@@ -4,6 +4,9 @@ dependencies:
   dep_id: dep_lin1x4oec0ytd
   resolution_hints: {app_id: 4UK6WHQ6UX7AKELK, name: Material 3 Theme, package_name: m3}
   version: {version_tag: v1.2.2}
+- dep_id: dep_0opyfyew6egz9
+  resolution_hints: {app_id: OANIXGELFYRDP4VV, name: OruDataCore, package_name: OruData}
+  version: {version_tag: v2.2}
 name: M3 App 2
 native_deps: null
 package_name: M3_App_2
@@ -16,3 +19,5 @@ services:
 - client_config: {}
   server_config: {}
   source: /runtime/services/tables.yml
+startup: null
+startup_form: null
