@@ -2,7 +2,19 @@ allow_embedding: false
 db_schema:
   alimento:
     client: none
-    columns: []
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: descricao
+      type: string
+    - admin_ui: {order: 1, width: 200}
+      name: grupo
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      name: energia
+      type: number
+    - admin_ui: {order: 3, width: 200}
+      name: proteina
+      type: number
     server: full
     title: Alimento
   users:
