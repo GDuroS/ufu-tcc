@@ -1,4 +1,48 @@
 allow_embedding: false
+db_schema:
+  alimento:
+    client: none
+    columns: []
+    server: full
+    title: Alimento
+  users:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: email
+      type: string
+    - admin_ui: {order: 1, width: 73}
+      name: enabled
+      type: bool
+    - admin_ui: {order: 2, width: 200}
+      name: last_login
+      type: datetime
+    - admin_ui: {order: 3, width: 200}
+      name: password_hash
+      type: string
+    - admin_ui: {order: 4, width: 200}
+      name: n_password_failures
+      type: number
+    - admin_ui: {order: 5, width: 200}
+      name: confirmed_email
+      type: bool
+    - admin_ui: {order: 6, width: 200}
+      name: remembered_logins
+      type: simpleObject
+    - admin_ui: {order: 7, width: 200}
+      name: signed_up
+      type: datetime
+    - admin_ui: {order: 1.5, width: 200}
+      name: fullname
+      type: string
+    - admin_ui: {order: 1.75, width: 200}
+      name: display_name
+      type: string
+    - admin_ui: {order: 1.875, width: 200}
+      name: photo
+      type: media
+    server: full
+    title: Users
 dependencies:
 - config: {}
   dep_id: dep_lin1x4oec0ytd
@@ -22,5 +66,15 @@ services:
 - client_config: {enable_v2: true}
   server_config: {}
   source: /runtime/services/tables.yml
+- client_config: {allow_remember_me: true, allow_signup: true, confirm_email: true, enable_automatically: true, remember_me_days: 30, require_secure_passwords: true, use_email: true, use_google: true}
+  server_config:
+    email_content:
+      confirm_address: {html: '<p>Obrigado por registrar sua conta conosco! Clique no link abaixo para confirmar que esta conta é sua:</p><p>{{confirm_link}}</p><p>Sinceramente,</p><p>Time OruData</p>'}
+      reset_password: {html: '<p>Olá,</p><p>Você solicitou a reinicialização da senha da conta de e-mail {{email}}. Para fazer isso, clique no link abaixo:</p><p>{{reset_link}}</p><p>Este link tem validade de 10 minutos.</p>'}
+    user_table: users
+  source: /runtime/services/anvil/users.yml
+- client_config: {}
+  server_config: {}
+  source: /runtime/services/google.yml
 startup: null
-startup_form: Form1
+startup_form: null
