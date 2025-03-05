@@ -96,6 +96,7 @@ dependencies:
 - dep_id: dep_obp4eaigzghyeh
   resolution_hints: {app_id: HYVETZT644ZWTERL, name: M3 Components, package_name: core_m3}
   version: {branch: master}
+metadata: {logo_img: 'asset:app_icon.png'}
 name: TCC
 native_deps: null
 package_name: TCC

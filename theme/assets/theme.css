@@ -1,0 +1,10 @@
+body {
+    background: linear-gradient(0deg, %color:Primary Overlay 2%, %color:Primary Overlay 2%), %color:Background% !important;
+}
+
+@media(max-width: 980px) {
+    .anvil-m3-navigation-drawer.anvil-m3-navigation-drawer-out-designer + .anvil-m3-top-app-bar {
+        padding: 0 16px;
+        background-color: var(--anvil-m3-surface-container);
+    }
+}
