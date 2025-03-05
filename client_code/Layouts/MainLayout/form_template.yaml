@@ -37,29 +37,42 @@ components_by_slot:
   navigation:
   - components:
     - layout_properties: {slot: anvil-m3-link-slot}
-      name: image_1
+      name: header_app_image
       properties: {height: 54, source: _/theme/app_icon.png}
       type: Image
     layout_properties: {}
     name: header_anchor
     properties: {align: left, path: /}
     type: form:dep_1f2ta8jjofu6y2:router.Anchor
-  - components:
-    - name: user_icon_component_1
-      properties: {}
-      type: form:dep_obp4eaigzghyeh:Users.UserIconComponent
-    layout_properties: {}
-    name: flow_panel_1
-    properties: {align: right}
-    type: FlowPanel
   - layout_properties: {}
-    name: outros_text
+    name: user_icon_component_1
     properties: {}
-    type: form:dep_lin1x4oec0ytd:_Components.Text
+    type: form:dep_obp4eaigzghyeh:Users.UserIconComponent
   - layout_properties: {}
-    name: nav_link_about
-    properties: {hash: '', icon: 'mi:license', path: /about, text: Sobre o App}
-    type: form:dep_1f2ta8jjofu6y2:router.NavLink
+    name: divider_1
+    properties: {}
+    type: form:dep_lin1x4oec0ytd:_Components.Divider
+  - components:
+    - layout_properties: {grid_position: 'RHTROC,LTIQKS'}
+      name: nav_link_pacientes_cadastro
+      properties: {icon: 'mi:person_add', path: /pacientes, text: Cadastro de Pacientes}
+      type: form:dep_1f2ta8jjofu6y2:router.NavLink
+    - layout_properties: {grid_position: 'YJYFKT,TFTDSX'}
+      name: nav_link_dietas
+      properties: {icon: 'mi:menu_book', path: /dietas, text: Criação de Dietas}
+      type: form:dep_1f2ta8jjofu6y2:router.NavLink
+    - layout_properties: {grid_position: 'QYCHDQ,YBLFYE'}
+      name: outros_text
+      properties: {bold: true, style: label, text: Outros}
+      type: form:dep_lin1x4oec0ytd:_Components.Text
+    - layout_properties: {grid_position: 'IREUHO,SAFDNY'}
+      name: nav_link_about
+      properties: {hash: '', icon: 'mi:license', path: /about, text: Sobre o App}
+      type: form:dep_1f2ta8jjofu6y2:router.NavLink
+    layout_properties: {}
+    name: nav_panel
+    properties: {spacing_above: none}
+    type: ColumnPanel
 is_package: true
 layout:
   properties: {background_color: '', navigation_drawer_color: '', show_sidesheet: false}
