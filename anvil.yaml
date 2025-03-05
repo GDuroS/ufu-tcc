@@ -85,6 +85,11 @@ db_schema:
       type: media
     server: full
     title: Users
+  usersettings:
+    client: none
+    columns: []
+    server: full
+    title: UserSettings
 dependencies:
 - config: {}
   dep_id: dep_lin1x4oec0ytd
