@@ -70,6 +70,7 @@ components_by_slot:
     name: nav_panel
     properties: {spacing_above: none}
     type: ColumnPanel
+custom_component: false
 is_package: true
 layout:
   properties: {background_color: '', navigation_drawer_color: '', show_sidesheet: false}

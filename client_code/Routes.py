@@ -14,6 +14,11 @@ Route.create(path='/', form='Pages.Dashboard')
 Route.create(path="/about", form="Pages.Outros.About")
 Route.create(path='/changelog', form="Pages.Outros.Changelog")
 
+# Users
+class UserIdentity(SecureRoute, Route):
+    path = "/user/config"
+    form = "Pages.Users.Identidades"
+
 # Aux
 class LoginForm(UnloggedRoute, Route):
     form = "Pages.Utils.LoginForm"
