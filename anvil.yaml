@@ -87,7 +87,35 @@ db_schema:
     title: Users
   usersettings:
     client: none
-    columns: []
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: user
+      target: users
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      name: theme
+      type: simpleObject
+    - admin_ui: {order: 2, width: 96}
+      name: dark_mode
+      type: bool
+    - admin_ui: {order: 3, width: 200}
+      name: auto_dark
+      type: string
+    - admin_ui: {order: 4, width: 200}
+      name: extra_theme_params
+      type: simpleObject
+    - admin_ui: {order: 5, width: 200}
+      name: notification_tokens
+      type: simpleObject
+    - admin_ui: {order: 6, width: 200}
+      name: notification_settings
+      type: simpleObject
+    - admin_ui: {order: 7, width: 200}
+      name: tutorials
+      type: simpleObject
+    - admin_ui: {order: 8, width: 200}
+      name: last_version
+      type: string
     server: full
     title: UserSettings
 dependencies:
