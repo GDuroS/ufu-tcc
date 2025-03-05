@@ -74,12 +74,6 @@ db_schema:
     - admin_ui: {order: 7, width: 200}
       name: signed_up
       type: datetime
-    - admin_ui: {order: 1.5, width: 200}
-      name: fullname
-      type: string
-    - admin_ui: {order: 1.75, width: 200}
-      name: display_name
-      type: string
     - admin_ui: {order: 1.875, width: 200}
       name: photo
       type: media
