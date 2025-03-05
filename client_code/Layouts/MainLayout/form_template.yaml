@@ -11,7 +11,8 @@ components_by_slot:
     type: form:dep_lin1x4oec0ytd:_Components.Heading
   content:
   - components:
-    - name: user_icon_fullsize
+    - layout_properties: {expand: false}
+      name: user_icon_fullsize
       properties: {}
       type: form:dep_obp4eaigzghyeh:Users.UserIconComponent
     layout_properties: {}
@@ -44,10 +45,6 @@ components_by_slot:
     name: header_anchor
     properties: {align: left, path: /}
     type: form:dep_1f2ta8jjofu6y2:router.Anchor
-  - layout_properties: {}
-    name: user_icon_component_1
-    properties: {}
-    type: form:dep_obp4eaigzghyeh:Users.UserIconComponent
   - layout_properties: {}
     name: divider_1
     properties: {}

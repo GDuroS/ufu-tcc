@@ -1,0 +1,10 @@
+components_by_slot:
+  content:
+  - data_bindings:
+    - {code: self.context, property: routing_context, writeback: false}
+    layout_properties: {}
+    name: error_form
+    properties: {}
+    type: form:dep_obp4eaigzghyeh:CommonForms.ErrorForm
+is_package: true
+layout: {type: 'form:Layouts.MainLayout'}

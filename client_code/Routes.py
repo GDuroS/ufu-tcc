@@ -13,3 +13,18 @@ Route.create(path='/', form='Pages.Dashboard')
 # Outros
 Route.create(path="/about", form="Pages.Outros.About")
 Route.create(path='/changelog', form="Pages.Outros.Changelog")
+
+# Aux
+class LoginForm(UnloggedRoute, Route):
+    form = "Pages.Utils.LoginForm"
+
+class LoginRoute(LoginForm):
+    path = "/login"
+
+class SignupRoute:
+    path = "/signup"
+
+class NotFoundRoute(Route):
+    form = "Pages.Utils.NotFound"
+    cache_form = False
+    default_not_found = True
