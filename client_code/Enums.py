@@ -13,3 +13,15 @@ class AlimentoGrupo(BaseEnum):
         'VEGETAIS': {'nome': 'Vegetais', 'codigo': 'V'}, # Vegerais e derivados
         'PROTEINA': {'nome': 'Proteínas', 'codigo': 'P'}
     }
+    
+    BEBIDA = None
+    SUCO = None
+    FRUTA = None
+    LEITE = None
+    PAO = None
+    CEREAL = None
+    GRAO = None
+    VEGETAIS = None
+    PROTEINA = None
+
+_build_all(__name__)
