@@ -1,6 +1,6 @@
 from OruData.Enum import BaseEnum, _build_all
 
-class AlimentoGrupo(BaseEnum):
+class AlimentoGrupoEnum(BaseEnum):
     """Grupos de alimentos (também chamado de classificação)"""
     __options__ = {
         'BEBIDA': {'nome': 'Bebidas', 'codigo': 'B'}, # Bebidas
