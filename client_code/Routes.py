@@ -15,6 +15,10 @@ Route.create(path="/about", form="Pages.Outros.About")
 Route.create(path='/changelog', form="Pages.Outros.Changelog")
 
 # Users
+class UserSetup(SecureRoute, Route):
+    path = "/user/setup"
+    form = "Components.Users.IdentidadesForm"
+
 class UserIdentity(SecureRoute, Route):
     path = "/user/config"
     form = "Pages.Users.Identidades"
