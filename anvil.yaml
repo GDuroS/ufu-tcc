@@ -128,7 +128,7 @@ dependencies:
   version: {branch: master}
 - dep_id: dep_obp4eaigzghyeh
   resolution_hints: {app_id: HYVETZT644ZWTERL, name: M3 Components, package_name: core_m3}
-  version: {branch: master}
+  version: {branch: identidades-layout}
 metadata: {logo_img: 'asset:app_icon.png'}
 name: TCC
 native_deps: null
