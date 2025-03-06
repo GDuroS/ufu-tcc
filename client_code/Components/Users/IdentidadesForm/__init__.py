@@ -15,8 +15,10 @@ class IdentidadesForm(IdentidadesFormTemplate):
         ], 'identidadeValidationGroup')
         
         if self.layout.mode == 'INIT':
+            def merge_item():
+                self.layout.item.merge()
             self.dados_profissionais_card.visible = False
-        self.layout.set_steps_list([
-            {'card': self.layout.identidades_card, 'validation': 'identidadeValidationGroup'},
-            {'card': self.dados_profissionais_card}
-        ])
+            self.layout.set_steps_list([
+                {'card': self.layout.identidades_card, 'validation': 'identidadeValidationGroup', 'callback': merge_item},
+                {'card': self.dados_profissionais_card}
+            ])
