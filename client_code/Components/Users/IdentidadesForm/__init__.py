@@ -24,3 +24,11 @@ class IdentidadesForm(IdentidadesFormTemplate):
                 {'card': self.layout.identidades_card, 'validation': 'identidadeValidationGroup', 'callback': merge_item},
                 {'card': self.dados_profissionais_card, 'callback': merge_profissional}
             ])
+
+    @property
+    def mode(self):
+        return self.layout.mode
+
+    @mode.setter
+    def mode(self, mode):
+        self.layout.mode = mode

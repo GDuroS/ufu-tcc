@@ -1,4 +1,8 @@
 components_by_slot:
-  content: []
+  content:
+  - layout_properties: {}
+    name: identidades_form
+    properties: {mode: INIT}
+    type: form:Components.Users.IdentidadesForm
 is_package: true
 layout: {type: 'form:Layouts.MainLayout'}
