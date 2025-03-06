@@ -1,5 +1,9 @@
 components_by_slot:
-  dados_left_internal_slot: []
+  dados_left_internal_slot:
+  - layout_properties: {}
+    name: cpf_text_box
+    properties: {}
+    type: form:dep_obp4eaigzghyeh:FormInput.CPFTextBox
   extra_layout_slot:
   - components:
     - components:
