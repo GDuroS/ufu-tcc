@@ -14,12 +14,12 @@ def getProfissionalFind(*args, **kwargs):
     return profissional_service.find(*args, **kwargs)
 
 @anvil.server.callable(require_user=True)
-def postProfissional(profissional, pontuacoes=None):
-    return profissional_service.save(profissional, pontuacoes)
+def postProfissional(profissional):
+    return profissional_service.save(profissional)
 
 @anvil.server.callable(require_user=True)
-def putProfissional(profissional, changes, pontuacoes=None):
-    return profissional_service.update(profissional, changes, pontuacoes)
+def putProfissional(profissional, changes):
+    return profissional_service.update(profissional, changes)
 
 @anvil.server.callable(require_user=True)
 def deleteProfissional(profissional):

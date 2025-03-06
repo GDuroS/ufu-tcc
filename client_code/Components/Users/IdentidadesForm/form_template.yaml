@@ -13,7 +13,8 @@ components_by_slot:
         name: dados_profissionais_heading
         properties: {bold: true, style: title, text: Dados Profissionais}
         type: form:dep_lin1x4oec0ytd:_Components.Heading
-      - data_bindings: []
+      - data_bindings:
+        - {code: 'self.layout.item.profissional[''profissao'']', property: text, writeback: true}
         layout_properties: {slot: card-content-container-slot}
         name: profissao_text_box
         properties: {label: Profissão, placeholder: 'Nutricionista, Nutrólogo, Profissional de Educação Física, etc.'}
