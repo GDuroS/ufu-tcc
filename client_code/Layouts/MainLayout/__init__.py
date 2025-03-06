@@ -2,6 +2,8 @@ from ._anvil_designer import MainLayoutTemplate
 from anvil import *
 from anvil.js import get_dom_node
 
+from ...Commons import after_login_method
+
 class MainLayout(MainLayoutTemplate):
     def __init__(self, **properties):
         # Changing styles
@@ -12,3 +14,7 @@ class MainLayout(MainLayoutTemplate):
         self.init_components(**properties)
 
         # Any code you write here will run before the form opens.
+
+    @property
+    def after_login_callback(self):
+        return after_login_method

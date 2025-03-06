@@ -1,14 +1,16 @@
 import anvil.server
 from OruData.Entity import Entity, User, EntityDescriptor
 
+@anvil.server.portable_class
 class ProfissionalUser(User):
     
     @classmethod
     def load_user(cls, buffer_changes=False):
-        obj = super(buffer_changes)
+        obj = super().load_user(buffer_changes)
         obj.profissional = Profissional.load_by_user(obj)
         return obj
 
+@anvil.server.portable_class
 class Profissional(Entity):
     user = EntityDescriptor(ProfissionalUser)
 

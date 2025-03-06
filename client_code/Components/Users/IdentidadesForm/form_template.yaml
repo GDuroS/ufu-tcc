@@ -1,6 +1,7 @@
 components_by_slot:
   dados_left_internal_slot:
-  - data_bindings: []
+  - data_bindings:
+    - {code: 'self.layout.item[''cpf'']', property: cpf, writeback: true}
     layout_properties: {}
     name: cpf_text_box
     properties: {}
@@ -32,7 +33,7 @@ layout:
   type: form:dep_obp4eaigzghyeh:Users.UserIdentityComponent
 properties:
 - default_binding_prop: true
-  default_value: CONFIG
+  default_value: INIT
   important: true
   name: mode
   options: [INIT, CONFIG]

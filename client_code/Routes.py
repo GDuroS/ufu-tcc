@@ -19,14 +19,16 @@ class SecureRoute(BaseSecureRoute):
     Se não está logado, redireciona ao login.
     Se está logado e não completou o cadastro, redireciona ao init
     """
-    def before_load(**loader_args):
-        user = super().before_load(**loader_args)
+    def before_load(self, **loader_args):
+        user = BaseSecureRoute.before_load(self, **loader_args)
         # Se chegou aqui, então está logado
         if not (user['fullname'] and user['display_name'] and user['cpf']):
+            print('iria redirecionar')
             raise Redirect('/user/init')
 
 # Users
-class UserSetup(SecureRoute, Route):
+class UserSetup(BaseSecureRoute, Route):
+    # Precisa ser BaseSecureRoute para não causar recursão
     path = "/user/init"
     form = "Components.Users.IdentidadesForm"
 

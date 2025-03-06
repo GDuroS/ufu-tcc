@@ -1,6 +1,8 @@
 components_by_slot:
   content:
-  - layout_properties: {}
+  - data_bindings:
+    - {code: self.after_login_callback, property: after_login_callback, writeback: false}
+    layout_properties: {}
     name: login_form
     properties: {}
     type: form:dep_obp4eaigzghyeh:Users.LoginForm

@@ -47,6 +47,32 @@ db_schema:
       type: simpleObject
     server: full
     title: Alimento
+  funcionalidadeversao:
+    client: none
+    columns:
+    - admin_ui: {width: 200}
+      name: App
+      type: string
+    - admin_ui: {width: 200}
+      name: Date
+      type: datetime
+    - admin_ui: {width: 200}
+      name: Major
+      type: number
+    - admin_ui: {width: 200}
+      name: Minor
+      type: number
+    - admin_ui: {width: 200}
+      name: Update
+      type: number
+    - admin_ui: {width: 200}
+      name: SWUpdated
+      type: bool
+    - admin_ui: {width: 200}
+      name: Funcionalidades
+      type: simpleObject
+    server: full
+    title: FuncionalidadeVersao
   profissional:
     client: none
     columns:
@@ -65,8 +91,17 @@ db_schema:
   sequencer:
     client: none
     columns:
-    - admin_ui: {order: 0, width: 200}
+    - admin_ui: {order: 4, width: 200}
       name: Profissional
+      type: number
+    - admin_ui: {order: 1, width: 200}
+      name: Major
+      type: number
+    - admin_ui: {order: 2, width: 200}
+      name: Minor
+      type: number
+    - admin_ui: {order: 3, width: 200}
+      name: Update
       type: number
     server: full
     title: Sequencer
