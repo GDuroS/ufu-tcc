@@ -29,5 +29,6 @@ unique_ids:
   scripts: {}
   server_modules:
     Resource: '1741183253478485840662726.22797'
+    Resource.ProfissionalResource: '1741277711552498627967037.6501'
     ServerRoutes: '1741183227708316941568815.3641'
     Service: '1741183261135401620240106.33466'

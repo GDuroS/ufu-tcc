@@ -7,8 +7,14 @@ def load_funcionalidades():
     from . import Changelog
     return
 
+def override_entities():
+    from OruData import Entity
+    from . import Entities
+    Entity.User = Entities.ProfissionalUser
+
 def main():
     call_async(load_funcionalidades)
+    override_entities()
     with Environment().startup(use_fcm=False):
         call_async(LocalCommons().start)
         Routes.launch()
