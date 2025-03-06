@@ -47,6 +47,18 @@ db_schema:
       type: simpleObject
     server: full
     title: Alimento
+  profissional:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: user
+      target: users
+      type: link_single
+    - admin_ui: {order: -1, width: 200}
+      name: profissao
+      type: string
+    server: full
+    title: Profissional
   users:
     client: none
     columns:
@@ -83,6 +95,9 @@ db_schema:
     - admin_ui: {order: 1.875, width: 200}
       name: photo
       type: media
+    - admin_ui: {order: 1.65625, width: 200}
+      name: cpf
+      type: string
     server: full
     title: Users
   usersettings:
