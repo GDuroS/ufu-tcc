@@ -19,11 +19,15 @@ class IdentidadesForm(IdentidadesFormTemplate):
                 self.layout.item.merge()
             def merge_profissional():
                 self.layout.item.profissional.merge()
+            def update_user():
+                from ....Commons import LocalCommons
+                LocalCommons()._logged_user = None
+                LocalCommons()._set_logged_user()
             self.dados_profissionais_card.visible = False
             self.layout.set_steps_list([
                 {'card': self.layout.identidades_card, 'validation': 'identidadeValidationGroup', 'callback': merge_item},
                 {'card': self.dados_profissionais_card, 'callback': merge_profissional}
-            ])
+            ], update_user)
 
     @property
     def mode(self):
