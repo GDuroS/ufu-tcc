@@ -1,4 +1,5 @@
 components_by_slot:
+  dados_left_internal_slot: []
   extra_layout_slot:
   - components:
     - components:
