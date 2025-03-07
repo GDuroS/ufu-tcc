@@ -1,14 +1,21 @@
-from anvil import app
+# from anvil import app
 
 from OruData.Routing import launch, Route, CrudRoute, Redirect, SecureRoute as BaseSecureRoute
 # from .Entities import 
 
-IN_DEBUG_MODE = "debug" in app.environment.tags
+# IN_DEBUG_MODE = "debug" in app.environment.tags
 
-if not IN_DEBUG_MODE:
-    Route.error_form = "Pages.Utils.ErrorForm"
+# if not IN_DEBUG_MODE:
+    # Route.error_form = "Pages.Utils.ErrorForm"
+
+def is_user_logged():
+    from .Commons import LocalCommons
+    logged_user = LocalCommons().get_logged_user_forced()
+    return logged_user
 
 class UnloggedRoute:
+    error_form = "Pages.Utils.ErrorFormUnlogged"
+    
     def before_load(self, **loader_args):
         from .Commons import LocalCommons
         if LocalCommons().get_logged_user_forced():
@@ -19,6 +26,8 @@ class SecureRoute(BaseSecureRoute):
     Se não está logado, redireciona ao login.
     Se está logado e não completou o cadastro, redireciona ao init
     """
+    error_form = "Pages.Utils.ErrorForm"
+    
     def before_load(self, **loader_args):
         user = BaseSecureRoute.before_load(self, **loader_args)
         # Se chegou aqui, então está logado
@@ -35,13 +44,14 @@ class DashboardRoute(SecureRoute, Route):
     form = 'Pages.Dashboard'
 
 # Outros
-class AboutSecureRoute(SecureRoute, Route):
-    path = "/about"
-    form = "Pages.Outros.About"
-
-class AboutRoute(UnloggedRoute, Route):
-    path = '/about-site'
-    form = 'Pages.Outros.AboutUnlogged'
+class AboutRoute(Route):
+    path = '/about'
+    
+    @property
+    def form(self):
+        if is_user_logged():
+            return "Pages.Outros.About"
+        return 'Pages.Outros.AboutUnlogged'
     
 class ChangelogRoute(SecureRoute, Route):
     path = '/changelog'
@@ -68,6 +78,11 @@ class SignupRoute(LoginForm):
     path = "/signup"
 
 class NotFoundRoute(Route):
-    form = "Pages.Utils.NotFound"
     cache_form = False
     default_not_found = True
+
+    @property
+    def form(self):
+        if is_user_logged():
+            return "Pages.Utils.NotFound"
+        return "Pages.Utils.NotFoundUnlogged"

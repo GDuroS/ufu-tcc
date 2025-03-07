@@ -1,10 +1,10 @@
 components_by_slot:
   content:
   - data_bindings:
-    - {code: self.login_callback, property: after_login_callback, writeback: false}
+    - {code: self.context, property: routing_context, writeback: false}
     layout_properties: {}
-    name: login_form
+    name: error_form
     properties: {}
-    type: form:dep_obp4eaigzghyeh:Users.LoginForm
+    type: form:dep_obp4eaigzghyeh:CommonForms.ErrorForm
 is_package: true
 layout: {type: 'form:Layouts.LandingLayout'}
