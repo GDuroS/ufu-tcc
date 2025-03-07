@@ -53,6 +53,7 @@ components_by_slot:
       - {data_key: '', id: PUMPVV, title: '', width: '50'}
       - {data_key: nome, expand: true, id: IEJZXP, title: Paciente, width: '220'}
       - {data_key: nascimento, id: GONQZH, title: Nascimento, width: '190'}
+      role: horizontal-scroll
     type: DataGrid
 is_package: true
 layout: {type: 'form:Layouts.MainLayout'}
