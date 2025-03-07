@@ -5,11 +5,16 @@ components_by_slot:
       name: heading
       properties: {style: headline, text: Pacientes}
       type: form:dep_lin1x4oec0ytd:_Components.Heading
-    - event_bindings: {}
+    - components:
+      - event_bindings: {click: paciente_add_button_click}
+        layout_properties: {slot: anvil-m3-link-slot}
+        name: paciente_add_button
+        properties: {appearance: filled, icon: 'mi:person_add'}
+        type: form:dep_lin1x4oec0ytd:_Components.IconButton
       layout_properties: {}
-      name: paciente_add_button
-      properties: {appearance: filled, icon: 'mi:person_add'}
-      type: form:dep_lin1x4oec0ytd:_Components.IconButton
+      name: paciente_add_anchor
+      properties: {path: /pacientes/create}
+      type: form:dep_1f2ta8jjofu6y2:router.Anchor
     layout_properties: {}
     name: heading_panel
     properties: {gap: medium, vertical_align: middle}
@@ -21,7 +26,7 @@ components_by_slot:
         name: paciente_nome_filter_text_box
         properties: {appearance: outlined, label: '', leading_icon: 'mi:filter_alt', placeholder: Nome do Paciente}
         type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
-      - event_bindings: {}
+      - event_bindings: {change: paciente_nascimento_filter_text_box_change}
         layout_properties: {column: GONQZH}
         name: paciente_nascimento_filter_text_box
         properties: {appearance: outlined, label: '', leading_icon: 'mi:filter_alt', placeholder: 01/01/1900}
