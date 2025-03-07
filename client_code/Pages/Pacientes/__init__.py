@@ -19,9 +19,3 @@ class Pacientes(PacientesTemplate):
         pacientes = LocalCommons().get_pacientes()
         self.pacientes_data_panel.items = pacientes
         self.paciente_summary_text.text = f"{len(pacientes)} pacientes cadastrados." if pacientes else "Nenhum paciente cadastrado"
-
-    def paciente_nome_filter_text_box_change(self, **event_args):
-        """This method is called when the text in this component is edited."""
-        pacientes = LocalCommons().get_pacientes()
-        query = self.paciente_nome_filter_text_box.text
-        self.pacientes_data_panel.items = [p for p in pacientes if not query or query in p['nome']]
