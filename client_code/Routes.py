@@ -1,9 +1,9 @@
-# from anvil import app
+from anvil import app
 
 from OruData.Routing import launch, Route, CrudRoute, Redirect, SecureRoute as BaseSecureRoute
 # from .Entities import 
 
-# IN_DEBUG_MODE = "debug" in app.environment.tags
+IN_DEBUG_MODE = "debug" in app.environment.tags
 
 # if not IN_DEBUG_MODE:
     # Route.error_form = "Pages.Utils.ErrorForm"
@@ -14,7 +14,8 @@ def is_user_logged():
     return logged_user
 
 class UnloggedRoute:
-    error_form = "Pages.Utils.ErrorFormUnlogged"
+    if not IN_DEBUG_MODE:
+        error_form = "Pages.Utils.ErrorFormUnlogged"
     
     def before_load(self, **loader_args):
         from .Commons import LocalCommons
@@ -26,7 +27,8 @@ class SecureRoute(BaseSecureRoute):
     Se não está logado, redireciona ao login.
     Se está logado e não completou o cadastro, redireciona ao init
     """
-    error_form = "Pages.Utils.ErrorForm"
+    if not IN_DEBUG_MODE:
+        error_form = "Pages.Utils.ErrorForm"
     
     def before_load(self, **loader_args):
         user = BaseSecureRoute.before_load(self, **loader_args)

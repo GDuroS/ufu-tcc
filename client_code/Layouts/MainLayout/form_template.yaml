@@ -1,6 +1,8 @@
 components_by_slot:
   app_bar_links:
-  - layout_properties: {}
+  - data_bindings:
+    - {code: self.after_login_callback, property: after_login_callback, writeback: false}
+    layout_properties: {}
     name: user_icon_mobile
     properties: {}
     type: form:dep_obp4eaigzghyeh:Users.UserIconComponent
@@ -52,6 +54,14 @@ components_by_slot:
     properties: {}
     type: form:dep_lin1x4oec0ytd:_Components.Divider
   - components:
+    - layout_properties: {grid_position: 'KARPUD,HVIHNE'}
+      name: nav_link_dashboard
+      properties: {icon: 'mi:dashboard', path: /dashboard, text: Dashboard}
+      type: form:dep_1f2ta8jjofu6y2:router.NavLink
+    - layout_properties: {grid_position: 'FKHICE,IAZQWN'}
+      name: pacientes_text
+      properties: {bold: true, style: label, text: Pacientes}
+      type: form:dep_lin1x4oec0ytd:_Components.Text
     - layout_properties: {grid_position: 'RHTROC,LTIQKS'}
       name: nav_link_pacientes_cadastro
       properties: {icon: 'mi:person_edit', path: /pacientes, text: Cadastro de Pacientes}
