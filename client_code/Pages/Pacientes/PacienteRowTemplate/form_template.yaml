@@ -1,3 +1,16 @@
-components: []
+components:
+- data_bindings:
+  - {code: self.nascimento_formatado, property: text, writeback: false}
+  layout_properties: {column: GONQZH}
+  name: nascimento_text
+  properties: {}
+  type: form:dep_lin1x4oec0ytd:_Components.Text
+- layout_properties: {column: PUMPVV}
+  name: edit_button
+  properties:
+    appearance: tonal
+    icon: mi:edit
+    margin: [null, '0', null, '0']
+  type: form:dep_lin1x4oec0ytd:_Components.IconButton
 container: {type: DataRowPanel}
 is_package: true
