@@ -1,5 +1,5 @@
 import anvil.server
-from ..Service import profissional_service
+from ..Service import profissional_service, user_service
 
 @anvil.server.callable
 def getProfissionalById(sequence:int):
@@ -24,3 +24,7 @@ def putProfissional(profissional, changes):
 @anvil.server.callable(require_user=True)
 def deleteProfissional(profissional):
     profissional_service.delete(profissional)
+
+@anvil.server.callable
+def getUserByCPF(cpf):
+    return user_service.find(cpf=cpf)
