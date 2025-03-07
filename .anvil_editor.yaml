@@ -11,6 +11,8 @@ unique_ids:
     Pages.Outros.About: '1741188597928590913484303.2831'
     Pages.Outros.AboutUnlogged: '1741365670090406511862630.8879'
     Pages.Outros.Changelog: '1741189117449702933428784.0468'
+    Pages.Pacientes: '1741380454053350542974254.7974'
+    Pages.Pacientes.PacienteRowTemplate: '1741380547749273032919218.29053'
     Pages.Users.Identidades: '1741215763045886578854752.211'
     Pages.Utils.ErrorForm: '174120922593380738955856.1351'
     Pages.Utils.ErrorFormUnlogged: '1741368403664409024648057.83966'
@@ -34,6 +36,7 @@ unique_ids:
   scripts: {}
   server_modules:
     Resource: '1741183253478485840662726.22797'
+    Resource.PacienteResource: '1741380239009206797029880.7602'
     Resource.ProfissionalResource: '1741277711552498627967037.6501'
     ServerRoutes: '1741183227708316941568815.3641'
     Service: '1741183261135401620240106.33466'

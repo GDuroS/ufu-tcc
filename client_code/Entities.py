@@ -27,3 +27,6 @@ class Profissional(Entity):
         if user_obj:
             obj._user_class = user_obj
         return obj
+
+class Paciente(Entity):
+    pass

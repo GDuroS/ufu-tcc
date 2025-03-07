@@ -73,6 +73,27 @@ db_schema:
       type: simpleObject
     server: full
     title: FuncionalidadeVersao
+  paciente:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: nome
+      type: string
+    - admin_ui: {order: 1, width: 200}
+      name: Sequence
+      type: number
+    - admin_ui: {order: 2, width: 200}
+      name: cpf
+      type: string
+    - admin_ui: {order: 3, width: 200}
+      name: nascimento
+      type: date
+    - admin_ui: {order: 4, width: 200}
+      name: profissional
+      target: profissional
+      type: link_single
+    server: full
+    title: Paciente
   profissional:
     client: none
     columns:

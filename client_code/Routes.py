@@ -45,6 +45,11 @@ class DashboardRoute(SecureRoute, Route):
     path = '/dashboard'
     form = 'Pages.Dashboard'
 
+# Pacientes
+class PacienteRoute(SecureRoute, Route):
+    path = '/pacientes'
+    form = 'Pages.Pacientes'
+
 # Outros
 class AboutRoute(Route):
     path = '/about'
