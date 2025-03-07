@@ -1,0 +1,22 @@
+components_by_slot:
+  content:
+  - layout_properties: {}
+    name: heading
+    properties: {text: Sobre o Aplicativo}
+    type: form:dep_lin1x4oec0ytd:_Components.Heading
+  - layout_properties: {}
+    name: about_rich_text
+    properties:
+      content: |-
+        <h4>Créditos</h4>
+        <strong>TCC (Sem Título)</strong> é um aplicativo da <strong><u>OruData Sistemas de Informática</u></strong>, desenvolvimento inteiramente por <em>Gabriel Duro</em>.<br>
+        <p>Disponível para contratações atualmente através da seguinte informação de contato:<address>
+        <a href="mailto:computador.orudata@gmail.com">OruData Sistemas de Informática</a></address></p>
+        <strong>Anvil Extras:</strong><br/>
+        <a href="https://anvil-extras.readthedocs.io/en/latest/index.html">Anvil Extras</a><br/><br/>
+        <strong>Créditos pelo Logo (favicon) do Aplicativo:</strong><br/>
+        <a href="https://www.flaticon.com/free-icons/nutrition" title="nutrition icons">Nutrition icons created by Freepik - Flaticon</a><br>
+      format: restricted_html
+    type: RichText
+is_package: true
+layout: {type: 'form:Layouts.LandingLayout'}

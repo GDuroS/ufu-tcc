@@ -1,18 +1,18 @@
 from anvil import app
 
-from OruData.Routing import launch, Route, CrudRoute, UnloggedRoute, Redirect, SecureRoute as BaseSecureRoute
+from OruData.Routing import launch, Route, CrudRoute, Redirect, SecureRoute as BaseSecureRoute
 # from .Entities import 
 
 IN_DEBUG_MODE = "debug" in app.environment.tags
 
 if not IN_DEBUG_MODE:
     Route.error_form = "Pages.Utils.ErrorForm"
-# Main
-Route.create(path='/', form='Pages.Dashboard')
 
-# Outros
-Route.create(path="/about", form="Pages.Outros.About")
-Route.create(path='/changelog', form="Pages.Outros.Changelog")
+class UnloggedRoute:
+    def before_load(self, **loader_args):
+        from .Commons import LocalCommons
+        if LocalCommons().get_logged_user_forced():
+            raise Redirect(path="/dashboard")
 
 class SecureRoute(BaseSecureRoute):
     """Todas as rotas seguras devem antes checar se o usuário logado já completou o cadastro também.
@@ -24,6 +24,28 @@ class SecureRoute(BaseSecureRoute):
         # Se chegou aqui, então está logado
         if not (user['fullname'] and user['display_name'] and user['cpf']):
             raise Redirect('/user/init')
+
+# Main
+class HomeRoute(UnloggedRoute, Route):
+    path = '/'
+    form = 'Pages.Home'
+    
+class DashboardRoute(SecureRoute, Route):
+    path = '/dashboard'
+    form = 'Pages.Dashboard'
+
+# Outros
+class AboutSecureRoute(SecureRoute, Route):
+    path = "/about"
+    form = "Pages.Outros.About"
+
+class AboutRoute(UnloggedRoute, Route):
+    path = '/about-site'
+    form = 'Pages.Outros.AboutUnlogged'
+    
+class ChangelogRoute(SecureRoute, Route):
+    path = '/changelog'
+    form = "Pages.Outros.Changelog"
 
 # Users
 class UserSetup(BaseSecureRoute, Route):

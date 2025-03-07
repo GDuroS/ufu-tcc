@@ -1,0 +1,26 @@
+components_by_slot:
+  content:
+  - layout_properties: {}
+    name: image
+    properties: {source: _/theme/app_icon.png}
+    type: Image
+  - layout_properties: {}
+    name: heading_1
+    properties: {align: center, text: Título do Aplicativo}
+    type: form:dep_lin1x4oec0ytd:_Components.Heading
+  - layout_properties: {}
+    name: placeholder_text
+    properties:
+      text: |-
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut semper magna, eget tincidunt neque. Duis ac libero id nunc blandit tempor sed et diam. Cras dictum varius sem, rhoncus maximus nunc interdum et. Praesent sit amet urna eu nunc gravida sodales ac id mauris. Integer ac ornare ipsum, id gravida arcu. Nam eget tincidunt dolor, sed iaculis sem. Nulla vitae metus sit amet quam condimentum commodo et sit amet turpis. Nullam blandit neque dui, ut porta leo faucibus a. In tincidunt tortor ligula, ac ultrices mauris convallis bibendum.
+
+        Etiam tristique, orci sit amet venenatis efficitur, ipsum felis viverra tellus, in tincidunt velit lacus vel nisl. Donec sit amet gravida turpis, id dignissim urna. In hac habitasse platea dictumst. Maecenas pellentesque suscipit lorem, at hendrerit elit sagittis venenatis. Sed placerat vestibulum ante, venenatis suscipit arcu ullamcorper sit amet. Integer consequat purus nisi, in rhoncus tellus facilisis nec. Nulla ac sem eu magna malesuada aliquet molestie at nunc. Nam posuere felis eu felis molestie imperdiet.
+
+        Fusce sit amet interdum ipsum, id porttitor ligula. Quisque euismod vitae nunc sed feugiat. Aliquam quis turpis vel ipsum placerat tincidunt. In tempor tristique justo, vitae placerat purus malesuada eu. Aliquam vehicula venenatis tortor, et commodo mi egestas eget. Integer odio turpis, congue at tempor a, accumsan id elit. Nulla in gravida nibh, in imperdiet urna. Duis eleifend, ante nec dignissim lacinia, purus tellus pretium massa, varius aliquam ante est id risus. Sed ultrices ac nisi vitae commodo. Fusce finibus sit amet leo eu ornare. Curabitur tempus nisl sit amet rutrum condimentum.
+
+        Duis faucibus fringilla nunc nec dapibus. Aliquam dignissim elit sed sapien bibendum, viverra condimentum purus tincidunt. Etiam elementum mollis velit ac euismod. Nunc eleifend massa sit amet ultrices ornare. Nunc suscipit tortor eu sapien semper placerat. Integer mollis mi quis libero fermentum gravida. Nam ornare felis arcu, in ultricies urna tincidunt eu. Nulla facilisi. In enim lorem, sodales sed nisi pretium, cursus dapibus enim. Vivamus massa quam, pulvinar et interdum eget, sagittis vel libero. Praesent eget facilisis arcu, a ullamcorper ante.
+
+        Quisque in aliquet est, ut gravida arcu. Mauris sed velit nec quam volutpat fringilla non eu nisi. Maecenas non mattis dui. Integer erat lacus, iaculis a consequat posuere, feugiat quis tellus. Donec pharetra mi est, sed gravida arcu placerat vel. Vivamus eleifend elit bibendum erat sollicitudin commodo. Phasellus id erat interdum ligula malesuada eleifend ac ut eros. In sit amet metus eget augue accumsan fermentum. Nulla blandit ipsum blandit, venenatis urna in, pellentesque arcu. Maecenas a sollicitudin metus. Sed id est semper, ultrices libero aliquet, consectetur purus. Pellentesque purus felis, tristique a lectus consectetur, eleifend semper urna. Interdum et malesuada fames ac ante ipsum primis in faucibus. In id tincidunt dui. Nunc eget facilisis enim.
+    type: form:dep_lin1x4oec0ytd:_Components.Text
+is_package: true
+layout: {type: 'form:Layouts.LandingLayout'}
