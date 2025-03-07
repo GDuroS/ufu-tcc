@@ -23,7 +23,6 @@ class SecureRoute(BaseSecureRoute):
         user = BaseSecureRoute.before_load(self, **loader_args)
         # Se chegou aqui, então está logado
         if not (user['fullname'] and user['display_name'] and user['cpf']):
-            print('iria redirecionar')
             raise Redirect('/user/init')
 
 # Users

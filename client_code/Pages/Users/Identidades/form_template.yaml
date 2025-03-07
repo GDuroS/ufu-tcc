@@ -2,7 +2,7 @@ components_by_slot:
   content:
   - layout_properties: {}
     name: identidades_form
-    properties: {mode: CONFIG}
+    properties: {internal_mode: CONFIG}
     type: form:Components.Users.IdentidadesForm
 is_package: true
 layout: {type: 'form:Layouts.MainLayout'}
