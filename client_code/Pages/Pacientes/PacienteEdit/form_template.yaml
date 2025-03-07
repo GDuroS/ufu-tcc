@@ -1,0 +1,44 @@
+components_by_slot:
+  content:
+  - components:
+    - layout_properties: {expand: true}
+      name: heading
+      properties: {text: Cadastro de Paciente}
+      type: form:dep_lin1x4oec0ytd:_Components.Heading
+    - layout_properties: {}
+      name: action_icon_button
+      properties: {appearance: filled}
+      type: form:dep_lin1x4oec0ytd:_Components.IconButton
+    layout_properties: {}
+    name: heading_panel
+    properties: {gap: medium, vertical_align: middle}
+    type: FlowPanel
+  - components:
+    - components:
+      - layout_properties: {slot: card-content-container-slot}
+        name: dados_basicos_heading
+        properties: {bold: true, style: title, text: Dados Básicos}
+        type: form:dep_lin1x4oec0ytd:_Components.Heading
+      - components:
+        - name: date_picker_alt_1
+          properties: {}
+          type: form:dep_obp4eaigzghyeh:FormInput.DatePickerAlt
+        - data_bindings:
+          - {code: 'self.item[''nome'']', property: text, writeback: true}
+          name: nome_completo_text_box
+          properties: {label: Nome Completo}
+          type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
+        layout_properties: {slot: card-content-container-slot}
+        name: flow_panel_1
+        properties: {gap: medium, vertical_align: middle}
+        type: FlowPanel
+      layout_properties: {slot: card-content-slot}
+      name: dados_basicos_card_content_container
+      properties: {}
+      type: form:dep_lin1x4oec0ytd:_Components.Card.CardContentContainer
+    layout_properties: {}
+    name: dados_basicos_card
+    properties: {}
+    type: form:dep_lin1x4oec0ytd:_Components.Card
+is_package: true
+layout: {type: 'form:Layouts.MainLayout'}
