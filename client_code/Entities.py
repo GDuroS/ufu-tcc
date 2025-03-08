@@ -29,4 +29,4 @@ class Profissional(Entity):
         return obj
 
 class Paciente(Entity):
-    pass
+    profissional = EntityDescriptor(Profissional)

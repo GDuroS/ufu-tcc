@@ -124,6 +124,9 @@ db_schema:
     - admin_ui: {order: 3, width: 200}
       name: Update
       type: number
+    - admin_ui: {order: 5, width: 200}
+      name: Paciente
+      type: number
     server: full
     title: Sequencer
   users:

@@ -1,7 +1,7 @@
 from anvil import app
 
 from OruData.Routing import launch, Route, CrudRoute, Redirect, SecureRoute as BaseSecureRoute
-# from .Entities import 
+from .Entities import Paciente
 
 IN_DEBUG_MODE = "debug" in app.environment.tags
 
@@ -49,6 +49,23 @@ class DashboardRoute(SecureRoute, Route):
 class PacienteRoute(SecureRoute, Route):
     path = '/pacientes'
     form = 'Pages.Pacientes'
+
+class PacienteCRUD(SecureRoute, CrudRoute, Route):
+    cache_form = True
+    form = "Pages.Pacientes.PacienteEdit"
+    entity = Paciente
+
+    def cache_deps(self, **loader_args):
+        return None
+
+class PacienteCreateRoute(PacienteCRUD):
+    create_route = True
+    cache_form = False
+    path = '/pacientes/create'
+
+class PacienteEditRoute(PacienteCRUD):
+    path = '/pacientes/:id'
+    
 
 # Outros
 class AboutRoute(Route):
