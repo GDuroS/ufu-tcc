@@ -1,9 +1,0 @@
-components:
-- layout_properties: {grid_position: 'WZZRGC,VPDAOZ'}
-  name: flow_panel_1
-  properties: {align: center, gap: tiny}
-  type: FlowPanel
-container:
-  properties: {background: var(--anvil-m3-secondary)}
-  type: ColumnPanel
-is_package: true
