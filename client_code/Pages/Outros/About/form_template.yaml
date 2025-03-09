@@ -1,10 +1,6 @@
 components_by_slot:
   content:
   - layout_properties: {}
-    name: heading
-    properties: {text: Sobre o Aplicativo}
-    type: form:dep_lin1x4oec0ytd:_Components.Heading
-  - layout_properties: {}
     name: about_rich_text
     properties:
       content: |-
@@ -22,5 +18,10 @@ components_by_slot:
     name: changelog_anchor
     properties: {icon: 'mi:history_edu', path: /changelog, role: row-button, text: Notas de Versão}
     type: form:dep_1f2ta8jjofu6y2:router.Anchor
+  content_heading_left:
+  - layout_properties: {}
+    name: heading
+    properties: {text: Sobre o Aplicativo}
+    type: form:dep_lin1x4oec0ytd:_Components.Heading
 is_package: true
 layout: {type: 'form:Layouts.MainLayout'}

@@ -28,7 +28,21 @@ components_by_slot:
         margin: [null, '20', null, null]
     type: FlowPanel
   - components:
-    - layout_properties: {slot: card-content-slot}
+    - components:
+      - components:
+        - layout_properties: {expand: true}
+          name: content_heading_left_panel
+          properties: {gap: medium, spacing_above: none, spacing_below: none, vertical_align: middle}
+          type: FlowPanel
+        - layout_properties: {}
+          name: content_heading_right_panel
+          properties: {gap: tiny, spacing_above: none, spacing_below: none, vertical_align: middle}
+          type: FlowPanel
+        layout_properties: {slot: card-content-container-slot}
+        name: content_heading_panel
+        properties: {gap: medium, vertical_align: middle}
+        type: FlowPanel
+      layout_properties: {slot: card-content-slot}
       name: card_content_container
       properties: {}
       type: form:dep_lin1x4oec0ytd:_Components.Card.CardContentContainer
@@ -90,6 +104,14 @@ layout:
 layout_metadata: {title: MainLayout}
 slots:
   content:
-    index: 0
+    index: 1
     set_layout_properties: {slot: card-content-container-slot}
     target: {name: card_content_container, type: container}
+  content_heading_left:
+    index: 0
+    set_layout_properties: {}
+    target: {name: content_heading_left_panel, type: container}
+  content_heading_right:
+    index: 0
+    set_layout_properties: {}
+    target: {name: content_heading_right_panel, type: container}

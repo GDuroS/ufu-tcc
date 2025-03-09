@@ -17,7 +17,10 @@ class MainLayout(MainLayoutTemplate):
         def hide_drawer(**event_args):
             self.layout.hide_nav_drawer()
         for link in self.nav_panel.get_components():
-            link.add_event_handler('click', hide_drawer)
+            try:
+                link.add_event_handler('click', hide_drawer)
+            except ValueError:
+                pass
 
     @property
     def after_login_callback(self):
