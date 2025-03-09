@@ -94,6 +94,24 @@ db_schema:
       type: link_single
     server: full
     title: Paciente
+  planorefeicao:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: paciente
+      target: paciente
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      name: Sequence
+      type: number
+    - admin_ui: {order: 2, width: 200}
+      name: incio
+      type: datetime
+    - admin_ui: {order: 3, width: 200}
+      name: termino
+      type: datetime
+    server: full
+    title: PlanoRefeicao
   profissional:
     client: none
     columns:
