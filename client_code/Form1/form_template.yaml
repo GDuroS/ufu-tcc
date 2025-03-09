@@ -4,6 +4,6 @@ components:
   properties: {align: center, gap: medium}
   type: FlowPanel
 container:
-  properties: {background: var(--anvil-m3-primary)}
+  properties: {background: var(--anvil-m3-secondary)}
   type: ColumnPanel
 is_package: true
