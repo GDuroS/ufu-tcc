@@ -14,6 +14,10 @@ class LandingLayout(LandingLayoutTemplate):
         self.init_components(**properties)
 
         # Any code you write here will run before the form opens.
+        def hide_drawer(**event_args):
+            self.layout.hide_nav_drawer()
+        for link in self.nav_panel.get_components():
+            link.add_event_handler('click', hide_drawer)
 
     @property
     def after_login_callback(self):
