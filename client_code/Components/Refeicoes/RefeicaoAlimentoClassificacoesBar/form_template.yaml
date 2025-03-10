@@ -1,10 +1,27 @@
 components:
 - layout_properties: {slot: default}
   name: panel
-  properties: {align: justify, gap: none, spacing_above: none, spacing_below: none, vertical_align: bottom}
+  properties: {align: left, gap: small, spacing_above: none, spacing_below: none, vertical_align: bottom}
   type: FlowPanel
 container:
-  properties: {html: <div anvil-slot="default"></div>}
+  properties:
+    html: |-
+      <style>
+          .refeicao-bar-component .anvil-has-text>.anvil-component-icon.anvil-left-icon {
+              margin-right: 0 !important;
+          }
+
+          .refeicao-bar-component .anvil-role-icon-outline>.anvil-component-icon {
+              -webkit-text-stroke-width: 2px;
+              -webkit-text-stroke-color: var(--anvil-m3-primary);
+          }
+
+          .refeicao-bar-component .anvil-role-icon-outline>.anvil-label-text {
+              -webkit-text-stroke-width: 1px;
+              -webkit-text-stroke-color: var(--anvil-m3-primary);
+          }
+      </style>
+      <div anvil-slot="default"></div>
   type: HtmlTemplate
 custom_component: true
 is_package: true

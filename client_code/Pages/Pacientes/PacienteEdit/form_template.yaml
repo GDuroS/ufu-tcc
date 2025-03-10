@@ -51,8 +51,9 @@ components_by_slot:
             properties: {bold: true, icon: 'mi:dinner_dining', style: title, text: Refeições, text_color: var(--anvil-m3-on-primary-container)}
             type: form:dep_lin1x4oec0ytd:_Components.Heading
           - components:
-            - name: refeicoes_edit_data_panel
-              properties: {item_template: Pages.Pacientes.PacienteEdit.RefeicaoRowTemplate}
+            - layout_properties: {}
+              name: refeicoes_edit_data_panel
+              properties: {background: var(--anvil-m3-surface-variant), item_template: Pages.Pacientes.PacienteEdit.RefeicaoRowTemplate}
               type: RepeatingPanel
             layout_properties: {slot: card-content-container-slot}
             name: refeicoes_edit_data_grid
