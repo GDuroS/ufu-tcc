@@ -42,7 +42,7 @@ components_by_slot:
           type: form:dep_lin1x4oec0ytd:_Components.Heading
         layout_properties: {slot: card-content-container-slot}
         name: planos_title_panel
-        properties: {gap: none, spacing_above: small, spacing_below: none, vertical_align: top}
+        properties: {gap: none, spacing_above: small, spacing_below: none, vertical_align: middle}
         type: FlowPanel
       - components:
         - components:
@@ -50,6 +50,23 @@ components_by_slot:
             name: refeicoes_heading
             properties: {bold: true, icon: 'mi:dinner_dining', style: title, text: Refeições, text_color: var(--anvil-m3-on-primary-container)}
             type: form:dep_lin1x4oec0ytd:_Components.Heading
+          - components:
+            - name: refeicoes_edit_data_panel
+              properties: {item_template: Pages.Pacientes.PacienteEdit.RefeicaoRowTemplate}
+              type: RepeatingPanel
+            layout_properties: {slot: card-content-container-slot}
+            name: refeicoes_edit_data_grid
+            properties:
+              background: var(--anvil-m3-primary-container)
+              columns:
+              - {data_key: nome, id: PFNEVB, title: Refeição, width: '150'}
+              - {data_key: horario, id: XQVMGL, title: Horário, width: '80'}
+              - {data_key: quantidades, expand: true, id: TLYOIR, title: Alimentos, width: '150'}
+              - {data_key: buttons, id: QRFTFM, title: '', width: '145'}
+              foreground: var(--anvil-m3-on-primary-container)
+              rows_per_page: null
+              show_page_controls: false
+            type: DataGrid
           layout_properties: {slot: card-content-slot}
           name: refeicoes_card_content_container
           properties: {}

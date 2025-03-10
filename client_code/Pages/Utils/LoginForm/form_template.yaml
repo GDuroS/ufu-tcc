@@ -2,6 +2,7 @@ components_by_slot:
   content:
   - data_bindings:
     - {code: self.login_callback, property: after_login_callback, writeback: false}
+    - {code: self.routing_context, property: routing_context, writeback: false}
     layout_properties: {}
     name: login_form
     properties: {}

@@ -10,7 +10,7 @@ class AlimentoClassificacaoEnum(BaseEnum):
         'PAO': {'nome': 'Cereais Derivados', 'codigo': 'C1', 'icon': 'fa:bread-slice', 'color': '#9A6E61'}, # Cereais e derivados
         'CEREAL': {'nome': 'Cereais', 'codigo': 'C2', 'icon': 'fa:wheat-awn', 'color': '#ffa500'}, # Cereais e derivados
         'GRAO': {'nome': 'Grãos', 'codigo': 'G', 'icon': 'fa:seedling', 'color': '#C0CBA1'}, # Leguminosas e derivados
-        'VEGETAIS': {'nome': 'Vegetais', 'codigo': 'V', 'icon': 'fa:carrot', 'color': '#E9692C'}, # Vegetais e derivados
+        'VEGETAL': {'nome': 'Vegetais', 'codigo': 'V', 'icon': 'fa:carrot', 'color': '#E9692C'}, # Vegetais e derivados
         'PROTEINA': {'nome': 'Proteínas', 'codigo': 'P', 'icon': 'fa:egg', 'color': '#CAA892'}
     }
     
@@ -21,7 +21,7 @@ class AlimentoClassificacaoEnum(BaseEnum):
     PAO = None
     CEREAL = None
     GRAO = None
-    VEGETAIS = None
+    VEGETAL = None
     PROTEINA = None
 
 _build_all(__name__)

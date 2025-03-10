@@ -94,7 +94,7 @@ db_schema:
       type: link_single
     server: full
     title: Paciente
-  planorefeicao:
+  planoalimentar:
     client: none
     columns:
     - admin_ui: {order: 0, width: 200}
@@ -114,7 +114,7 @@ db_schema:
       name: observacoes
       type: string
     server: full
-    title: PlanoRefeicao
+    title: PlanoAlimentar
   profissional:
     client: none
     columns:
@@ -135,7 +135,7 @@ db_schema:
     columns:
     - admin_ui: {order: 0, width: 200}
       name: plano
-      target: planorefeicao
+      target: planoalimentar
       type: link_single
     - admin_ui: {order: 1, width: 200}
       name: nome
@@ -168,6 +168,12 @@ db_schema:
       type: number
     - admin_ui: {order: 5, width: 200}
       name: Paciente
+      type: number
+    - admin_ui: {order: 6, width: 200}
+      name: PlanoAlimentar
+      type: number
+    - admin_ui: {order: 7, width: 200}
+      name: Refeicao
       type: number
     server: full
     title: Sequencer

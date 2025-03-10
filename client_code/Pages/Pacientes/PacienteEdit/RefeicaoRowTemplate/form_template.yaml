@@ -1,0 +1,28 @@
+components:
+- data_bindings:
+  - {code: self.horario_refeicao, property: text, writeback: false}
+  layout_properties: {column: XQVMGL}
+  name: horario_text
+  properties: {align: center, text: '08:00'}
+  type: form:dep_lin1x4oec0ytd:_Components.Text
+- components:
+  - layout_properties: {width: 48}
+    name: edit_row_icon_button
+    properties: {appearance: outlined, icon: 'mi:edit'}
+    type: form:dep_lin1x4oec0ytd:_Components.IconButton
+  - layout_properties: {}
+    name: remove_row_icon_button
+    properties: {appearance: filled, background_color: var(--anvil-m3-tertiary), icon: 'mi:delete'}
+    type: form:dep_lin1x4oec0ytd:_Components.IconButton
+  layout_properties: {column: QRFTFM}
+  name: buttons_panel
+  properties: {align: center, gap: none, spacing_above: none, spacing_below: none, vertical_align: middle}
+  type: FlowPanel
+- data_bindings:
+  - {code: 'self.item[''quantidades'']', property: alimentos_refeicao, writeback: false}
+  layout_properties: {column: TLYOIR}
+  name: refeicao_alimento_classificacoes_bar
+  properties: {}
+  type: form:Components.Refeicoes.RefeicaoAlimentoClassificacoesBar
+container: {type: DataRowPanel}
+is_package: true

@@ -1,5 +1,5 @@
 import anvil.server
-from OruData.Entity import Entity, User, EntityDescriptor
+from OruData.Entity import Entity, User, EntityDescriptor, ManagedRelationship
 
 @anvil.server.portable_class
 class ProfissionalUser(User):
@@ -28,11 +28,24 @@ class Profissional(Entity):
             obj._user_class = user_obj
         return obj
 
+@anvil.server.portable_class
 class Paciente(Entity):
     profissional = EntityDescriptor(Profissional)
 
-class PlanoRefeicao(Entity):
-    paciente = EntityDescriptor(Paciente)
+    @property
+    def plano_vigente(self):
+        try:
+            return getattr(self, '_plano_vigente')
+        except AttributeError:
+            self._plano_vigente = PlanoAlimentar(anvil.server.call('getPlanoAlimentarVigentePorPaciente', self.original_row))
+            return self._plano_vigente
 
+@anvil.server.portable_class
+class PlanoAlimentar(Entity):
+    paciente = EntityDescriptor(Paciente)
+    refeicoes = ManagedRelationship('Refeicao', 'plano')
+
+@anvil.server.portable_class
 class Refeicao(Entity):
-    plano = EntityDescriptor(PlanoRefeicao)
+    plano = EntityDescriptor(PlanoAlimentar)
+    
