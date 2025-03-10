@@ -105,11 +105,14 @@ db_schema:
       name: Sequence
       type: number
     - admin_ui: {order: 2, width: 200}
-      name: incio
+      name: inicio
       type: datetime
     - admin_ui: {order: 3, width: 200}
       name: termino
       type: datetime
+    - admin_ui: {order: 4, width: 200}
+      name: observacoes
+      type: string
     server: full
     title: PlanoRefeicao
   profissional:
@@ -127,6 +130,27 @@ db_schema:
       type: number
     server: full
     title: Profissional
+  refeicao:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: plano
+      target: planorefeicao
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      name: nome
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      name: Sequence
+      type: number
+    - admin_ui: {order: 3, width: 200}
+      name: horario
+      type: datetime
+    - admin_ui: {order: 4, width: 200}
+      name: quantidades
+      type: simpleObject
+    server: full
+    title: Refeicao
   sequencer:
     client: none
     columns:

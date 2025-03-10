@@ -30,3 +30,9 @@ class Profissional(Entity):
 
 class Paciente(Entity):
     profissional = EntityDescriptor(Profissional)
+
+class PlanoRefeicao(Entity):
+    paciente = EntityDescriptor(Paciente)
+
+class Refeicao(Entity):
+    plano = EntityDescriptor(PlanoRefeicao)

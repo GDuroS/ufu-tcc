@@ -14,3 +14,5 @@ class PacienteService(AbstractCrudServiceClass):
 user_service = AbstractCrudServiceClass('Users')
 profissional_service = AbstractCrudServiceClass('Profissional')
 paciente_service = PacienteService()
+plano_refeicao_service = AbstractCrudServiceClass("PlanoRefeicao")
+refeicao_service = AbstractCrudServiceClass("Refeicao")
