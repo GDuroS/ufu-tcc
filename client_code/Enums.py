@@ -3,7 +3,7 @@ from OruData.Enum import BaseEnum, _build_all
 class AlimentoClassificacaoEnum(BaseEnum):
     """Classificação de alimentos"""
     __options__ = {
-        'BEBIDA': {'nome': 'Bebidas', 'codigo': 'B', 'icon': 'fa:glass-water', 'color': 'lightblue'}, # Bebidas
+        'BEBIDA': {'nome': 'Bebidas', 'codigo': 'B', 'icon': 'fa:glass-water', 'color': 'darkblue'}, # Bebidas
         'SUCO': {'nome': 'Sucos', 'codigo': 'S', 'icon': 'fa:blender', 'color': '#4cdeb3'}, # Frutas e derivados
         'FRUTA': {'nome': 'Frutas', 'codigo': 'F', 'icon': 'fa:apple-whole', 'color': '#DD1533'}, # Frutas e derivados
         'LEITE': {'nome': 'Leites e Derivados', 'codigo': 'L', 'icon': 'fa:bottle-droplet', 'color': '#FDFFF5', 'outlined': True}, # Leite e derivados

@@ -1,0 +1,29 @@
+components:
+- layout_properties: {slot: default}
+  name: panel
+  properties: {align: center, gap: small, spacing_above: none, spacing_below: none, vertical_align: bottom}
+  type: FlowPanel
+container:
+  properties:
+    html: |-
+      <style>
+          .refeicao-legenda-component .anvil-has-text>.anvil-component-icon.anvil-left-icon {
+              margin-right: 0 !important;
+          }
+
+          .refeicao-legenda-component .anvil-role-icon-outline>.anvil-component-icon {
+              -webkit-text-stroke-width: 2px;
+              -webkit-text-stroke-color: var(--anvil-m3-primary);
+          }
+
+          .refeicao-legenda-component .anvil-role-icon-outline>.anvil-label-text {
+              -webkit-text-stroke-width: 1px;
+              -webkit-text-stroke-color: var(--anvil-m3-primary);
+          }
+      </style>
+      <div anvil-slot="default"></div>
+  type: HtmlTemplate
+custom_component: true
+is_package: true
+properties: []
+toolbox_item: {group: Refeições, title: Barra de Legendas de Classificações}

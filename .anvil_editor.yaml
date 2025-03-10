@@ -3,6 +3,7 @@ unique_ids:
     app_icon.png: '1741189546736248522264276.53635'
     theme.css: 6G44GIEQQRJLILWU6GQSQO5BTDFT5ZI3
   forms:
+    Components.Refeicoes.AlimentoClassificacoesLegenda: '1741607372669758647828619.7391'
     Components.Refeicoes.RefeicaoAlimentoClassificacoesBar: '1741578022046538403456332.33167'
     Components.Users.IdentidadesForm: '1741223492393423412961305.5164'
     Layouts.LandingLayout: '1741365251475586421159054.9941'

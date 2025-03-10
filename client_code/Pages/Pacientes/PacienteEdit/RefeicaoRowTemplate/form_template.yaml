@@ -3,7 +3,7 @@ components:
   - {code: self.horario_refeicao, property: text, writeback: false}
   layout_properties: {column: XQVMGL}
   name: horario_text
-  properties: {align: center, text: '08:00'}
+  properties: {align: center, font_size: null, text: '08:00'}
   type: form:dep_lin1x4oec0ytd:_Components.Text
 - components:
   - layout_properties: {width: 48}
@@ -24,5 +24,7 @@ components:
   name: refeicao_alimento_classificacoes_bar
   properties: {}
   type: form:Components.Refeicoes.RefeicaoAlimentoClassificacoesBar
-container: {type: DataRowPanel}
+container:
+  properties: {font_size: null}
+  type: DataRowPanel
 is_package: true
