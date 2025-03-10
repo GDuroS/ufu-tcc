@@ -1,7 +1,7 @@
 from OruData.Enum import BaseEnum, _build_all
 
-class AlimentoGrupoEnum(BaseEnum):
-    """Grupos de alimentos (também chamado de classificação)"""
+class AlimentoClassificacaoEnum(BaseEnum):
+    """Classificação de alimentos"""
     __options__ = {
         'BEBIDA': {'nome': 'Bebidas', 'codigo': 'B', 'icon': 'fa:glass-water', 'color': 'lightblue'}, # Bebidas
         'SUCO': {'nome': 'Sucos', 'codigo': 'S', 'icon': 'fa:blender', 'color': '#4cdeb3'}, # Frutas e derivados
@@ -10,7 +10,7 @@ class AlimentoGrupoEnum(BaseEnum):
         'PAO': {'nome': 'Cereais Derivados', 'codigo': 'C1', 'icon': 'fa:bread-slice', 'color': '#9A6E61'}, # Cereais e derivados
         'CEREAL': {'nome': 'Cereais', 'codigo': 'C2', 'icon': 'fa:wheat-awn', 'color': '#ffa500'}, # Cereais e derivados
         'GRAO': {'nome': 'Grãos', 'codigo': 'G', 'icon': 'fa:seedling', 'color': '#C0CBA1'}, # Leguminosas e derivados
-        'VEGETAIS': {'nome': 'Vegetais', 'codigo': 'V', 'icon': 'fa:carrot', 'color': '#E9692C'}, # Vegerais e derivados
+        'VEGETAIS': {'nome': 'Vegetais', 'codigo': 'V', 'icon': 'fa:carrot', 'color': '#E9692C'}, # Vegetais e derivados
         'PROTEINA': {'nome': 'Proteínas', 'codigo': 'P', 'icon': 'fa:egg', 'color': '#CAA892'}
     }
     

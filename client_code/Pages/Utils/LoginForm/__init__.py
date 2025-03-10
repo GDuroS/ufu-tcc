@@ -3,7 +3,7 @@ from anvil import *
 
 
 class LoginForm(LoginFormTemplate):
-    def __init__(self, **properties):
+    def __init__(self, routing_context, **properties):
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
 

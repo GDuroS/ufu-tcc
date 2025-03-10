@@ -1,6 +1,7 @@
 from ._anvil_designer import PacienteEditTemplate
 from anvil import *
 
+from anvil_extras.popover import popover
 from OruData.CrudInterface import CrudInterface
 from ....Entities import Paciente
 
@@ -15,6 +16,7 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
 
         # Any code you write here will run before the form opens.
         self._toggle_components()
+        popover(self.planos_title_tooltip_heading, 'Planos são conjuntos de refeições planejadas para o paciente durante um período no qual são vigentes', title='Planos de Refeições', placement='auto', trigger='hover click')
 
     def before_save(self):
         if self.item.is_new:

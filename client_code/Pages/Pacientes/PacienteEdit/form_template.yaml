@@ -1,51 +1,83 @@
 components_by_slot:
   content:
+  - layout_properties: {}
+    name: dados_basicos_heading
+    properties: {bold: true, style: title, text: Dados Básicos}
+    type: form:dep_lin1x4oec0ytd:_Components.Heading
+  - data_bindings:
+    - {code: 'self.item[''nome'']', property: text, writeback: true}
+    layout_properties: {}
+    name: nome_completo_text_box
+    properties: {label: Nome Completo}
+    type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
+  - components:
+    - data_bindings:
+      - {code: 'self.item[''cpf'']', property: cpf, writeback: true}
+      layout_properties: {expand: true}
+      name: cpftext_box
+      properties: {align: left, supporting_text: ''}
+      type: form:dep_obp4eaigzghyeh:FormInput.CPFTextBox
+    - data_bindings:
+      - {code: 'self.item[''nascimento'']', property: date, writeback: true}
+      layout_properties: {expand: true}
+      name: nascimento_date_picker
+      properties:
+        label: Data de Nascimento
+        margin: ['0', '0', '4', '0']
+      type: form:dep_obp4eaigzghyeh:FormInput.DatePickerAlt
+    layout_properties: {}
+    name: basicos_flow_panel
+    properties: {align: justify, gap: medium, vertical_align: top}
+    type: FlowPanel
   - components:
     - components:
-      - layout_properties: {slot: card-content-container-slot}
-        name: dados_basicos_heading
-        properties: {bold: true, style: title, text: Dados Básicos}
-        type: form:dep_lin1x4oec0ytd:_Components.Heading
-      - data_bindings:
-        - {code: 'self.item[''nome'']', property: text, writeback: true}
-        layout_properties: {slot: card-content-container-slot}
-        name: nome_completo_text_box
-        properties: {label: Nome Completo}
-        type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
       - components:
-        - data_bindings:
-          - {code: 'self.item[''cpf'']', property: cpf, writeback: true}
-          layout_properties: {expand: true}
-          name: cpftext_box
-          properties: {align: left, supporting_text: ''}
-          type: form:dep_obp4eaigzghyeh:FormInput.CPFTextBox
-        - data_bindings:
-          - {code: 'self.item[''nascimento'']', property: date, writeback: true}
-          layout_properties: {expand: true}
-          name: nascimento_date_picker
-          properties:
-            label: Data de Nascimento
-            margin: ['0', '0', '4', '0']
-          type: form:dep_obp4eaigzghyeh:FormInput.DatePickerAlt
+        - layout_properties: {}
+          name: planos_title_heading
+          properties: {bold: true, style: title, text: Planos de Refeições do Paciente}
+          type: form:dep_lin1x4oec0ytd:_Components.Heading
+        - layout_properties: {}
+          name: planos_title_tooltip_heading
+          properties: {bold: true, icon: 'mi:help', style: title, text: ''}
+          type: form:dep_lin1x4oec0ytd:_Components.Heading
         layout_properties: {slot: card-content-container-slot}
-        name: basicos_flow_panel
-        properties: {align: justify, gap: medium, vertical_align: top}
+        name: planos_title_panel
+        properties: {gap: none, spacing_above: small, spacing_below: none, vertical_align: top}
         type: FlowPanel
+      - components:
+        - components:
+          - layout_properties: {slot: card-content-container-slot}
+            name: refeicoes_heading
+            properties: {bold: true, icon: 'mi:dinner_dining', style: title, text: Refeições, text_color: var(--anvil-m3-on-primary-container)}
+            type: form:dep_lin1x4oec0ytd:_Components.Heading
+          layout_properties: {slot: card-content-slot}
+          name: refeicoes_card_content_container
+          properties: {}
+          type: form:dep_lin1x4oec0ytd:_Components.Card.CardContentContainer
+        layout_properties: {slot: card-content-container-slot}
+        name: refeicoes_card
+        properties: {background_color: var(--anvil-m3-primary-container)}
+        type: form:dep_lin1x4oec0ytd:_Components.Card
+      - components:
+        - components:
+          - layout_properties: {slot: card-content-container-slot}
+            name: metas_heading
+            properties: {bold: true, icon: 'mi:flag_circle', style: title, text: Metas, text_color: var(--anvil-m3-on-tertiary-container)}
+            type: form:dep_lin1x4oec0ytd:_Components.Heading
+          layout_properties: {slot: card-content-slot}
+          name: metas_card_content_container
+          properties: {}
+          type: form:dep_lin1x4oec0ytd:_Components.Card.CardContentContainer
+        layout_properties: {slot: card-content-container-slot}
+        name: metas_card
+        properties: {background_color: var(--anvil-m3-tertiary-container)}
+        type: form:dep_lin1x4oec0ytd:_Components.Card
       layout_properties: {slot: card-content-slot}
-      name: dados_basicos_card_content_container
+      name: planos_card_content_container
       properties: {}
       type: form:dep_lin1x4oec0ytd:_Components.Card.CardContentContainer
     layout_properties: {}
-    name: dados_basicos_card
-    properties: {}
-    type: form:dep_lin1x4oec0ytd:_Components.Card
-  - components:
-    - layout_properties: {slot: card-content-slot}
-      name: refeicoes_card_content_container
-      properties: {}
-      type: form:dep_lin1x4oec0ytd:_Components.Card.CardContentContainer
-    layout_properties: {}
-    name: refeicoes_card
+    name: planos_card
     properties: {}
     type: form:dep_lin1x4oec0ytd:_Components.Card
   content_heading_left:
