@@ -24,6 +24,7 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         self.refeicoes_edit_data_panel.tag.form = self
         self.refeicoes_edit_data_grid.tag.all_columns = [c for c in self.refeicoes_edit_data_grid.columns]
         self.refeicoes_edit_data_grid.tag.view_columns = [c for c in self.refeicoes_edit_data_grid.columns if c['data_key'] != 'buttons']
+        self._set_grid_visibility()
 
     def _set_grid_visibility(self):
         self.refeicoes_edit_data_grid.auto_header = not self.view_mode
@@ -36,3 +37,7 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         if self.item.is_new:
             from ....Commons import LocalCommons
             self.item.profissional = LocalCommons().profissional
+
+    def mode_switch_change(self, **event_args):
+        """This method is called when the state of the component is changed."""
+        self._set_grid_visibility()

@@ -22,7 +22,7 @@ components_by_slot:
       layout_properties: {expand: true}
       name: nascimento_date_picker
       properties:
-        label: Data de Nascimento
+        label: Nascimento
         margin: ['0', '0', '4', '0']
       type: form:dep_obp4eaigzghyeh:FormInput.DatePickerAlt
     layout_properties: {}

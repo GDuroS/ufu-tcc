@@ -12,9 +12,9 @@ class RefeicaoEditRowTemplate(RefeicaoEditRowTemplateTemplate):
     @property
     def view_mode(self):
         try:
-            pass
-        except:
-            pass
+            return self.parent.tag.form.view_mode
+        except Exception:
+            return True
 
     @property
     def horario_refeicao(self):
