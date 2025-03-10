@@ -23,3 +23,7 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         if self.item.is_new:
             from ....Commons import LocalCommons
             self.item.profissional = LocalCommons().profissional
+
+    def mode_switch_change(self, **event_args):
+        """This method is called when the state of the component is changed."""
+        pass

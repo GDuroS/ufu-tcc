@@ -110,6 +110,7 @@ components_by_slot:
   - data_bindings:
     - {code: self.edit_mode, property: selected, writeback: false}
     - {code: not self.create_mode, property: visible, writeback: false}
+    event_bindings: {change: mode_switch_change}
     layout_properties: {}
     name: mode_switch
     properties: {selected_icon: 'mi:edit', unselected_icon: 'mi:visibility'}
