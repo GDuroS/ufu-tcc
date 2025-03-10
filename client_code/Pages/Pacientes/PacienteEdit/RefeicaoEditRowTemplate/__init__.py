@@ -10,5 +10,12 @@ class RefeicaoEditRowTemplate(RefeicaoEditRowTemplateTemplate):
         # Any code you write here will run before the form opens.
 
     @property
+    def view_mode(self):
+        try:
+            pass
+        except:
+            pass
+
+    @property
     def horario_refeicao(self):
         return "{:%H:%M}".format(self.item['horario'])

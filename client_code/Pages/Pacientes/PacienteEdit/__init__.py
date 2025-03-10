@@ -18,6 +18,19 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         self._toggle_components()
         popover(self.planos_title_tooltip_heading, 'Planos são conjuntos de refeições planejadas para o paciente durante um período no qual são vigentes', title='Planos de Refeições', placement='auto', trigger='hover click')
         self.refeicoes_edit_data_panel.items = self.item.plano_vigente.refeicoes
+        self._prepare_grid_visibility()
+
+    def _prepare_grid_visibility(self):
+        self.refeicoes_edit_data_panel.tag.form = self
+        self.refeicoes_edit_data_grid.tag.all_columns = [c for c in self.refeicoes_edit_data_grid.columns]
+        self.refeicoes_edit_data_grid.tag.view_columns = [c for c in self.refeicoes_edit_data_grid.columns if c['data_key'] != 'buttons']
+
+    def _set_grid_visibility(self):
+        self.refeicoes_edit_data_grid.auto_header = not self.view_mode
+        if self.view_mode:
+            self.refeicoes_edit_data_grid.columns = self.refeicoes_edit_data_grid.tag.view_columns
+        else:
+            self.refeicoes_edit_data_grid.columns = self.refeicoes_edit_data_grid.tag.all_columns
 
     def before_save(self):
         if self.item.is_new:
