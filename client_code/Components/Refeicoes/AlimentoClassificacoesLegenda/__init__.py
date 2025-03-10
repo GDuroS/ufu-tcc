@@ -30,3 +30,11 @@ class AlimentoClassificacoesLegenda(AlimentoClassificacoesLegendaTemplate):
                     role="icon-outline" if enum.get("outlined", False) else "",
                 )
             )
+
+    @property
+    def background_color(self):
+        return self.background
+
+    @background_color.setter
+    def background_color(self, value):
+        self.background = value

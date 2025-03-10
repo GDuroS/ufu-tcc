@@ -52,13 +52,17 @@ components_by_slot:
             type: form:dep_lin1x4oec0ytd:_Components.Heading
           - layout_properties: {slot: card-content-container-slot}
             name: refeicoes_view_panel
-            properties: {}
-            type: ColumnPanel
+            properties: {item_template: Pages.Pacientes.PacienteEdit.RefeicaoViewItemTemplate}
+            type: RepeatingPanel
           - components:
             - layout_properties: {}
               name: refeicoes_edit_data_panel
-              properties: {background: var(--anvil-m3-surface-variant), item_template: Pages.Pacientes.PacienteEdit.RefeicaoRowTemplate}
+              properties: {background: var(--anvil-m3-surface-variant), item_template: Pages.Pacientes.PacienteEdit.RefeicaoEditRowTemplate, role: null}
               type: RepeatingPanel
+            - layout_properties: {slot: footer}
+              name: alimento_classificacoes_legenda
+              properties: {background_color: ''}
+              type: form:Components.Refeicoes.AlimentoClassificacoesLegenda
             layout_properties: {slot: card-content-container-slot}
             name: refeicoes_edit_data_grid
             properties:
@@ -72,10 +76,6 @@ components_by_slot:
               rows_per_page: null
               show_page_controls: false
             type: DataGrid
-          - layout_properties: {slot: card-content-container-slot}
-            name: alimento_classificacoes_legenda
-            properties: {}
-            type: form:Components.Refeicoes.AlimentoClassificacoesLegenda
           layout_properties: {slot: card-content-slot}
           name: refeicoes_card_content_container
           properties: {}
