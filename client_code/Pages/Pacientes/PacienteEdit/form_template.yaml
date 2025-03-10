@@ -50,6 +50,18 @@ components_by_slot:
             name: refeicoes_heading
             properties: {bold: true, icon: 'mi:dinner_dining', style: title, text: Refeições, text_color: var(--anvil-m3-on-primary-container)}
             type: form:dep_lin1x4oec0ytd:_Components.Heading
+          - components:
+            - name: repeating_panel_1
+              properties: {item_template: Pages.Pacientes.PacienteEdit.RowTemplate1}
+              type: RepeatingPanel
+            layout_properties: {slot: card-content-container-slot}
+            name: data_grid_1
+            properties:
+              columns:
+              - {data_key: column_1, id: VJPBKH, title: Column 1}
+              - {data_key: column_2, id: QHSDNZ, title: Column 2}
+              - {data_key: column_3, id: IEISZE, title: Column 3}
+            type: DataGrid
           - layout_properties: {slot: card-content-container-slot}
             name: refeicoes_view_panel
             properties: {item_template: Pages.Pacientes.PacienteEdit.RefeicaoViewItemTemplate}
