@@ -48,4 +48,18 @@ class PlanoAlimentar(Entity):
 @anvil.server.portable_class
 class Refeicao(Entity):
     plano = EntityDescriptor(PlanoAlimentar)
+
+    @property
+    def horario_time(self):
+        if self['horario']:
+            from datetime import time
+            return time.fromisoformat(self['horario'])
+        return None
+
+    @horario_time.setter
+    def horario_time(self, time_instance):
+        if time_instance:
+            self['horario'] = time_instance.isoformat()
+        else:
+            self['horario'] = None
     

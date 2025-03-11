@@ -143,12 +143,12 @@ db_schema:
     - admin_ui: {order: 2, width: 200}
       name: Sequence
       type: number
-    - admin_ui: {order: 3, width: 200}
-      name: horario
-      type: datetime
     - admin_ui: {order: 4, width: 200}
       name: quantidades
       type: simpleObject
+    - admin_ui: {order: 5, width: 200}
+      name: horario
+      type: string
     server: full
     title: Refeicao
   sequencer:

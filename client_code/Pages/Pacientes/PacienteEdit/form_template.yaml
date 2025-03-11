@@ -61,7 +61,7 @@ components_by_slot:
               background: var(--anvil-m3-primary-container)
               columns:
               - {data_key: nome, id: PFNEVB, title: Nome, width: '150'}
-              - {data_key: horario, id: XQVMGL, title: Horário, width: '80'}
+              - {data_key: horario_time, expand: false, id: XQVMGL, title: Horário, width: '80'}
               - {data_key: quantidades, expand: true, id: TLYOIR, title: Alimentos, width: '150'}
               - {data_key: buttons, id: QRFTFM, title: '', width: '145'}
               foreground: var(--anvil-m3-on-primary-container)
