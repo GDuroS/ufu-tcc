@@ -23,7 +23,11 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         self.routing_context.raise_init_events()
 
     def _prepare_grid_visibility(self):
+        def remove_refeicao(refeicao, **event_args):
+            self.item.plano_vigente.refeicoes.remove(refeicao)
+            self.refeicoes_edit_data_panel.items = self.item.plano_vigente.refeicoes
         self.refeicoes_edit_data_panel.tag.form = self
+        self.refeicoes_edit_data_panel.add_event_handler('x-remove-self', remove_refeicao)
         self.refeicoes_edit_data_grid.tag.all_columns = [c for c in self.refeicoes_edit_data_grid.columns]
         self.refeicoes_edit_data_grid.tag.view_columns = [c for c in self.refeicoes_edit_data_grid.columns if c['data_key'] != 'buttons']
         self.on_query_changed()

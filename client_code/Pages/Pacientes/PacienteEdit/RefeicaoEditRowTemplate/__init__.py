@@ -23,4 +23,12 @@ class RefeicaoEditRowTemplate(RefeicaoEditRowTemplateTemplate):
     def horario_refeicao(self):
         return "{:%H:%M}".format(self.item['horario'])
 
+    def edit_row_icon_button_click(self, **event_args):
+        from anvil.js import get_dom_node
+        get_dom_node(self).classList.add('edit-mode-row')
+        self.edit_panel.visible = True
+
+    def remove_row_icon_button_click(self, **event_args):
+        self.parent.raise_event('x-remove-self', refeicao=self.item)
+
     
