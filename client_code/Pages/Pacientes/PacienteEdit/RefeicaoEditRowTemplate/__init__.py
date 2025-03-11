@@ -4,6 +4,7 @@ from anvil import *
 
 class RefeicaoEditRowTemplate(RefeicaoEditRowTemplateTemplate):
     def __init__(self, **properties):
+        from anvil.js import get_dom_node
         # Set Form properties and Data Bindings.
         self.init_components(**properties)
 
@@ -11,6 +12,7 @@ class RefeicaoEditRowTemplate(RefeicaoEditRowTemplateTemplate):
         def refresh(**event_args):
             self.refresh_data_bindings()
         self.add_event_handler('x-refresh', refresh)
+        get_dom_node(self.classificacoes_data_panel).classList.add("min-padding")
 
     @property
     def view_mode(self):
@@ -22,10 +24,6 @@ class RefeicaoEditRowTemplate(RefeicaoEditRowTemplateTemplate):
     @property
     def horario_refeicao(self):
         return "{:%H:%M}".format(self.item['horario'])
-
-    @property
-    def horario_edit_value(self):
-        return 
 
     def edit_row_icon_button_click(self, **event_args):
         from anvil.js import get_dom_node
