@@ -13,6 +13,7 @@ class RefeicaoEditRowTemplate(RefeicaoEditRowTemplateTemplate):
             self.refresh_data_bindings()
         self.add_event_handler('x-refresh', refresh)
         get_dom_node(self.classificacoes_data_panel).classList.add("min-padding")
+        self.edit_panel.visible = False # Inicialização em view_mode sempre
 
     @property
     def view_mode(self):
@@ -24,6 +25,10 @@ class RefeicaoEditRowTemplate(RefeicaoEditRowTemplateTemplate):
     @property
     def horario_refeicao(self):
         return "{:%H:%M}".format(self.item['horario'])
+
+    @property
+    def quantidade_items(self):
+        return [{'classificacao': classificacao, 'quantidade': quantidade} for classificacao, quantidade in self.item.quantidades.items()]
 
     def edit_row_icon_button_click(self, **event_args):
         from anvil.js import get_dom_node

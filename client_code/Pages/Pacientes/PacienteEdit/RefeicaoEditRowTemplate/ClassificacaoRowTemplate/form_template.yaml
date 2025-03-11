@@ -1,0 +1,9 @@
+components:
+- data_bindings:
+  - {code: 'self.item[''quantidade'']', property: text, writeback: true}
+  layout_properties: {column: PQXJWN}
+  name: quantidade_text_box
+  properties: {appearance: outlined, type: number}
+  type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
+container: {type: DataRowPanel}
+is_package: true
