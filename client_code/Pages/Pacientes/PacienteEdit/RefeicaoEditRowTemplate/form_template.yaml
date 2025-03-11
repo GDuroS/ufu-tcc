@@ -29,12 +29,14 @@ components:
   properties: {}
   type: form:Components.Refeicoes.RefeicaoAlimentoClassificacoesBar
 - components:
-  - layout_properties: {grid_position: 'QXDXZN,UGQHYA'}
-    name: text_box_1
+  - data_bindings:
+    - {code: 'self.item[''nome'']', property: text, writeback: true}
+    layout_properties: {grid_position: 'QXDXZN,UGQHYA'}
+    name: nome_edit_text_box
     properties: {appearance: outlined, label: Nome}
     type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
   - layout_properties: {grid_position: 'CYZNMX,GMLHGU'}
-    name: horario_picker_component
+    name: horario_edit_picker_component
     properties: {appearance: outlined, is_timestamp: true, label: Horário Recomendado, lower_unit: minutes}
     type: form:dep_obp4eaigzghyeh:FormInput.TimePickerComponent
   layout_properties: {}
