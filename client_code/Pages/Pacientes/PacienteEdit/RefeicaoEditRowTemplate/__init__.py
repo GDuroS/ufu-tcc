@@ -1,6 +1,6 @@
 from ._anvil_designer import RefeicaoEditRowTemplateTemplate
 from anvil import *
-
+from .....Enums import AlimentoClassificacaoEnum
 
 class RefeicaoEditRowTemplate(RefeicaoEditRowTemplateTemplate):
     def __init__(self, **properties):
@@ -28,7 +28,10 @@ class RefeicaoEditRowTemplate(RefeicaoEditRowTemplateTemplate):
 
     @property
     def quantidade_items(self):
-        return [{'classificacao': classificacao, 'quantidade': quantidade} for classificacao, quantidade in self.item.quantidades.items()]
+        return [
+            {'classificacao': key, 'quantidade': self.item['quantidades'].get(key, 0) if self.item['quantidades'] else 0}
+            for key in AlimentoClassificacaoEnum.key_list()
+        ]
 
     def edit_row_icon_button_click(self, **event_args):
         from anvil.js import get_dom_node
@@ -37,5 +40,13 @@ class RefeicaoEditRowTemplate(RefeicaoEditRowTemplateTemplate):
 
     def remove_row_icon_button_click(self, **event_args):
         self.parent.raise_event('x-remove-self', refeicao=self.item)
+
+    def cancel_button_click(self, **event_args):
+        """This method is called when the component is clicked."""
+        pass
+
+    def save_button_click(self, **event_args):
+        """This method is called when the component is clicked."""
+        pass
 
     
