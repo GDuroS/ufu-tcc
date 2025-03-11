@@ -57,7 +57,9 @@ class LocalCommons(CommonData):
                 return
             self._refresh_pacientes()
         if self._pacientes_async_call.status == "PENDING":
-            self._set_pacientes(self._pacientes_async_call.await_result())
+            from anvil import server
+            with server.loading_indicator():
+                self._set_pacientes(self._pacientes_async_call.await_result())
 
     def _wait_for_profissional(self):
         if self._profissional_async_call is None:

@@ -1,5 +1,9 @@
 components:
 - layout_properties: {slot: default}
+  name: titulo_text
+  properties: {align: center, bold: true, text: Legenda, underline: true}
+  type: form:dep_lin1x4oec0ytd:_Components.Text
+- layout_properties: {slot: default}
   name: panel
   properties: {align: center, gap: small, spacing_above: none, spacing_below: none, vertical_align: bottom}
   type: FlowPanel
@@ -18,7 +22,7 @@ container:
 
           .refeicao-legenda-component .anvil-role-icon-outline>.anvil-label-text {
               -webkit-text-stroke-width: 1px;
-              -webkit-text-stroke-color: var(--anvil-m3-primary);
+              text-shadow: -1px 0 var(--anvil-m3-primary), 0 1px var(--anvil-m3-primary), 1px 0 var(--anvil-m3-primary), 0 -1px var(--anvil-m3-primary);
           }
       </style>
       <div anvil-slot="default"></div>

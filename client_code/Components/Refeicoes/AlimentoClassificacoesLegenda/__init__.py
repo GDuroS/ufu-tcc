@@ -22,7 +22,7 @@ class AlimentoClassificacoesLegenda(AlimentoClassificacoesLegendaTemplate):
                     spacing_above=None,
                     spacing_below=None,
                     text=enum['nome'],
-                    font_size=20,
+                    font_size=14,
                     bold=True,
                     foreground=enum["color"],
                     icon=enum["icon"],

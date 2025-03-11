@@ -1,5 +1,6 @@
 from ._anvil_designer import PacienteEditTemplate
 from anvil import *
+from anvil.js import get_dom_node
 
 from anvil_extras.popover import popover
 from OruData.CrudInterface import CrudInterface
@@ -19,19 +20,23 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         popover(self.planos_title_tooltip_heading, 'Planos são conjuntos de refeições planejadas para o paciente durante um período no qual são vigentes', title='Planos de Refeições', placement='auto', trigger='hover click')
         self.refeicoes_edit_data_panel.items = self.item.plano_vigente.refeicoes
         self._prepare_grid_visibility()
+        self.routing_context.raise_init_events()
 
     def _prepare_grid_visibility(self):
         self.refeicoes_edit_data_panel.tag.form = self
         self.refeicoes_edit_data_grid.tag.all_columns = [c for c in self.refeicoes_edit_data_grid.columns]
         self.refeicoes_edit_data_grid.tag.view_columns = [c for c in self.refeicoes_edit_data_grid.columns if c['data_key'] != 'buttons']
-        self._set_grid_visibility()
+        self.on_query_changed()
 
-    def _set_grid_visibility(self):
+    def on_query_changed(self, **event_args):
+        CrudInterface.on_query_changed(self, **event_args)
         self.refeicoes_edit_data_grid.auto_header = not self.view_mode
+        get_dom_node(self.refeicoes_edit_data_panel).classList.toggle('no-auto-header', self.view_mode)
         if self.view_mode:
             self.refeicoes_edit_data_grid.columns = self.refeicoes_edit_data_grid.tag.view_columns
         else:
             self.refeicoes_edit_data_grid.columns = self.refeicoes_edit_data_grid.tag.all_columns
+        self.refeicoes_edit_data_panel.raise_event_on_children('x-refresh')
 
     def before_save(self):
         if self.item.is_new:
@@ -40,4 +45,4 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
 
     def mode_switch_change(self, **event_args):
         """This method is called when the state of the component is changed."""
-        self._set_grid_visibility()
+        self.on_query_changed()

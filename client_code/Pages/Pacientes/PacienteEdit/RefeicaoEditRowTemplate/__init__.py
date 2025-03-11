@@ -8,6 +8,9 @@ class RefeicaoEditRowTemplate(RefeicaoEditRowTemplateTemplate):
         self.init_components(**properties)
 
         # Any code you write here will run before the form opens.
+        def refresh(**event_args):
+            self.refresh_data_bindings()
+        self.add_event_handler('x-refresh', refresh)
 
     @property
     def view_mode(self):
@@ -19,3 +22,5 @@ class RefeicaoEditRowTemplate(RefeicaoEditRowTemplateTemplate):
     @property
     def horario_refeicao(self):
         return "{:%H:%M}".format(self.item['horario'])
+
+    
