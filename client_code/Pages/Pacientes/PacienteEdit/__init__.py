@@ -4,7 +4,7 @@ from anvil.js import get_dom_node
 
 from anvil_extras.popover import popover
 from OruData.CrudInterface import CrudInterface
-from ....Entities import Paciente
+from ....Entities import Paciente, Refeicao
 
 class PacienteEdit(CrudInterface, PacienteEditTemplate):
     def __init__(self, routing_context, **properties):
@@ -25,14 +25,19 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         def remove_refeicao(refeicao, **event_args):
             self.item.plano_vigente.refeicoes.remove(refeicao)
             self.refeicoes_edit_data_panel.items = self.item.plano_vigente.refeicoes
+            self.on_query_changed()
+        def update_view(edit_mode, **event_args):
+            self.add_refeicao_button.visible = not edit_mode
         self.refeicoes_edit_data_panel.tag.form = self
         self.refeicoes_edit_data_panel.add_event_handler('x-remove-self', remove_refeicao)
+        self.refeicoes_edit_data_panel.add_event_handler('x-update-view', update_view)
         self.refeicoes_edit_data_grid.tag.all_columns = [c for c in self.refeicoes_edit_data_grid.columns]
         self.refeicoes_edit_data_grid.tag.view_columns = [c for c in self.refeicoes_edit_data_grid.columns if c['data_key'] != 'buttons']
 
     def on_query_changed(self, **event_args):
         CrudInterface.on_query_changed(self, **event_args)
         self.refeicoes_edit_data_grid.auto_header = not self.view_mode
+        self.add_refeicao_button.visible = not self.view_mode
         get_dom_node(self.refeicoes_edit_data_panel).classList.toggle('no-auto-header', self.view_mode)
         if self.view_mode:
             self.refeicoes_edit_data_grid.columns = self.refeicoes_edit_data_grid.tag.view_columns
@@ -44,3 +49,10 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         if self.item.is_new:
             from ....Commons import LocalCommons
             self.item.profissional = LocalCommons().profissional
+
+    def add_refeicao_button_click(self, **event_args):
+        """This method is called when the component is clicked."""
+        self.item.plano_vigente.refeicoes.append(Refeicao())
+        self.refeicoes_edit_data_panel.items = self.item.plano_vigente.refeicoes
+        self.on_query_changed()
+        self.add_refeicao_button.visible = False # Pois ficará visível ao rodar on_query_changed

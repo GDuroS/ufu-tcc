@@ -1,6 +1,7 @@
 components:
 - data_bindings:
   - {code: 'self.item[''quantidade'']', property: text, writeback: true}
+  event_bindings: {change: quantidade_text_box_change}
   layout_properties: {column: PQXJWN}
   name: quantidade_text_box
   properties: {appearance: outlined, type: number}

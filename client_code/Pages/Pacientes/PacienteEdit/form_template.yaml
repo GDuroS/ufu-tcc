@@ -55,6 +55,12 @@ components_by_slot:
               name: refeicoes_edit_data_panel
               properties: {background: var(--anvil-m3-surface-variant), item_template: Pages.Pacientes.PacienteEdit.RefeicaoEditRowTemplate, role: null}
               type: RepeatingPanel
+            - data_bindings: []
+              event_bindings: {click: add_refeicao_button_click}
+              layout_properties: {slot: footer}
+              name: add_refeicao_button
+              properties: {align: right, icon: 'mi:add_row_below', text: Adicionar refeição, visible: false}
+              type: form:dep_lin1x4oec0ytd:_Components.Button
             data_bindings: []
             layout_properties: {slot: card-content-container-slot}
             name: refeicoes_edit_data_grid

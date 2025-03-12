@@ -24,7 +24,7 @@ class RefeicaoAlimentoClassificacoesBar(RefeicaoAlimentoClassificacoesBarTemplat
     def update_alimentos(self):
         self.panel.clear()
         for key, enum in AlimentoClassificacaoEnum.items():
-            quantidade = self.item.get(key, 0)
+            quantidade = self.item.get(key, 0) if self.item else 0
             if quantidade > 0:
                 self.panel.add_component(Label(
                     spacing_above=None, spacing_below=None, 

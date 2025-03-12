@@ -17,12 +17,11 @@ container:
 
           .refeicao-legenda-component .anvil-role-icon-outline>.anvil-component-icon {
               -webkit-text-stroke-width: 2px;
-              -webkit-text-stroke-color: var(--anvil-m3-primary);
+              -webkit-text-stroke-color: var(--anvil-m3-on-surface);
           }
 
           .refeicao-legenda-component .anvil-role-icon-outline>.anvil-label-text {
-              -webkit-text-stroke-width: 1px;
-              text-shadow: -1px 0 var(--anvil-m3-primary), 0 1px var(--anvil-m3-primary), 1px 0 var(--anvil-m3-primary), 0 -1px var(--anvil-m3-primary);
+              color: var(--anvil-m3-on-surface);
           }
       </style>
       <div anvil-slot="default"></div>

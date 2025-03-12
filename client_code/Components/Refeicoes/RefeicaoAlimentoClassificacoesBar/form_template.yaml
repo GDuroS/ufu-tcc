@@ -13,12 +13,11 @@ container:
 
           .refeicao-bar-component .anvil-role-icon-outline>.anvil-component-icon {
               -webkit-text-stroke-width: 2px;
-              -webkit-text-stroke-color: var(--anvil-m3-primary);
+              -webkit-text-stroke-color: var(--anvil-m3-on-surface);
           }
 
           .refeicao-bar-component .anvil-role-icon-outline>.anvil-label-text {
-              -webkit-text-stroke-width: 1px;
-              -webkit-text-stroke-color: var(--anvil-m3-primary);
+              color: var(--anvil-m3-on-surface);
           }
       </style>
       <div anvil-slot="default"></div>
