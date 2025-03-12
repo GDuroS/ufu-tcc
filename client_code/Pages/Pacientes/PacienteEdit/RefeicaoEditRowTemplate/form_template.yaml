@@ -36,8 +36,7 @@ components:
     properties: {appearance: outlined, is_timestamp: true, label: Horário Recomendado, lower_unit: minutes}
     type: form:dep_obp4eaigzghyeh:FormInput.TimePickerComponent
   - components:
-    - data_bindings:
-      - {code: self.quantidade_items, property: items, writeback: false}
+    - data_bindings: []
       name: classificacoes_data_panel
       properties: {item_template: Pages.Pacientes.PacienteEdit.RefeicaoEditRowTemplate.ClassificacaoRowTemplate}
       type: RepeatingPanel
