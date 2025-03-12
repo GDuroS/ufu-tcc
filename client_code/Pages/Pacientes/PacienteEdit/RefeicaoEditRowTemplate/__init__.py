@@ -2,24 +2,12 @@ from ._anvil_designer import RefeicaoEditRowTemplateTemplate
 from anvil import *
 from anvil.js import get_dom_node
 
-from .....Enums import AlimentoClassificacaoEnum
-
 class RefeicaoEditRowTemplate(RefeicaoEditRowTemplateTemplate):
     def __init__(self, **properties):
-        from anvil.js import get_dom_node
         # Set Form properties and Data Bindings.
-        self.quantidade_items = [
-            {'classificacao': key, 'quantidade': properties['item']['quantidades'].get(key, 0) if properties['item']['quantidades'] else 0}
-            for key in AlimentoClassificacaoEnum.key_list()
-        ]
         self.init_components(**properties)
 
         # Any code you write here will run before the form opens.
-        def refresh(**event_args):
-            self.refresh_data_bindings()
-        self.add_event_handler('x-refresh', refresh)
-        get_dom_node(self.classificacoes_data_panel).classList.add("min-padding")
-        self.edit_panel.visible = False # Inicialização em view_mode sempre
 
     @property
     def view_mode(self):

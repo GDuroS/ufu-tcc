@@ -22,53 +22,6 @@ components:
   name: refeicao_alimento_classificacoes_bar
   properties: {}
   type: form:Components.Refeicoes.RefeicaoAlimentoClassificacoesBar
-- components:
-  - data_bindings:
-    - {code: 'self.item[''nome'']', property: text, writeback: true}
-    layout_properties: {grid_position: 'QXDXZN,UGQHYA'}
-    name: nome_edit_text_box
-    properties: {appearance: outlined, label: Nome}
-    type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
-  - data_bindings:
-    - {code: 'self.item[''horario_time'']', property: time, writeback: true}
-    layout_properties: {grid_position: 'CYZNMX,GMLHGU'}
-    name: horario_edit_picker_component
-    properties: {appearance: outlined, is_timestamp: true, label: Horário Recomendado, lower_unit: minutes}
-    type: form:dep_obp4eaigzghyeh:FormInput.TimePickerComponent
-  - components:
-    - data_bindings:
-      - {code: self.quantidade_items, property: items, writeback: false}
-      name: classificacoes_data_panel
-      properties: {item_template: Pages.Pacientes.PacienteEdit.RefeicaoEditRowTemplate.ClassificacaoRowTemplate}
-      type: RepeatingPanel
-    layout_properties: {grid_position: 'TLBCZS,ARKDFW'}
-    name: classificacoes_data_grid
-    properties:
-      columns:
-      - {data_key: classificacao, expand: true, id: XTZZLU, title: Classificação, width: '120'}
-      - {data_key: quantidade, id: PQXJWN, title: Qnt., width: '100'}
-      rows_per_page: null
-      show_page_controls: false
-    type: DataGrid
-  - components:
-    - event_bindings: {click: cancel_button_click}
-      layout_properties: {}
-      name: cancel_button
-      properties: {appearance: outlined, text: Cancelar}
-      type: form:dep_lin1x4oec0ytd:_Components.Button
-    - event_bindings: {click: save_button_click}
-      layout_properties: {}
-      name: save_button
-      properties: {text: Confirmar}
-      type: form:dep_lin1x4oec0ytd:_Components.Button
-    layout_properties: {grid_position: 'KCOOBF,QLOBPM'}
-    name: edit_confirm_panel
-    properties: {align: right, background: '', spacing_above: none, spacing_below: none}
-    type: FlowPanel
-  layout_properties: {}
-  name: edit_panel
-  properties: {background: var(--anvil-m3-surface), foreground: var(--anvil-m3-on-surface), visible: true}
-  type: ColumnPanel
 container:
   properties: {font_size: null}
   type: DataRowPanel
