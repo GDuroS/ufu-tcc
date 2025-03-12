@@ -2,17 +2,30 @@ from ._anvil_designer import RefeicaoEditRowTemplateTemplate
 from anvil import *
 from anvil.js import get_dom_node
 
+from OruData.Validations import Validatable
 from .....Enums import AlimentoClassificacaoEnum
 
-class RefeicaoEditRowTemplate(RefeicaoEditRowTemplateTemplate):
+class RefeicaoEditRowTemplate(Validatable, RefeicaoEditRowTemplateTemplate):
     def __init__(self, **properties):
         from anvil.js import get_dom_node
         # Set Form properties and Data Bindings.
+        Validatable.__init__(self)
         self.init_components(**properties)
 
         # Any code you write here will run before the form opens.
         def refresh(**event_args):
             self.refresh_data_bindings()
+        def total_quantidades():
+            return sum(map(lambda c:c['quantidade'], self.classificacoes_data_panel.items))
+
+        self.set_required_components([
+            self.nome_edit_text_box,
+            self.horario_edit_picker_component
+        ], 'refeicaoValidationGroup')
+        Validatable.set_required_attributes(self, [
+            (total_quantidades, 'Pelo menos uma classificação deverá ter quantidades informadas.')
+        ], 'refeicaoValidationGroup')
+        
         self.add_event_handler('x-refresh', refresh)
         get_dom_node(self.classificacoes_data_panel).classList.add("min-padding")
         self.edit_panel.visible = False # Inicialização em view_mode sempre
@@ -63,10 +76,10 @@ class RefeicaoEditRowTemplate(RefeicaoEditRowTemplateTemplate):
 
     def save_button_click(self, **event_args):
         """This method is called when the component is clicked."""
-        classificacoes = self.classificacoes_data_panel.items
-        self.item['quantidades'] = {item['classificacao']:int(item['quantidade']) for item in classificacoes if item['quantidade'] is not None and item['quantidade'] > 0}
-        
-        self.reset_view()
+        if self.is_valid('refeicaoValidationGroup'):
+            classificacoes = self.classificacoes_data_panel.items
+            self.item['quantidades'] = {item['classificacao']:int(item['quantidade']) for item in classificacoes if item['quantidade'] is not None and item['quantidade'] > 0}
+            self.reset_view()
 
     def form_show(self, **event_args):
         """This method is called when the form is shown on the page"""

@@ -9,6 +9,9 @@ from ....Entities import Paciente, Refeicao
 class PacienteEdit(CrudInterface, PacienteEditTemplate):
     def __init__(self, routing_context, **properties):
         CrudInterface.__init__(self, Paciente, routing_context, mode_switch_component=self.mode_switch, **properties)
+        if self.has_sequence:
+            if self.item.plano_vigente is not None:
+                self.plano_observacoes_quill.set_html(self.item.plano_vigente['observacoes'])
         self.set_toggleable_components([
             self.nome_completo_text_box,
             self.nascimento_date_picker,
@@ -16,6 +19,14 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         ])
 
         # Any code you write here will run before the form opens.
+        self.set_required_components([
+            self.nome_completo_text_box,
+            self.cpftext_box,
+            self.nascimento_date_picker
+        ])
+        
+        self.plano_inicio_date_picker.read_only = True
+        self.plano_termino_date_picker.read_only = True
         popover(self.planos_title_tooltip_heading, 'Planos são conjuntos de refeições planejadas para o paciente durante um período no qual são vigentes', title='Planos de Refeições', placement='auto', trigger='hover click')
         self.refeicoes_edit_data_panel.items = self.item.plano_vigente.refeicoes
         self._prepare_grid_visibility()
@@ -49,6 +60,8 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         if self.item.is_new:
             from ....Commons import LocalCommons
             self.item.profissional = LocalCommons().profissional
+        if self.item.plano_vigente is not None:
+            self.item.plano_vigente['observacoes'] = self.plano_observacoes_quill.get_html()
 
     def add_refeicao_button_click(self, **event_args):
         """This method is called when the component is clicked."""

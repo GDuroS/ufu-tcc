@@ -112,7 +112,7 @@ db_schema:
       type: datetime
     - admin_ui: {order: 4, width: 200}
       name: observacoes
-      type: string
+      type: simpleObject
     server: full
     title: PlanoAlimentar
   profissional:

@@ -45,6 +45,43 @@ components_by_slot:
         properties: {gap: none, spacing_above: small, spacing_below: none, vertical_align: middle}
         type: FlowPanel
       - components:
+        - layout_properties: {grid_position: 'PIDAVP,EDEHHC'}
+          name: plano_vigente_text
+          properties: {bold: true, text: Plano Vigente}
+          type: form:dep_lin1x4oec0ytd:_Components.Text
+        - components:
+          - data_bindings:
+            - {code: 'self.item.plano_vigente[''inicio'']', property: date, writeback: true}
+            layout_properties: {expand: true}
+            name: plano_inicio_date_picker
+            properties:
+              label: Início
+              margin: ['0', '0', '0', '0']
+              pick_time: true
+            type: form:dep_obp4eaigzghyeh:FormInput.DatePickerAlt
+          - data_bindings:
+            - {code: 'self.item.plano_vigente[''termino'']', property: date, writeback: true}
+            layout_properties: {expand: true}
+            name: plano_termino_date_picker
+            properties:
+              label: Término
+              margin: ['0', '0', '0', '0']
+              pick_time: true
+              placeholder: Indefinido
+            type: form:dep_obp4eaigzghyeh:FormInput.DatePickerAlt
+          layout_properties: {grid_position: 'ZQSMJN,AOXEKM'}
+          name: basicos_flow_panel_copy
+          properties: {align: justify, gap: medium, vertical_align: top}
+          type: FlowPanel
+        - layout_properties: {grid_position: 'MSXMVH,GDUVHP'}
+          name: plano_observacoes_quill
+          properties: {height: '75', placeholder: Observações adicionais sobre o plano., readonly: true, spacing_above: none, spacing_below: none, toolbar: false}
+          type: form:dep_45ni8uk6frrkc:Quill
+        layout_properties: {slot: card-content-container-slot}
+        name: plano_vigente_panel
+        properties: {}
+        type: ColumnPanel
+      - components:
         - components:
           - layout_properties: {slot: card-content-container-slot}
             name: refeicoes_heading
