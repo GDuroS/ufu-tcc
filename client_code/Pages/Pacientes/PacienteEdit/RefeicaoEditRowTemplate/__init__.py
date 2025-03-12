@@ -1,11 +1,17 @@
 from ._anvil_designer import RefeicaoEditRowTemplateTemplate
 from anvil import *
+from anvil.js import get_dom_node
+
 from .....Enums import AlimentoClassificacaoEnum
 
 class RefeicaoEditRowTemplate(RefeicaoEditRowTemplateTemplate):
     def __init__(self, **properties):
         from anvil.js import get_dom_node
         # Set Form properties and Data Bindings.
+        self.quantidade_items = [
+            {'classificacao': key, 'quantidade': properties['item']['quantidades'].get(key, 0) if properties['item']['quantidades'] else 0}
+            for key in AlimentoClassificacaoEnum.key_list()
+        ]
         self.init_components(**properties)
 
         # Any code you write here will run before the form opens.
@@ -26,15 +32,7 @@ class RefeicaoEditRowTemplate(RefeicaoEditRowTemplateTemplate):
     def horario_refeicao(self):
         return "{:%H:%M}".format(self.item['horario'])
 
-    @property
-    def quantidade_items(self):
-        return [
-            {'classificacao': key, 'quantidade': self.item['quantidades'].get(key, 0) if self.item['quantidades'] else 0}
-            for key in AlimentoClassificacaoEnum.key_list()
-        ]
-
     def edit_row_icon_button_click(self, **event_args):
-        from anvil.js import get_dom_node
         get_dom_node(self).classList.add('edit-mode-row')
         self.edit_panel.visible = True
 
@@ -43,10 +41,15 @@ class RefeicaoEditRowTemplate(RefeicaoEditRowTemplateTemplate):
 
     def cancel_button_click(self, **event_args):
         """This method is called when the component is clicked."""
-        pass
+        self.item.reset_changes()
 
     def save_button_click(self, **event_args):
         """This method is called when the component is clicked."""
-        pass
+        classificacoes = self.classificacoes_data_panel.items
+        self.item['quantidades'] = {item['classificao']:item['quantidade'] for item in classificacoes}
+        
+        self.edit_panel.visible = False
+        get_dom_node(self).classList.remove('edit-mode-row')
+        self.refresh_data_bindings()
 
     

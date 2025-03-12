@@ -59,7 +59,7 @@ class Refeicao(Entity):
     @horario_time.setter
     def horario_time(self, time_instance):
         if time_instance:
-            self['horario'] = time_instance.isoformat()
+            self['horario'] = time_instance.isoformat(timespec='minutes')
         else:
             self['horario'] = None
     
