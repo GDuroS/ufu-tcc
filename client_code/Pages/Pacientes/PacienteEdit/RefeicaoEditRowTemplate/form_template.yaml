@@ -36,21 +36,6 @@ components:
     properties: {appearance: outlined, is_timestamp: true, label: Horário Recomendado, lower_unit: minutes}
     type: form:dep_obp4eaigzghyeh:FormInput.TimePickerComponent
   - components:
-    - data_bindings:
-      - {code: self.quantidade_items, property: items, writeback: false}
-      name: classificacoes_data_panel
-      properties: {item_template: Pages.Pacientes.PacienteEdit.RefeicaoEditRowTemplate.ClassificacaoRowTemplate}
-      type: RepeatingPanel
-    layout_properties: {grid_position: 'TLBCZS,ARKDFW'}
-    name: classificacoes_data_grid
-    properties:
-      columns:
-      - {data_key: classificacao, expand: true, id: XTZZLU, title: Classificação, width: '120'}
-      - {data_key: quantidade, id: PQXJWN, title: Qnt., width: '100'}
-      rows_per_page: null
-      show_page_controls: false
-    type: DataGrid
-  - components:
     - event_bindings: {click: cancel_button_click}
       layout_properties: {}
       name: cancel_button

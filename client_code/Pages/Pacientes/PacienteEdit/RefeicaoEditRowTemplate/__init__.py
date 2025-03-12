@@ -18,7 +18,6 @@ class RefeicaoEditRowTemplate(RefeicaoEditRowTemplateTemplate):
         def refresh(**event_args):
             self.refresh_data_bindings()
         self.add_event_handler('x-refresh', refresh)
-        get_dom_node(self.classificacoes_data_panel).classList.add("min-padding")
         self.edit_panel.visible = False # Inicialização em view_mode sempre
 
     @property
