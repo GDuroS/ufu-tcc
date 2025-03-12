@@ -40,10 +40,36 @@ class Paciente(Entity):
             self._plano_vigente = PlanoAlimentar(anvil.server.call('getPlanoAlimentarVigentePorPaciente', self.original_row))
             return self._plano_vigente
 
+    @property
+    def was_changed(self):
+        was_changed = super().was_changed
+        if not was_changed:
+            plano_vigente = getattr(self, '_plano_vigente', None)
+            if plano_vigente:
+                was_changed = plano_vigente.was_changed
+        return was_changed
+
+    def merge(self):
+        if not self.was_changed:
+            raise ValueError("Não permitido quando o item não foi alterado.")
+        # TODO: 
+        if self.is_new:
+            pass
+        else:
+            pass
+
 @anvil.server.portable_class
 class PlanoAlimentar(Entity):
     paciente = EntityDescriptor(Paciente)
     refeicoes = ManagedRelationship('Refeicao', 'plano')
+
+    @property
+    def was_changed(self):
+        was_changed = super().was_changed
+        if not was_changed:
+            if getattr(self, '_managed_refeicoes', None):
+                was_changed = self.refeicoes.has_changes
+        return was_changed
 
 @anvil.server.portable_class
 class Refeicao(Entity):
