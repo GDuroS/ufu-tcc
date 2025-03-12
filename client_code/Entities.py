@@ -52,11 +52,13 @@ class Paciente(Entity):
     def merge(self):
         if not self.was_changed:
             raise ValueError("Não permitido quando o item não foi alterado.")
-        # TODO: 
+        plano_vigente = getattr(self, '_plano_vigente', None)
         if self.is_new:
-            pass
+            if plano_vigente is None:
+                raise Exception("É necessário informar um Plano Alimentar.")
+            return Paciente(anvil.server.call('postPaciente', self.row_changes, plano_vigente))
         else:
-            pass
+            return Paciente(anvil.server.call('putPaciente', self.original_row, self.row_changes, plano_vigente))
 
 @anvil.server.portable_class
 class PlanoAlimentar(Entity):
