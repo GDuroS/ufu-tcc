@@ -36,17 +36,19 @@ class PlanoAlimentarService(AbstractCrudServiceClass):
             for meta in removed:
                 meta_service._delete(meta.original_row)
 
-    def _validate(self, plano):
+    def _validate(self, plano, refeicoes, metas):
         error_builder = []
         if plano['inicio'] is None:
             error_builder.append('A data de início do Plano Alimentar é obrigatória.')
         if plano['termino'] is not None:
             if plano['inicio'] > plano['termino']:
                 error_builder.append('A data de término não pode ser anterior à data de início.')
-        if plano.is_new:
-            if len(plano.refeicoes['added']) < 1:
+        if plano.get('Sequence', None):
+           pass
+        else:
+            if not refeicoes or not refeicoes['added']: # Se não informou refeições ou é uma lista vazia
                 error_builder.append('Todo plano precisa ter pelo menos uma refeição informada.')
-            # if len(plano.metas['added']) < 1:
+            # if not metas or not metas['added']:
             #     error_builder.append('Todo plano precisa ter pelo menos uma meta informada.')
         if plano['paciente'] is None:
             error_builder.append('Todo plano precisa ser vinculado à um paciente.')
