@@ -135,13 +135,6 @@ class PacienteService(AbstractCrudServiceClass):
         if plano is None:
             return
         refeicoes, metas = getattr(plano, 'refeicoes', None), getattr(plano, 'metas', None)
-        print("-----")
-        print('refeicoes: ', refeicoes)
-        print('refeicoes_direct: ', plano.refeicoes)
-        print('refeicoes_compare: ', refeicoes is plano.refeicoes, refeicoes == plano.refeicoes)
-        print('refeicao[0]: ', refeicoes[0])
-        print('refeicao_direct[0]: ', plano.refeicoes[0])
-        print('refeicao[0] compare:', refeicoes[0] is plano.refeicoes[0], refeicoes[0] == plano.refeicoes[0])
         raise Exception("stopped")
         if plano.is_new:
             plano['paciente'] = paciente
