@@ -12,13 +12,17 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         # self.refeicoes_card.visible = False
         self.metas_card.visible = False
         # self.no_plano_text.visible = True
+        self._prepare_grid_visibility()
         if self.has_sequence:
             if self.item.plano_vigente is not None:
                 self.plano_vigente_panel.visible = True
                 self.refeicoes_card.visible = True
                 self.metas_card.visible = True
                 self.no_plano_text.visible = False
-                self.plano_observacoes_quill.set_html(self.item.plano_vigente['observacoes'])
+                if self.item.plano_vigente['observacoes']:
+                    self.plano_observacoes_quill.set_html(self.item.plano_vigente['observacoes'])
+                else:
+                    self.plano_observacoes_quill.visible = False
                 self.refeicoes_edit_data_panel.items = self.item.plano_vigente.refeicoes
                 
         self.set_toggleable_components([
@@ -48,7 +52,6 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         ], 'planoVigenteValidationGroup')
 
         popover(self.planos_title_tooltip_heading, 'Planos são conjuntos de refeições planejadas para o paciente durante um período no qual são vigentes', title='Planos de Refeições', placement='auto', trigger='hover click')
-        self._prepare_grid_visibility()
         self.routing_context.raise_init_events()
 
     def _prepare_grid_visibility(self):
@@ -74,6 +77,14 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         else:
             self.refeicoes_edit_data_grid.columns = self.refeicoes_edit_data_grid.tag.all_columns
         self.refeicoes_edit_data_panel.raise_event_on_children('x-refresh')
+        if self.view_mode and not self.item.is_new and self.item.plano_vigente:
+            self.refeicoes_edit_data_panel.items = self.item.plano_vigente.refeicoes
+            if self.item.plano_vigente['observacoes']:
+                self.plano_observacoes_quill.set_html(self.item.plano_vigente['observacoes'])
+            else:
+                self.plano_observacoes_quill.visible = False
+        elif not self.view_mode:
+            self.plano_observacoes_quill.visible = True
 
     def is_valid(self):
         is_valid = super().is_valid()
@@ -101,10 +112,8 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
 
     def new_plano_button_click(self, **event_args):
         """This method is called when the component is clicked."""
-        from ....Entities import PlanoAlimentar
-        # Vou simplesmente setar o PlanoAlimentar como sendo um novo plano. Se Existir outro, será fechado ao salvar.
-        # TODO: pegar o old_plano = self.item.plano_vigente e criar uma cópia, com as refeições e metas já definidas para facilitar.
-        self.item.plano_vigente = PlanoAlimentar()
+        self.item.plano_vigente = self.item.plano_vigente.novo_plano()
         self.refeicoes_card.visible = True
         self.metas_card.visible = True
         self.plano_vigente_panel.visible = True
+        self.refresh_data_bindings()
