@@ -86,7 +86,7 @@ class Paciente(Entity):
     def reset_changes(self):
         Entity.reset_changes(self)
         if getattr(self, '_plano_vigente', None):
-            if self.plano_vigente.is_new:
+            if self.plano_vigente.is_new and not self.plano_vigente.is_empty:
                 novo_plano = self.plano_vigente
                 self.plano_vigente = self._old_plano
                 del novo_plano

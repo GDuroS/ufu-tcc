@@ -28,7 +28,6 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         self.set_toggleable_components([
             self.nome_completo_text_box,
             self.nascimento_date_picker,
-            self.cpftext_box,
             self.plano_inicio_date_picker,
             self.plano_termino_date_picker,
             self.plano_observacoes_quill
@@ -85,6 +84,7 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
                 self.plano_observacoes_quill.visible = False
         elif not self.view_mode:
             self.plano_observacoes_quill.visible = True
+        self.cpftext_box.read_only = not self.create_mode
 
     def is_valid(self):
         is_valid = super().is_valid()
