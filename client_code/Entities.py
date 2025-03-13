@@ -40,6 +40,10 @@ class Paciente(Entity):
             self._plano_vigente = PlanoAlimentar(anvil.server.call('getPlanoAlimentarVigentePorPaciente', self.original_row))
             return self._plano_vigente
 
+    @plano_vigente.setter
+    def plano_vigente(self, plano):
+        self._plano_vigente = PlanoAlimentar(plano)
+
     @property
     def was_changed(self):
         was_changed = super().was_changed
@@ -48,6 +52,12 @@ class Paciente(Entity):
             if plano_vigente:
                 was_changed = plano_vigente.was_changed
         return was_changed
+
+    def reset_changes(self):
+        Entity.reset_changes(self)
+        plano_vigente = getattr(self, '_plano_vigente', None)
+        if plano_vigente:
+            plano_vigente.reset_changes()
 
     def merge(self):
         if not self.was_changed:
@@ -64,6 +74,12 @@ class Paciente(Entity):
 class PlanoAlimentar(Entity):
     paciente = EntityDescriptor(Paciente)
     refeicoes = ManagedRelationship('Refeicao', 'plano')
+
+    def reset_changes(self):
+        Entity.reset_changes(self)
+        refeicoes = getattr(self, '_managed_refeicoes', None)
+        if refeicoes:
+            refeicoes.reset_changes()
 
     @property
     def was_changed(self):

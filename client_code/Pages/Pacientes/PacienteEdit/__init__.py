@@ -9,13 +9,25 @@ from ....Entities import Paciente, Refeicao
 class PacienteEdit(CrudInterface, PacienteEditTemplate):
     def __init__(self, routing_context, **properties):
         CrudInterface.__init__(self, Paciente, routing_context, mode_switch_component=self.mode_switch, **properties)
+        # self.refeicoes_card.visible = False
+        self.metas_card.visible = False
+        # self.no_plano_text.visible = True
         if self.has_sequence:
             if self.item.plano_vigente is not None:
+                self.plano_vigente_panel.visible = True
+                self.refeicoes_card.visible = True
+                self.metas_card.visible = True
+                self.no_plano_text.visible = False
                 self.plano_observacoes_quill.set_html(self.item.plano_vigente['observacoes'])
+                self.refeicoes_edit_data_panel.items = self.item.plano_vigente.refeicoes
+                
         self.set_toggleable_components([
             self.nome_completo_text_box,
             self.nascimento_date_picker,
-            self.cpftext_box
+            self.cpftext_box,
+            self.plano_inicio_date_picker,
+            self.plano_termino_date_picker,
+            self.plano_observacoes_quill
         ])
 
         # Any code you write here will run before the form opens.
@@ -24,11 +36,18 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
             self.cpftext_box,
             self.nascimento_date_picker
         ])
-        
-        self.plano_inicio_date_picker.read_only = True
-        self.plano_termino_date_picker.read_only = True
+
+        self.set_required_components([
+            (self.plano_inicio_date_picker, 'Vigência do Plano Alimentar'),
+        ], 'planoVigenteValidationGroup')
+
+        def has_refeicoes():
+            return self.item.plano_vigente.refeicoes
+        self.set_required_attributes([
+            (has_refeicoes, 'É obrigatório informar pelo menos uma refeição para o Plano')
+        ], 'planoVigenteValidationGroup')
+
         popover(self.planos_title_tooltip_heading, 'Planos são conjuntos de refeições planejadas para o paciente durante um período no qual são vigentes', title='Planos de Refeições', placement='auto', trigger='hover click')
-        self.refeicoes_edit_data_panel.items = self.item.plano_vigente.refeicoes
         self._prepare_grid_visibility()
         self.routing_context.raise_init_events()
 
@@ -56,6 +75,12 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
             self.refeicoes_edit_data_grid.columns = self.refeicoes_edit_data_grid.tag.all_columns
         self.refeicoes_edit_data_panel.raise_event_on_children('x-refresh')
 
+    def is_valid(self):
+        is_valid = super().is_valid()
+        if is_valid and self.item.plano_vigente:
+            is_valid = super().is_valid('planoVigenteValidationGroup')
+        return is_valid
+
     def before_save(self):
         if self.item.is_new:
             from ....Commons import LocalCommons
@@ -69,3 +94,17 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         self.refeicoes_edit_data_panel.items = self.item.plano_vigente.refeicoes
         self.on_query_changed()
         self.add_refeicao_button.visible = False # Pois ficará visível ao rodar on_query_changed
+
+    def show_planos_link_click(self, **event_args):
+        """This method is called clicked"""
+        pass
+
+    def new_plano_button_click(self, **event_args):
+        """This method is called when the component is clicked."""
+        from ....Entities import PlanoAlimentar
+        # Vou simplesmente setar o PlanoAlimentar como sendo um novo plano. Se Existir outro, será fechado ao salvar.
+        # TODO: pegar o old_plano = self.item.plano_vigente e criar uma cópia, com as refeições e metas já definidas para facilitar.
+        self.item.plano_vigente = PlanoAlimentar()
+        self.refeicoes_card.visible = True
+        self.metas_card.visible = True
+        self.plano_vigente_panel.visible = True
