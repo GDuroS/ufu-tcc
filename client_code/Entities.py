@@ -53,15 +53,40 @@ class Paciente(Entity):
                 was_changed = plano_vigente.was_changed
         return was_changed
 
+    def criar_novo_plano(self):
+        """Cria um novo plano alimentar baseado no atual"""
+        from datetime import datetime, timedelta
+        plano_vigente = getattr(self, '_plano_vigente', None)
+        if not plano_vigente:
+            self.plano_vigente = PlanoAlimentar({'inicio': datetime.now()})
+            return
+        
+        changes = {k:plano_vigente.original_row[k] for k in plano_vigente._original_key_list}
+        novo_plano = PlanoAlimentar(changes)
+        novo_plano['inicio'] = self['termino'] + timedelta(days=1) if self['termino'] else datetime.now().date()
+        
+        refeicoes = []
+        for refeicao in novo_plano.refeicoes:
+            if refeicao.is_new:
+                refeicao['plano'] = novo_plano
+                refeicoes.append(refeicao)
+                continue
+            ref_changes = {k:refeicao.original_row[k] for k in refeicao._original_key_list}
+            ref_changes['plano'] = novo_plano
+            refeicoes.append(Refeicao(ref_changes))
+        novo_plano.refeicoes = refeicoes
+        self._old_plano = plano_vigente
+        
+        return novo_plano
+
     def reset_changes(self):
         Entity.reset_changes(self)
         if getattr(self, '_plano_vigente', None):
             if self.plano_vigente.is_new:
                 novo_plano = self.plano_vigente
-                self.plano_vigente = self.plano_vigente._based_of
+                self.plano_vigente = self._old_plano
                 del novo_plano
-            else:
-                self.plano_vigente.reset_changes()
+            self.plano_vigente.reset_changes()
 
     def merge(self):
         if not self.was_changed:
@@ -76,30 +101,8 @@ class Paciente(Entity):
 
 @anvil.server.portable_class
 class PlanoAlimentar(Entity):
-    _based_of = None
     paciente = EntityDescriptor(Paciente)
     refeicoes = ManagedRelationship('Refeicao', 'plano')
-
-    def novo_plano(self):
-        """Cria um novo plano alimentar baseado no atual"""
-        from datetime import datetime, timedelta
-        changes = {k:self.original_row[k] for k in self._original_key_list}
-        novo_plano = PlanoAlimentar(changes)
-        novo_plano['inicio'] = self['termino'] + timedelta(days=1) if self['termino'] else datetime.now().date()
-        
-        refeicoes = []
-        for refeicao in self.refeicoes:
-            if refeicao.is_new:
-                refeicao['plano'] = novo_plano
-                refeicoes.append(refeicao)
-                continue
-            ref_changes = {k:refeicao.original_row[k] for k in refeicao._original_key_list}
-            ref_changes['plano'] = novo_plano
-            refeicoes.append(Refeicao(ref_changes))
-        novo_plano.refeicoes = refeicoes
-        
-        novo_plano._based_of = self
-        return novo_plano
 
     def reset_changes(self):
         Entity.reset_changes(self)
@@ -113,10 +116,6 @@ class PlanoAlimentar(Entity):
             if getattr(self, '_managed_refeicoes', None):
                 was_changed = self.refeicoes.has_changes
         return was_changed
-
-    def __serialize__(self, global_data):
-        self._based_of = None
-        return self.__dict__
 
 @anvil.server.portable_class
 class Refeicao(Entity):

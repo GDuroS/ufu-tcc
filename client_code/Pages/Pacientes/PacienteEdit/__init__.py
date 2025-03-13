@@ -112,7 +112,7 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
 
     def new_plano_button_click(self, **event_args):
         """This method is called when the component is clicked."""
-        self.item.plano_vigente = self.item.plano_vigente.novo_plano()
+        self.item.criar_novo_plano()
         self.refeicoes_card.visible = True
         self.metas_card.visible = True
         self.plano_vigente_panel.visible = True
