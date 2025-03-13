@@ -55,9 +55,8 @@ class Paciente(Entity):
 
     def reset_changes(self):
         Entity.reset_changes(self)
-        plano_vigente = getattr(self, '_plano_vigente', None)
-        if plano_vigente:
-            plano_vigente.reset_changes()
+        if getattr(self, '_plano_vigente', None):
+            self.plano_vigente.reset_changes()
 
     def merge(self):
         if not self.was_changed:
@@ -77,9 +76,8 @@ class PlanoAlimentar(Entity):
 
     def reset_changes(self):
         Entity.reset_changes(self)
-        refeicoes = getattr(self, '_managed_refeicoes', None)
-        if refeicoes:
-            refeicoes.reset_changes()
+        if getattr(self, '_managed_refeicoes', None):
+            self.refeicoes.reset_changes()
 
     @property
     def was_changed(self):
