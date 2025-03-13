@@ -116,4 +116,5 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         self.refeicoes_card.visible = True
         self.metas_card.visible = True
         self.plano_vigente_panel.visible = True
+        self.no_plano_text.visible = False
         self.refresh_data_bindings()

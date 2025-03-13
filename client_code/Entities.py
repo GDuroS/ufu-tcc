@@ -1,4 +1,5 @@
 import anvil.server
+from anvil import is_server_side
 from OruData.Entity import Entity, User, EntityDescriptor, ManagedRelationship
 
 @anvil.server.portable_class
@@ -101,6 +102,7 @@ class Paciente(Entity):
 
 @anvil.server.portable_class
 class PlanoAlimentar(Entity):
+    print('plano on server side?', is_server_side())
     paciente = EntityDescriptor(Paciente)
     refeicoes = ManagedRelationship('Refeicao', 'plano')
 
@@ -116,6 +118,15 @@ class PlanoAlimentar(Entity):
             if getattr(self, '_managed_refeicoes', None):
                 was_changed = self.refeicoes.has_changes
         return was_changed
+
+    def __serialize__(self, global_data):
+        print(self.__dict__)
+        return self.__dict__
+
+    def __deserialize__(self, data, global_data):
+        print('deser', data, global_data, self)
+        self.__dict__.update(data)
+        
 
 @anvil.server.portable_class
 class Refeicao(Entity):
