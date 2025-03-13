@@ -96,9 +96,11 @@ class Paciente(Entity):
         if not self.was_changed:
             raise ValueError("Não permitido quando o item não foi alterado.")
         plano_vigente = getattr(self, '_plano_vigente', None)
+        if plano_vigente.is_empty:
+            plano_vigente = None
         if self.is_new:
-            if plano_vigente is None:
-                raise Exception("É necessário informar um Plano Alimentar.")
+            # if plano_vigente is None or plano_vigente.is_empty:
+                # raise Exception("É necessário informar um Plano Alimentar.")
             return Paciente(anvil.server.call('postPaciente', self.row_changes, plano_vigente))
         else:
             return Paciente(anvil.server.call('putPaciente', self.original_row, self.row_changes, plano_vigente))

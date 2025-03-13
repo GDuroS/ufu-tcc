@@ -14,7 +14,7 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         # self.no_plano_text.visible = True
         self._prepare_grid_visibility()
         if self.has_sequence:
-            if self.item.plano_vigente is not None:
+            if self.item.plano_vigente is not None and not self.item.plano_vigente.is_empty:
                 self.plano_vigente_panel.visible = True
                 self.refeicoes_card.visible = True
                 self.metas_card.visible = True
@@ -88,7 +88,7 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
 
     def is_valid(self):
         is_valid = super().is_valid()
-        if is_valid and self.item.plano_vigente:
+        if is_valid and not self.item.plano_vigente.is_empty:
             is_valid = super().is_valid('planoVigenteValidationGroup')
         return is_valid
 
@@ -96,8 +96,11 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         if self.item.is_new:
             from ....Commons import LocalCommons
             self.item.profissional = LocalCommons().profissional
-        if self.item.plano_vigente is not None:
-            self.item.plano_vigente['observacoes'] = self.plano_observacoes_quill.get_html()
+        if self.item.plano_vigente is not None and not self.item.plano_vigente.is_empty:
+            if self.plano_observacoes_quill.get_text().strip():
+                self.item.plano_vigente['observacoes'] = self.plano_observacoes_quill.get_html()
+            else:
+                self.item.plano_vigente['observacoes'] = None
 
     def add_refeicao_button_click(self, **event_args):
         """This method is called when the component is clicked."""
@@ -112,11 +115,12 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
 
     def new_plano_button_click(self, **event_args):
         """This method is called when the component is clicked."""
-        if self.item.criar_novo_plano():
-            self.refeicoes_card.visible = True
-            self.metas_card.visible = True
-            self.plano_vigente_panel.visible = True
-            self.no_plano_text.visible = False
-        elif self.item.plano_vigente.is_new:
+        if self.item.plano_vigente.is_new and self.plano_vigente_panel.visible:
             Notification("O plano sendo editado já é um plano novo.", style="warning").show()
-        self.refresh_data_bindings()
+            return
+        self.refeicoes_card.visible = True
+        self.metas_card.visible = True
+        self.plano_vigente_panel.visible = True
+        self.no_plano_text.visible = False
+        if self.item.criar_novo_plano():
+            self.refresh_data_bindings()

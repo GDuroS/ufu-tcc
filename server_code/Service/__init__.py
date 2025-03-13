@@ -122,9 +122,11 @@ class PlanoAlimentarService(AbstractCrudServiceClass):
         )
         try:
             return planos_vigentes[0]
+        except IndexError:
+            return None
         except Exception as e:
             self.log_error(e)
-            return None
+            raise e
 plano_alimentar_service = PlanoAlimentarService()
 
 class PacienteService(AbstractCrudServiceClass):
@@ -132,21 +134,26 @@ class PacienteService(AbstractCrudServiceClass):
         super().__init__('Paciente')
 
     def _merge_plano_vigente(self, paciente, plano):
-        if plano is None:
+        if plano is None or plano.is_empty:
             return
         refeicoes, metas = plano.refeicoes.list_changes, None # TODO: implementar metas
-        print(refeicoes)
-        raise Exception("stopped")
         if plano.is_new:
             plano['paciente'] = paciente
             plano_alimentar_service._save(plano.row_changes, refeicoes, metas)
         else:
             plano_alimentar_service._update(plano.original_row, plano.row_changes, refeicoes, metas)
 
+    def _validate(self, paciente):
+        if not paciente.get('Sequence'):
+            semelhantes = self.app_tables.paciente.search(profissional=paciente['profissional'], cpf=paciente['cpf'])
+            if len(semelhantes) > 0:
+                raise Exception("Já existe um paciente cadastrado com este CPF!")
+
     @tables.in_transaction
     def save(self, paciente, plano_vigente=None):
+        self._validate(paciente)
         saved = AbstractCrudServiceClass.save(self, paciente)
-        self._merge_plano_vigente(paciente, plano_vigente)
+        self._merge_plano_vigente(saved, plano_vigente)
         return saved
 
     @tables.in_transaction
