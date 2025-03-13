@@ -112,9 +112,11 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
 
     def new_plano_button_click(self, **event_args):
         """This method is called when the component is clicked."""
-        self.item.criar_novo_plano()
-        self.refeicoes_card.visible = True
-        self.metas_card.visible = True
-        self.plano_vigente_panel.visible = True
-        self.no_plano_text.visible = False
+        if self.item.criar_novo_plano():
+            self.refeicoes_card.visible = True
+            self.metas_card.visible = True
+            self.plano_vigente_panel.visible = True
+            self.no_plano_text.visible = False
+        elif self.item.plano_vigente.is_new:
+            Notification("O plano sendo editado já é um plano novo.", style="warning").show()
         self.refresh_data_bindings()

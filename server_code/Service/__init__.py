@@ -134,7 +134,8 @@ class PacienteService(AbstractCrudServiceClass):
     def _merge_plano_vigente(self, paciente, plano):
         if plano is None:
             return
-        refeicoes, metas = getattr(plano, 'refeicoes', None), getattr(plano, 'metas', None)
+        refeicoes, metas = plano.refeicoes.list_changes, None # TODO: implementar metas
+        print(refeicoes)
         raise Exception("stopped")
         if plano.is_new:
             plano['paciente'] = paciente

@@ -59,8 +59,10 @@ class Paciente(Entity):
         from datetime import datetime, timedelta
         plano_vigente = getattr(self, '_plano_vigente', None)
         if not plano_vigente:
-            self.plano_vigente = PlanoAlimentar({'inicio': datetime.now()})
-            return
+            self._plano_vigente = PlanoAlimentar({'inicio': datetime.now()})
+            return self._plano_vigente
+        elif plano_vigente.is_new:
+            return None # Não faz sentido
         
         changes = {k:plano_vigente.original_row[k] for k in plano_vigente._original_key_list}
         novo_plano = PlanoAlimentar(changes)
@@ -77,8 +79,9 @@ class Paciente(Entity):
             refeicoes.append(Refeicao(ref_changes))
         novo_plano.refeicoes = refeicoes
         self._old_plano = plano_vigente
+        self._plano_vigente = novo_plano
         
-        return novo_plano
+        return self._plano_vigente
 
     def reset_changes(self):
         Entity.reset_changes(self)
