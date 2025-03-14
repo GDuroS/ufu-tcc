@@ -59,12 +59,12 @@ class Paciente(Entity):
         plano_vigente = getattr(self, '_plano_vigente', None)
         if not plano_vigente:
             self._plano_vigente = PlanoAlimentar({'inicio': datetime.now()})
-            self._plano_vigente.metas = MetaDiaria.create_metas_padrao(self._plano_vigente)
+            self._plano_vigente.metas = MetaDiaria.create_metas_padrao()
             return self._plano_vigente
         elif plano_vigente.is_empty:
             # cria as metas no plano
             self._plano_vigente['inicio'] = datetime.now()
-            self._plano_vigente.metas = MetaDiaria.create_metas_padrao(self._plano_vigente)
+            self._plano_vigente.metas = MetaDiaria.create_metas_padrao()
             return self._plano_vigente
         elif plano_vigente.is_new:
             return None # Não faz sentido
