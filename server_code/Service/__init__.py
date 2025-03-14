@@ -2,7 +2,7 @@ from OruData.Service.AbstractService import AbstractCrudServiceClass
 from anvil import tables
 
 refeicao_service = AbstractCrudServiceClass("Refeicao")
-meta_service = AbstractCrudServiceClass("Meta")
+meta_diaria_service = AbstractCrudServiceClass("MetaDiaria")
 user_service = AbstractCrudServiceClass('Users')
 profissional_service = AbstractCrudServiceClass('Profissional')
 
@@ -30,11 +30,11 @@ class PlanoAlimentarService(AbstractCrudServiceClass):
             changed = metas['changed']
             for meta in added:
                 meta['plano'] = plano
-                meta_service.save(meta.row_changes)
+                meta_diaria_service.save(meta.row_changes)
             for meta in changed:
-                meta_service.update(meta.original_row, meta.row_changes)
+                meta_diaria_service.update(meta.original_row, meta.row_changes)
             for meta in removed:
-                meta_service._delete(meta.original_row)
+                meta_diaria_service._delete(meta.original_row)
 
     def _validate(self, plano, refeicoes, metas):
         error_builder = []

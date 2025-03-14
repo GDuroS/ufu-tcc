@@ -109,11 +109,14 @@ class Paciente(Entity):
 class PlanoAlimentar(Entity):
     paciente = EntityDescriptor(Paciente)
     refeicoes = ManagedRelationship('Refeicao', 'plano')
+    metas = ManagedRelationship('MetaDiaria', 'plano')
 
     def reset_changes(self):
         Entity.reset_changes(self)
         if getattr(self, '_managed_refeicoes', None):
             self.refeicoes.reset_changes()
+        if getattr(self, '_managed_metas', None):
+            self.metas.reset_changes()
 
     @property
     def was_changed(self):
@@ -121,6 +124,9 @@ class PlanoAlimentar(Entity):
         if not was_changed:
             if getattr(self, '_managed_refeicoes', None):
                 was_changed = self.refeicoes.has_changes
+        if not was_changed:
+            if getattr(self, '_managed_metas', None):
+                was_changed = self.metas.has_changes
         return was_changed
         
 
@@ -141,4 +147,8 @@ class Refeicao(Entity):
             self['horario'] = time_instance.isoformat(timespec='minutes')
         else:
             self['horario'] = None
+
+@anvil.server.portable_class
+class MetaDiaria(Entity):
+    plano = EntityDescriptor(PlanoAlimentar)
     

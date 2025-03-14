@@ -24,4 +24,37 @@ class AlimentoClassificacaoEnum(BaseEnum):
     VEGETAL = None
     PROTEINA = None
 
+class AlimentoComposicaoEnum(BaseEnum):
+    __options__ = {
+		'ENERGIA': {'nome': 'Energia'},
+		'PROTEINA': {'nome': 'Proteína'},
+		'CARBOIDRATO': {'nome': 'Carboidrato'},
+		'FIBRA': {'nome': 'Fibra'},
+		'CALCIO': {'nome': 'Cálcio'},
+		'MAGNESIO': {'nome': 'Magnésio'},
+		'FERRO': {'nome': 'Ferro'},
+		'FOSFORO': {'nome': 'Fósforo'},
+		'MANGANES': {'nome': 'Manganês'},
+		'SODIO': {'nome': 'Sódio'},
+		'ZINCO': {'nome': 'Zinco'},
+		'LIPIDIOS': {'nome': 'Lipídios'}
+	}
+
+    ENERGIA = None
+    PROTEINA = None
+    CARBOIDRATO = None
+    FIBRA = None
+    CALCIO = None
+    MAGNESIO = None
+    FERRO = None
+    FOSFORO = None
+    MANGANES = None
+    SODIO = None
+    ZINCO = None
+    LIPIDIOS = None
+
+    @property
+    def column_name(self):
+        return self.key.lower()
+
 _build_all(__name__)

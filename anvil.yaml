@@ -73,6 +73,24 @@ db_schema:
       type: simpleObject
     server: full
     title: FuncionalidadeVersao
+  metadiaria:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: plano
+      target: planoalimentar
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      name: composicao
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      name: minimo
+      type: number
+    - admin_ui: {order: 3, width: 200}
+      name: maximo
+      type: number
+    server: full
+    title: MetaDiaria
   paciente:
     client: none
     columns:

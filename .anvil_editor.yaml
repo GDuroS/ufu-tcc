@@ -43,6 +43,7 @@ unique_ids:
   scripts: {}
   server_modules:
     Resource: '1741183253478485840662726.22797'
+    Resource.MetaDiariaResource: '1741913482147289130223708.8287'
     Resource.PacienteResource: '1741380239009206797029880.7602'
     Resource.PlanoAlimentarResource: '1741581032655715859555310.1244'
     Resource.ProfissionalResource: '1741277711552498627967037.6501'
