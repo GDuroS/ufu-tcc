@@ -48,7 +48,7 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         def has_refeicoes():
             return self.item.plano_vigente.refeicoes
         def has_metas():
-            return sum(map(lambda m:m['minimo']+m['maximo'], self.item.plano_vigente.metas))
+            return sum(map(lambda m:(m['minimo'] or 0)+(m['maximo'] or 0), self.item.plano_vigente.metas))
         self.set_required_attributes([
             (has_refeicoes, 'É obrigatório informar pelo menos uma refeição para o Plano'),
             (has_metas, 'É obrigatório informar pelo menos uma meta de refeições diária')

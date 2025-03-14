@@ -14,14 +14,22 @@ class MetaDiariaEditRowTemplate(Validatable, MetaDiariaEditRowTemplateTemplate):
         def refresh(**event_args):
             self.refresh_data_bindings()
         def has_meta():
-            return self.item['minimo'] + self.item['maximo']
+            return (self.item['minimo'] or 0) + (self.item['maximo'] or 0)
 
         Validatable.set_required_attributes(self, [
             (has_meta, 'A composição deve ter pelo menos uma meta diária mínima ou máxima.')
         ], 'metaValidationGroup')
         
         self.add_event_handler('x-refresh', refresh)
+        self._prepare_styles()
+
+    def _prepare_styles(self):
+        get_dom_node(self).classList.add('edit-mode-extra-row')
         self.edit_data_row_panel.visible = False # Inicialização em view_mode sempre
+        for child in get_dom_node(self.edit_data_row_panel).children:
+            if child.getAttribute('data-grid-col-id') in ['BQOTRM', 'NPYXUT']:
+                child.style.paddingRight = '10px'
+                child.style.paddingLeft = '10px'
 
     @property
     def view_mode(self):

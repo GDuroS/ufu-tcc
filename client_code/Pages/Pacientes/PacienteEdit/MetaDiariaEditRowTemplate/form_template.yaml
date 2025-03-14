@@ -48,6 +48,12 @@ components:
     name: maximo_text_box
     properties: {align: right, appearance: outlined, type: number}
     type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
+  - data_bindings:
+    - {code: 'self.item[''composicao_nome'']', property: text, writeback: false}
+    layout_properties: {column: WPSKVN}
+    name: composicao_text
+    properties: {}
+    type: form:dep_lin1x4oec0ytd:_Components.Text
   layout_properties: {}
   name: edit_data_row_panel
   properties: {}
