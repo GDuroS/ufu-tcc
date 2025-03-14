@@ -68,22 +68,23 @@ class RefeicaoEditRowTemplate(Validatable, RefeicaoEditRowTemplateTemplate):
 
     def cancel_button_click(self, **event_args):
         """This method is called when the component is clicked."""
-        if self.item.is_new:
+        if self.item.is_empty:
             self.remove_row_icon_button_click()
         else:
-            self.item.reset_changes()
             self.reset_view()
 
     def save_button_click(self, **event_args):
         """This method is called when the component is clicked."""
         if self.is_valid('refeicaoValidationGroup'):
+            self.item['nome'] = self.nome_edit_text_box.text
+            self.item.horario_time = self.horario_edit_picker_component.time
             classificacoes = self.classificacoes_data_panel.items
             self.item['quantidades'] = {item['classificacao']:int(item['quantidade']) for item in classificacoes if item['quantidade'] is not None and item['quantidade'] > 0}
             self.reset_view()
 
     def form_show(self, **event_args):
         """This method is called when the form is shown on the page"""
-        if self.item.is_new:
+        if self.item.is_empty:
             self.edit_row_icon_button_click()
 
     

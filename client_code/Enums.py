@@ -57,4 +57,12 @@ class AlimentoComposicaoEnum(BaseEnum):
     def column_name(self):
         return self.key.lower()
 
+    @property
+    def default_min(self):
+        return 1 if self['default_min'] is not None else None
+
+    @property
+    def default_max(self):
+        return 1 if self['default_max'] is not None else None
+
 _build_all(__name__)
