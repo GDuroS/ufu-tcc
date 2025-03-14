@@ -49,11 +49,8 @@ class MetaDiariaEditRowTemplate(Validatable, MetaDiariaEditRowTemplateTemplate):
     def minimo_maximo_text_box_change(self, **event_args):
         """This method is called when the text in this component is edited."""
         value = event_args['sender'].text
-        if value is None or value == '':
-            value = 0
-        if value < 0:
-            value = 0
-        event_args['sender'].text = value
+        if isinstance(value, float) and value < 0:
+            event_args['sender'].text = 0
 
     def cancel_row_icon_button_click(self, **event_args):
         self.edit_data_row_panel.visible = False
