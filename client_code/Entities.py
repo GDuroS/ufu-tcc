@@ -199,5 +199,9 @@ class MetaDiaria(Entity):
                 meta['plano'] = plano
             metas.append(meta)
         return metas
+
+    def __serialize__(self, global_data):
+        self._composicao_enum = None
+        return self.__dict__
         
     
