@@ -134,13 +134,31 @@ components_by_slot:
             name: metas_heading
             properties: {bold: true, icon: 'mi:flag_circle', style: title, text: Metas, text_color: var(--anvil-m3-on-tertiary-container)}
             type: form:dep_lin1x4oec0ytd:_Components.Heading
+          - components:
+            - layout_properties: {}
+              name: metas_edit_data_panel
+              properties: {background: var(--anvil-m3-surface-variant), item_template: Pages.Pacientes.PacienteEdit.MetaDiariaEditRowTemplate}
+              type: RepeatingPanel
+            layout_properties: {slot: card-content-container-slot}
+            name: metas_edit_data_grid
+            properties:
+              background: ''
+              columns:
+              - {data_key: composicao_nome, expand: true, id: WPSKVN, title: '', width: '100'}
+              - {data_key: minimo, expand: false, id: BQOTRM, title: Mínimo, width: '100'}
+              - {data_key: maximo, id: NPYXUT, title: Máximo, width: '100'}
+              - {data_key: buttons, id: RMKVSP, title: '', width: '145'}
+              foreground: var(--anvil-m3-on-tertiary-container)
+              rows_per_page: null
+              show_page_controls: false
+            type: DataGrid
           layout_properties: {slot: card-content-slot}
           name: metas_card_content_container
           properties: {}
           type: form:dep_lin1x4oec0ytd:_Components.Card.CardContentContainer
         layout_properties: {slot: card-content-container-slot}
         name: metas_card
-        properties: {background_color: var(--anvil-m3-tertiary-container)}
+        properties: {background_color: var(--anvil-m3-tertiary-container), visible: false}
         type: form:dep_lin1x4oec0ytd:_Components.Card
       - layout_properties: {slot: card-content-container-slot}
         name: no_plano_text

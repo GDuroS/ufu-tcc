@@ -1,0 +1,56 @@
+components:
+- components:
+  - event_bindings: {click: edit_row_icon_button_click}
+    layout_properties: {width: 48}
+    name: edit_row_icon_button
+    properties: {appearance: outlined, icon: 'mi:edit', tooltip: Editar os valores de metas}
+    type: form:dep_lin1x4oec0ytd:_Components.IconButton
+  - event_bindings: {click: reset_row_icon_button_click}
+    layout_properties: {}
+    name: reset_row_icon_button
+    properties: {appearance: filled, background_color: var(--anvil-m3-tertiary), icon: 'mi:restart_alt', tooltip: Reverter valores para os originais}
+    type: form:dep_lin1x4oec0ytd:_Components.IconButton
+  data_bindings:
+  - {code: not self.view_mode, property: visible, writeback: false}
+  layout_properties: {column: RMKVSP}
+  name: buttons_panel
+  properties: {align: center, gap: none, spacing_above: none, spacing_below: none, vertical_align: middle}
+  type: FlowPanel
+- components:
+  - components:
+    - event_bindings: {click: cancel_row_icon_button_click}
+      layout_properties: {width: 48}
+      name: cancel_row_icon_button
+      properties: {appearance: outlined, background_color: '', icon: 'mi:cancel', tooltip: Cancelar alterações}
+      type: form:dep_lin1x4oec0ytd:_Components.IconButton
+    - event_bindings: {click: save_row_icon_button_click}
+      layout_properties: {}
+      name: save_row_icon_button
+      properties: {appearance: filled, background_color: '', icon: 'mi:check', tooltip: Confirmar alterações}
+      type: form:dep_lin1x4oec0ytd:_Components.IconButton
+    data_bindings:
+    - {code: not self.view_mode, property: visible, writeback: false}
+    layout_properties: {column: RMKVSP}
+    name: edit_buttons_panel
+    properties: {align: center, gap: none, spacing_above: none, spacing_below: none, vertical_align: middle}
+    type: FlowPanel
+  - data_bindings:
+    - {code: 'self.item[''minimo'']', property: text, writeback: false}
+    event_bindings: {change: minimo_maximo_text_box_change}
+    layout_properties: {column: BQOTRM}
+    name: minimo_text_box
+    properties: {align: right, appearance: outlined, type: number}
+    type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
+  - data_bindings:
+    - {code: 'self.item[''maximo'']', property: text, writeback: false}
+    event_bindings: {change: minimo_maximo_text_box_change}
+    layout_properties: {column: NPYXUT}
+    name: maximo_text_box
+    properties: {align: right, appearance: outlined, type: number}
+    type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
+  layout_properties: {}
+  name: edit_data_row_panel
+  properties: {}
+  type: DataRowPanel
+container: {type: DataRowPanel}
+is_package: true

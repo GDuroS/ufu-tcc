@@ -54,12 +54,13 @@ class PlanoAlimentarService(AbstractCrudServiceClass):
                        error_builder.append("Um plano não pode ficar sem refeições vinculadas!")
             if metas:
                # Alterou metas
-               pass
+               if metas['removed']:
+                   error_builder.append("Não é permitido remover metas!")
         else:
             if not refeicoes or not refeicoes['added']: # Se não informou refeições ou é uma lista vazia
                 error_builder.append('Todo plano precisa ter pelo menos uma refeição informada.')
-            # if not metas or not metas['added']:
-            #     error_builder.append('Todo plano precisa ter pelo menos uma meta informada.')
+            if not metas or not metas['added']:
+                error_builder.append('Todo plano precisa ter suas metas informadas.')
         if plano['paciente'] is None:
             error_builder.append('Todo plano precisa ser vinculado à um paciente.')
         else:
@@ -136,7 +137,7 @@ class PacienteService(AbstractCrudServiceClass):
     def _merge_plano_vigente(self, paciente, plano):
         if plano is None or plano.is_empty:
             return
-        refeicoes, metas = plano.refeicoes.list_changes, None # TODO: implementar metas
+        refeicoes, metas = plano.refeicoes.list_changes, plano.metas.list_changes
         if plano.is_new:
             plano['paciente'] = paciente
             plano_alimentar_service._save(plano.row_changes, refeicoes, metas)

@@ -1,5 +1,4 @@
 import anvil.server
-from anvil import is_server_side
 from OruData.Entity import Entity, User, EntityDescriptor, ManagedRelationship
 
 @anvil.server.portable_class
@@ -60,6 +59,12 @@ class Paciente(Entity):
         plano_vigente = getattr(self, '_plano_vigente', None)
         if not plano_vigente:
             self._plano_vigente = PlanoAlimentar({'inicio': datetime.now()})
+            self._plano_vigente.metas = MetaDiaria.create_metas_padrao(self._plano_vigente)
+            return self._plano_vigente
+        elif plano_vigente.is_empty:
+            # cria as metas no plano
+            self._plano_vigente['inicio'] = datetime.now()
+            self._plano_vigente.metas = MetaDiaria.create_metas_padrao(self._plano_vigente)
             return self._plano_vigente
         elif plano_vigente.is_new:
             return None # Não faz sentido
@@ -69,7 +74,7 @@ class Paciente(Entity):
         novo_plano['inicio'] = self['termino'] + timedelta(days=1) if self['termino'] else datetime.now().date()
         
         refeicoes = []
-        for refeicao in novo_plano.refeicoes:
+        for refeicao in plano_vigente.refeicoes:
             if refeicao.is_new:
                 refeicao['plano'] = novo_plano
                 refeicoes.append(refeicao)
@@ -78,6 +83,14 @@ class Paciente(Entity):
             ref_changes['plano'] = novo_plano
             refeicoes.append(Refeicao(ref_changes))
         novo_plano.refeicoes = refeicoes
+
+        metas = []
+        for meta in plano_vigente.metas:
+            meta_changes = {k:meta.original_row[k] for k in meta._original_key_list}
+            meta_changes['plano'] = novo_plano
+            metas.append(MetaDiaria(meta_changes))
+        novo_plano.metas = metas
+        
         self._old_plano = plano_vigente
         self._plano_vigente = novo_plano
         
@@ -151,4 +164,40 @@ class Refeicao(Entity):
 @anvil.server.portable_class
 class MetaDiaria(Entity):
     plano = EntityDescriptor(PlanoAlimentar)
+    _composicao_enum = None
+
+    @property
+    def composicao_enum(self):
+        if self._composicao_enum is None and self['composicao'] is not None:
+            from .Enums import AlimentoComposicaoEnum
+            self._composicao_enum = AlimentoComposicaoEnum.by_key(self['composicao'])
+        return self._composicao_enum
+
+    @composicao_enum.setter
+    def composicao_enum(self, value):
+        self._composicao_enum = value
+        self['composicao'] = value.key
+
+    @property
+    def composicao_nome(self):
+        return self.composicao_enum.nome
+
+    def reset_to_default(self):
+        if self.composicao_enum:
+            self['minimo'] = self.composicao_enum['default_min']
+            self['maximo'] = self.composicao_enum['default_max']
+
+    @staticmethod
+    def create_metas_padrao(plano=None):
+        from .Enums import AlimentoComposicaoEnum
+        metas = []
+        for comp in AlimentoComposicaoEnum.list():
+            if comp['default_min'] is None and comp['default_max'] is None:
+                continue # ignora manganês
+            meta = MetaDiaria({'composicao': comp.key, 'minimo': comp['default_min'], 'maximo': comp['default_max']})
+            if plano:
+                meta['plano'] = plano
+            metas.append(meta)
+        return metas
+        
     

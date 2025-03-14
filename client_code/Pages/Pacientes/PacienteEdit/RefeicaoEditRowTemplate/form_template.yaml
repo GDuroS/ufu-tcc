@@ -3,12 +3,12 @@ components:
   - event_bindings: {click: edit_row_icon_button_click}
     layout_properties: {width: 48}
     name: edit_row_icon_button
-    properties: {appearance: outlined, icon: 'mi:edit'}
+    properties: {appearance: outlined, icon: 'mi:edit', tooltip: Editar a refeição}
     type: form:dep_lin1x4oec0ytd:_Components.IconButton
   - event_bindings: {click: remove_row_icon_button_click}
     layout_properties: {}
     name: remove_row_icon_button
-    properties: {appearance: filled, background_color: var(--anvil-m3-tertiary), icon: 'mi:delete'}
+    properties: {appearance: filled, background_color: var(--anvil-m3-tertiary), icon: 'mi:delete', tooltip: Remover a refeição}
     type: form:dep_lin1x4oec0ytd:_Components.IconButton
   data_bindings:
   - {code: not self.view_mode, property: visible, writeback: false}

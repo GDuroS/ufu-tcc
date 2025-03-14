@@ -10,7 +10,7 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
     def __init__(self, routing_context, **properties):
         CrudInterface.__init__(self, Paciente, routing_context, mode_switch_component=self.mode_switch, **properties)
         # self.refeicoes_card.visible = False
-        self.metas_card.visible = False
+        # self.metas_card.visible = False
         # self.no_plano_text.visible = True
         self._prepare_grid_visibility()
         if self.has_sequence:
@@ -24,6 +24,7 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
                 else:
                     self.plano_observacoes_quill.visible = False
                 self.refeicoes_edit_data_panel.items = self.item.plano_vigente.refeicoes
+                self.metas_edit_data_panel.items = self.item.plano_vigente.metas
                 
         self.set_toggleable_components([
             self.nome_completo_text_box,
@@ -46,8 +47,11 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
 
         def has_refeicoes():
             return self.item.plano_vigente.refeicoes
+        def has_metas():
+            return sum(map(lambda m:m['minimo']+m['maximo'], self.item.plano_vigente.metas))
         self.set_required_attributes([
-            (has_refeicoes, 'É obrigatório informar pelo menos uma refeição para o Plano')
+            (has_refeicoes, 'É obrigatório informar pelo menos uma refeição para o Plano'),
+            (has_metas, 'É obrigatório informar pelo menos uma meta de refeições diária')
         ], 'planoVigenteValidationGroup')
 
         popover(self.planos_title_tooltip_heading, 'Planos são conjuntos de refeições planejadas para o paciente durante um período no qual são vigentes', title='Planos de Refeições', placement='auto', trigger='hover click')
@@ -61,10 +65,14 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         def update_view(edit_mode, **event_args):
             self.add_refeicao_button.visible = not edit_mode
         self.refeicoes_edit_data_panel.tag.form = self
+        self.metas_edit_data_panel.tag.form = self
         self.refeicoes_edit_data_panel.add_event_handler('x-remove-self', remove_refeicao)
         self.refeicoes_edit_data_panel.add_event_handler('x-update-view', update_view)
+        get_dom_node(self.metas_edit_data_panel).classList.add("min-padding")
         self.refeicoes_edit_data_grid.tag.all_columns = [c for c in self.refeicoes_edit_data_grid.columns]
         self.refeicoes_edit_data_grid.tag.view_columns = [c for c in self.refeicoes_edit_data_grid.columns if c['data_key'] != 'buttons']
+        self.metas_edit_data_grid.tag.all_columns = [c for c in self.metas_edit_data_grid.columns]
+        self.metas_edit_data_grid.tag.view_columns = [c for c in self.metas_edit_data_grid.columns if c['data_key'] != 'buttons']
 
     def on_query_changed(self, **event_args):
         CrudInterface.on_query_changed(self, **event_args)
@@ -73,11 +81,15 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         get_dom_node(self.refeicoes_edit_data_panel).classList.toggle('no-auto-header', self.view_mode)
         if self.view_mode:
             self.refeicoes_edit_data_grid.columns = self.refeicoes_edit_data_grid.tag.view_columns
+            self.metas_edit_data_grid.columns = self.metas_edit_data_grid.tag.view_columns
         else:
             self.refeicoes_edit_data_grid.columns = self.refeicoes_edit_data_grid.tag.all_columns
+            self.metas_edit_data_grid.columns = self.metas_edit_data_grid.tag.all_columns
         self.refeicoes_edit_data_panel.raise_event_on_children('x-refresh')
+        self.metas_edit_data_panel.raise_event_on_children('x-refresh')
         if self.view_mode and not self.item.is_new and self.item.plano_vigente:
             self.refeicoes_edit_data_panel.items = self.item.plano_vigente.refeicoes
+            self.metas_edit_data_panel.items = self.item.plano_vigente.metas
             if self.item.plano_vigente['observacoes']:
                 self.plano_observacoes_quill.set_html(self.item.plano_vigente['observacoes'])
             else:
@@ -123,4 +135,5 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         self.plano_vigente_panel.visible = True
         self.no_plano_text.visible = False
         if self.item.criar_novo_plano():
-            self.refresh_data_bindings()
+            self.metas_edit_data_panel.items = self.item.plano_vigente.metas
+            self.on_query_changed()

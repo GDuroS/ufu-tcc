@@ -26,18 +26,18 @@ class AlimentoClassificacaoEnum(BaseEnum):
 
 class AlimentoComposicaoEnum(BaseEnum):
     __options__ = {
-		'ENERGIA': {'nome': 'Energia'},
-		'PROTEINA': {'nome': 'Proteína'},
-		'CARBOIDRATO': {'nome': 'Carboidrato'},
-		'FIBRA': {'nome': 'Fibra'},
-		'CALCIO': {'nome': 'Cálcio'},
-		'MAGNESIO': {'nome': 'Magnésio'},
-		'FERRO': {'nome': 'Ferro'},
-		'FOSFORO': {'nome': 'Fósforo'},
-		'MANGANES': {'nome': 'Manganês'},
-		'SODIO': {'nome': 'Sódio'},
-		'ZINCO': {'nome': 'Zinco'},
-		'LIPIDIOS': {'nome': 'Lipídios'}
+		'ENERGIA': {'nome': 'Energia', 'default_min': 1800.0, 'default_max': None},
+		'PROTEINA': {'nome': 'Proteína', 'default_min': 75.0, 'default_max': None},
+		'CARBOIDRATO': {'nome': 'Carboidrato', 'default_min': 202.5, 'default_max': None},
+		'FIBRA': {'nome': 'Fibra', 'default_min': 30.0, 'default_max': None},
+		'CALCIO': {'nome': 'Cálcio', 'default_min': 850.0, 'default_max': None},
+		'MAGNESIO': {'nome': 'Magnésio', 'default_min': 400.0, 'default_max': None},
+		'FERRO': {'nome': 'Ferro', 'default_min': 18.0, 'default_max': None},
+		'FOSFORO': {'nome': 'Fósforo', 'default_min': 700.0, 'default_max': None},
+		'MANGANES': {'nome': 'Manganês', 'default_min': None, 'default_max': None},
+		'SODIO': {'nome': 'Sódio', 'default_min': None, 'default_max': 2000.0},
+		'ZINCO': {'nome': 'Zinco', 'default_min': 15, 'default_max': None},
+		'LIPIDIOS': {'nome': 'Lipídios', 'default_min': None, 'default_max': 60.0}
 	}
 
     ENERGIA = None
