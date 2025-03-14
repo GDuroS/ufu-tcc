@@ -14,7 +14,7 @@ class MetaDiariaEditRowTemplate(Validatable, MetaDiariaEditRowTemplateTemplate):
         def refresh(**event_args):
             self.refresh_data_bindings()
         def has_meta():
-            return (self.item['minimo'] or 0) + (self.item['maximo'] or 0)
+            return (self.minimo_text_box.text or 0) + (self.maximo_text_box.text or 0)
 
         Validatable.set_required_attributes(self, [
             (has_meta, 'A composição deve ter pelo menos uma meta diária mínima ou máxima.')
@@ -41,6 +41,7 @@ class MetaDiariaEditRowTemplate(Validatable, MetaDiariaEditRowTemplateTemplate):
     def edit_row_icon_button_click(self, **event_args):
         get_dom_node(self).classList.add('edit-mode-row')
         self.edit_data_row_panel.visible = True
+        self.minimo_text_box.focus()
 
     def reset_row_icon_button_click(self, **event_args):
         self.item.reset_to_default()

@@ -54,6 +54,7 @@ class RefeicaoEditRowTemplate(Validatable, RefeicaoEditRowTemplateTemplate):
         self.classificacoes_data_panel.items = self.quantidade_items
         self.grid_container.add_component(self.classificacoes_data_grid)
         self.edit_panel.visible = True
+        self.nome_edit_text_box.focus()
         self.parent.raise_event('x-update-view', edit_mode=True)
 
     def remove_row_icon_button_click(self, **event_args):
@@ -65,6 +66,7 @@ class RefeicaoEditRowTemplate(Validatable, RefeicaoEditRowTemplateTemplate):
         get_dom_node(self).classList.remove('edit-mode-row')
         self.parent.raise_event('x-update-view', edit_mode=False)
         self.refresh_data_bindings()
+        self.edit_row_icon_button.scroll_into_view()
 
     def cancel_button_click(self, **event_args):
         """This method is called when the component is clicked."""
