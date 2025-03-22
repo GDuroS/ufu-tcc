@@ -72,6 +72,7 @@ class Paciente(Entity):
         changes = {k:plano_vigente.original_row[k] for k in plano_vigente._original_key_list}
         novo_plano = PlanoAlimentar(changes)
         novo_plano['inicio'] = self['termino'] + timedelta(days=1) if self['termino'] else datetime.now().date()
+        novo_plano['termino'] = novo_plano['inicio'] + self['termino'] - self['inicio'] if self['termino'] else None
         
         refeicoes = []
         for refeicao in plano_vigente.refeicoes:

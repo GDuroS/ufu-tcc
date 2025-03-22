@@ -38,8 +38,8 @@ class PlanoAlimentarService(AbstractCrudServiceClass):
 
     def _validate(self, plano, refeicoes, metas):
         error_builder = []
-        if plano['inicio'] is None:
-            error_builder.append('A data de início do Plano Alimentar é obrigatória.')
+        if plano['inicio'] is None or plano['termino'] is None:
+            error_builder.append('As datas de início e término do Plano Alimentar são obrigatórias.')
         if plano.get('termino'):
             if plano['inicio'] > plano['termino']:
                 error_builder.append('A data de término não pode ser anterior à data de início.')

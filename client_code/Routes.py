@@ -65,7 +65,11 @@ class PacienteCreateRoute(PacienteCRUD):
 
 class PacienteEditRoute(PacienteCRUD):
     path = '/pacientes/:id'
-    
+
+# Dietas
+class DietasRoute(SecureRoute, Route):
+    path = "/dietas"
+    form = "Pages.Dietas"
 
 # Outros
 class AboutRoute(Route):

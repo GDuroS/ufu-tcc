@@ -1,0 +1,27 @@
+components_by_slot:
+  content:
+  - event_bindings: {resync_click: paciente_autocomplete_resync_click}
+    layout_properties: {}
+    name: paciente_autocomplete
+    properties: {label: Paciente, show_clear_button: true, show_refresh_button: true}
+    type: form:dep_obp4eaigzghyeh:FormInput.Autocomplete
+  - layout_properties: {}
+    name: create_button
+    properties: {align: center, icon: 'mi:note_add', text: Criar nova Dieta}
+    type: form:dep_lin1x4oec0ytd:_Components.Button
+  - components:
+    - layout_properties: {grid_position: 'DBONTS,RZNUZZ'}
+      name: text_1
+      properties: {text: '# Dados do plano (ou seletor?)'}
+      type: form:dep_lin1x4oec0ytd:_Components.Text
+    layout_properties: {}
+    name: create_panel
+    properties: {}
+    type: ColumnPanel
+  content_heading_left:
+  - layout_properties: {}
+    name: heading
+    properties: {text: Geração de Dietas}
+    type: form:dep_lin1x4oec0ytd:_Components.Heading
+is_package: true
+layout: {type: 'form:Layouts.MainLayout'}
