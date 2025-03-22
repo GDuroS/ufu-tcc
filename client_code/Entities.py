@@ -33,6 +33,14 @@ class Paciente(Entity):
     profissional = EntityDescriptor(Profissional)
 
     @property
+    def planos_alimentares(self):
+        try:
+            return getattr(self, '_planos_alimentares')
+        except AttributeError:
+            self._planos_alimentares = PlanoAlimentar.from_search(anvil.server.call('getPlanoAlimentarFind', paciente=self.original_row))
+            return self._planos_alimentares
+
+    @property
     def plano_vigente(self):
         try:
             return getattr(self, '_plano_vigente')
@@ -131,6 +139,9 @@ class PlanoAlimentar(Entity):
             self.refeicoes.reset_changes()
         if getattr(self, '_managed_metas', None):
             self.metas.reset_changes()
+
+    def __str__(self):
+        return f"Plano de {'{:%d/%m/%Y}'.format(self['inicio'])} à {'{:%d/%m/%Y}'.format(self['fim'])}"
 
     @property
     def was_changed(self):
