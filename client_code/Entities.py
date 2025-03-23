@@ -141,7 +141,7 @@ class PlanoAlimentar(Entity):
             self.metas.reset_changes()
 
     def __str__(self):
-        return f"Plano de {'{:%d/%m/%Y}'.format(self['inicio'])} à {'{:%d/%m/%Y}'.format(self['fim'])}"
+        return f"Plano de {'{:%d/%m/%Y}'.format(self['inicio'])} à {'{:%d/%m/%Y}'.format(self['termino'])}"
 
     @property
     def was_changed(self):

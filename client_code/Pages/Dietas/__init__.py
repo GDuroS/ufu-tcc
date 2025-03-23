@@ -34,5 +34,6 @@ class Dietas(DietasTemplate):
         self.create_button.visible = False
         self.create_panel.visible = True
         self.plano_dropdown_menu.items = [(str(plano), plano) for plano in self.paciente_autocomplete.selected_value.planos_alimentares]
+        self.plano_dropdown_menu.selected_value = self.paciente_autocomplete.selected_value.planos_alimentares[-1]
 
     
