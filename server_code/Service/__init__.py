@@ -175,17 +175,23 @@ paciente_service = PacienteService()
 
 class DietaService(AbstractCrudServiceClass):
     @anvil.server.background_task
-    def gerar_dieta(self):
+    def gerar_dieta(self, plano_seq):
         try:
             from pulp import LpProblem, LpMinimize
             state = anvil.server.task_state
 
-            alimentos = []
-
-            @tables.in_transaction
-            def start_process():
+            def start_process(plano_seq):
+                self.log_progress(step=1, progress=0, message="Iniciando problema")
                 prob = LpProblem("Problema de Dieta Simples", LpMinimize)
-            start_process()
+                
+                self.log_progress(progress=1, message="Carregando base de Alimentos")
+                # TODO: substituir tables por self assim que possível
+                alimentos = tables.app_tables.alimento.search()
+
+                self.log_progress(progress=10, message="Carregando plano alimentar")
+                plano_alimentar
+                
+            start_process(plano_seq)
         except Exception as e:
             self.log_progress(message=e, error=True)
         else:
