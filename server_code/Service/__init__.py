@@ -177,7 +177,7 @@ class DietaService(AbstractCrudServiceClass):
     @anvil.server.background_task
     def gerar_dieta(self, plano_seq):
         try:
-            from pulp import LpProblem, LpMinimize, LpVariable, LpBinary
+            from pulp import LpProblem, LpMinimize, LpVariable, LpBinary, lpSum
             from ..Enums import AlimentoClassificacaoEnum
             state = anvil.server.task_state
 
@@ -191,12 +191,20 @@ class DietaService(AbstractCrudServiceClass):
 
                 self.log_progress(progress=10, message="Carregando plano alimentar")
                 plano_alimentar = tables.app_tables.planoalimentar.get(Sequence=plano_seq)
+                refeicoes = tables.app_tables.refeicao.search(plano=plano_alimentar)
 
                 self.log_progress(progress=15, message="Definindo variáveis")
                 chosen_vars = {}
                 for alimento in alimentos:
                     if AlimentoClassificacaoEnum.VEGETAL.key in alimento['grupos']:
                         chosen_vars[alimento['Sequence']] = LpVariable(f"Chosen_{alimento['Sequence']}", 0, 1, LpBinary)
+                self.log_progress(progress=30)
+                food_vars = LpVariable.dicts("Selecao", ([r['nome'] for r in refeicoes], [a['descricao'] for a in alimentos]), 0, cat="Integer")
+
+                prob += lpSum([
+                    (0.7 * alimento['carboidrato'] * food_vars[]) 
+                    for ref in refeicoes for alimento in alimentos
+                ])
                 
                 
             start_process(plano_seq)
