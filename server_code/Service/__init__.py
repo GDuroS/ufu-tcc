@@ -171,3 +171,8 @@ class PacienteService(AbstractCrudServiceClass):
         return self.app_tables.paciente.search(profissional=self.q.any_of(*profissionais))
 
 paciente_service = PacienteService()
+
+class DietaService(AbstractCrudServiceClass):
+    def gerar_dieta(self):
+        from pulp import LpProblem
+        
