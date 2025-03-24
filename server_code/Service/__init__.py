@@ -194,15 +194,20 @@ class DietaService(AbstractCrudServiceClass):
                 refeicoes = tables.app_tables.refeicao.search(plano=plano_alimentar)
 
                 self.log_progress(progress=15, message="Definindo variáveis")
+                ### BLOCO ESTÁTICO: Usado para definir estaticamente 2 vegetais
                 chosen_vars = {}
                 for alimento in alimentos:
                     if AlimentoClassificacaoEnum.VEGETAL.key in alimento['grupos']:
                         chosen_vars[alimento['Sequence']] = LpVariable(f"Chosen_{alimento['Sequence']}", 0, 1, LpBinary)
+                ###
                 self.log_progress(progress=30)
                 food_vars = LpVariable.dicts("Selecao", ([r['nome'] for r in refeicoes], [a['descricao'] for a in alimentos]), 0, cat="Integer")
 
+                ### BLOCO ESTÁTICO: Usado para definir proporção de 70 / 30 entre carboidratos e energia (não sei o que significa)
                 prob += lpSum([
-                    (0.7 * alimento['carboidrato'] * food_vars[]) 
+                    ((0.7 * (alimento['carboidrato'] * food_vars[ref['nome'][alimento['descricao']]])) +
+                     (0.3 * (alimento['energia'] * food_vars[ref['nome'][alimento['descricao']]]))
+                    )
                     for ref in refeicoes for alimento in alimentos
                 ])
                 
