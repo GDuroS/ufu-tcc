@@ -177,7 +177,8 @@ class DietaService(AbstractCrudServiceClass):
     @anvil.server.background_task
     def gerar_dieta(self, plano_seq):
         try:
-            from pulp import LpProblem, LpMinimize
+            from pulp import LpProblem, LpMinimize, LpVariable, LpBinary
+            from ..Enums import AlimentoClassificacaoEnum
             state = anvil.server.task_state
 
             def start_process(plano_seq):
@@ -189,7 +190,14 @@ class DietaService(AbstractCrudServiceClass):
                 alimentos = tables.app_tables.alimento.search()
 
                 self.log_progress(progress=10, message="Carregando plano alimentar")
-                plano_alimentar
+                plano_alimentar = tables.app_tables.planoalimentar.get(Sequence=plano_seq)
+
+                self.log_progress(progress=15, message="Definindo variáveis")
+                chosen_vars = {}
+                for alimento in alimentos:
+                    if AlimentoClassificacaoEnum.VEGETAL.key in alimento['grupos']:
+                        chosen_vars[alimento['Sequence']] = LpVariable(f"Chosen_{alimento['Sequence']}", 0, 1, LpBinary)
+                
                 
             start_process(plano_seq)
         except Exception as e:
