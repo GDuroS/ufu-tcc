@@ -1,5 +1,6 @@
 from OruData.Service.AbstractService import AbstractCrudServiceClass
 from anvil import tables
+import anvil.server
 
 refeicao_service = AbstractCrudServiceClass("Refeicao")
 meta_diaria_service = AbstractCrudServiceClass("MetaDiaria")
@@ -173,6 +174,21 @@ class PacienteService(AbstractCrudServiceClass):
 paciente_service = PacienteService()
 
 class DietaService(AbstractCrudServiceClass):
+    @anvil.server.background_task
     def gerar_dieta(self):
-        from pulp import LpProblem
-        
+        try:
+            from pulp import LpProblem, LpMinimize
+            state = anvil.server.task_state
+
+            alimentos = []
+
+            @tables.in_transaction
+            def start_process():
+                prob = LpProblem("Problema de Dieta Simples", LpMinimize)
+            start_process()
+        except Exception as e:
+            self.log_progress(message=e, error=True)
+        else:
+            pass
+        finally:
+            pass
