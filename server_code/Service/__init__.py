@@ -201,15 +201,28 @@ class DietaService(AbstractCrudServiceClass):
                         chosen_vars[alimento['Sequence']] = LpVariable(f"Chosen_{alimento['Sequence']}", 0, 1, LpBinary)
                 ###
                 self.log_progress(progress=30)
-                food_vars = LpVariable.dicts("Selecao", ([r['nome'] for r in refeicoes], [a['descricao'] for a in alimentos]), 0, cat="Integer")
+                food_vars = LpVariable.dicts("Selecao", ([r['Sequence'] for r in refeicoes], [a['Sequence'] for a in alimentos]), 0, cat="Integer")
 
                 ### BLOCO ESTÁTICO: Usado para definir proporção de 70 / 30 entre carboidratos e energia (não sei o que significa)
                 prob += lpSum([
-                    ((0.7 * (alimento['carboidrato'] * food_vars[ref['nome'][alimento['descricao']]])) +
-                     (0.3 * (alimento['energia'] * food_vars[ref['nome'][alimento['descricao']]]))
+                    ((0.7 * (alimento['carboidrato'] * food_vars[ref['Sequence'][alimento['Sequence']]])) +
+                     (0.3 * (alimento['energia'] * food_vars[ref['Sequence'][alimento['Sequence']]]))
                     )
                     for ref in refeicoes for alimento in alimentos
                 ])
+                ###
+
+                for refeicao in refeicoes:
+                    total = sum(refeicao['quantidades'].values())
+                    prob += lpSum([food_vars[refeicao['Sequence']][a['Sequence']] for a in alimentos]) == total, f"Total_{refeicao['nome'].replace(" ", "_")}"
+
+                ### BLOCO ESTÁTICO: Usado para definir estaticamente 2 vegetais
+                prob += lpSum(chosen_vars[a['Sequence']] for a in alimentos) == 2, "Exactly_2_V_Foods"
+
+                for alimento in alimentos:
+                    prob += food_vars[alimento['Sequence']][alimento['Sequence']]
+                ###
+                
                 
                 
             start_process(plano_seq)
