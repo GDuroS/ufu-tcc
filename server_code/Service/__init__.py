@@ -188,25 +188,25 @@ class DietaService(AbstractCrudServiceClass):
             from ..Enums import AlimentoClassificacaoEnum, AlimentoComposicaoEnum
             # state = anvil.server.task_state
 
+            @tables.in_transaction
             def start_process(plano_seq, vigencia_dieta, renovacao_pesos):
-                # self.log_progress(step=1, progress=0, message="Iniciando problema")
                 timer.check("start_process")
-                prob = LpProblem("Problema de Dieta Simples", LpMinimize)
-                timer.check("prob init")
                 
-                # self.log_progress(progress=1, message="Carregando base de Alimentos")
                 # TODO: substituir tables por self assim que possível
                 alimentos = tables.app_tables.alimento.search()
                 timer.check("alimentos_search")
 
-                # self.log_progress(progress=10, message="Carregando plano alimentar")
-                
                 plano_alimentar = tables.app_tables.planoalimentar.get(Sequence=plano_seq)
                 refeicoes = tables.app_tables.refeicao.search(plano=plano_alimentar)
                 metas_plano = tables.app_tables.metadiaria.search(plano=plano_alimentar)
+                # TODO: Atualizar o plano
                 timer.check("plano_get+refeicoes+metas")
 
-                # self.log_progress(progress=15, message="Definindo variáveis")
+                
+
+                prob = LpProblem("Problema de Dieta Simples", LpMinimize)
+                timer.check("prob init")
+
                 ### BLOCO ESTÁTICO: Usado para definir estaticamente 2 vegetais
                 chosen_vars = {}
                 for alimento in alimentos:
@@ -215,7 +215,6 @@ class DietaService(AbstractCrudServiceClass):
                 ###
                 timer.check('chosen_vars')
                 
-                # self.log_progress(progress=30)
                 food_vars = LpVariable.dicts("Selecao", (
                     [refeicao['Sequence'] for refeicao in refeicoes], [alimento['Sequence'] for alimento in alimentos]
                 ), 0, cat="Integer")
