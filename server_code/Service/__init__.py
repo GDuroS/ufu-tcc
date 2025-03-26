@@ -173,30 +173,38 @@ class PacienteService(AbstractCrudServiceClass):
 
 paciente_service = PacienteService()
 
+from anvil_extras.logging import TimerLogger
+
 class DietaService(AbstractCrudServiceClass):
     def __init__(self):
         super().__init__("Dieta")
     
     @anvil.server.background_task
-    def gerar_dieta(self, plano_seq):
+    def gerar_dieta(self, plano_seq, vigencia_dieta, renovacao_pesos):
+        timer = TimerLogger("Task timer")
+        timer.start("Starting")
         try:
             from pulp import LpProblem, LpMinimize, LpVariable, LpBinary, LpStatus, lpSum, value
             from ..Enums import AlimentoClassificacaoEnum, AlimentoComposicaoEnum
             # state = anvil.server.task_state
 
-            def start_process(plano_seq):
+            def start_process(plano_seq, vigencia_dieta, renovacao_pesos):
                 # self.log_progress(step=1, progress=0, message="Iniciando problema")
+                timer.check("start_process")
                 prob = LpProblem("Problema de Dieta Simples", LpMinimize)
+                timer.check("prob init")
                 
                 # self.log_progress(progress=1, message="Carregando base de Alimentos")
                 # TODO: substituir tables por self assim que possível
                 alimentos = tables.app_tables.alimento.search()
+                timer.check("alimentos_search")
 
                 # self.log_progress(progress=10, message="Carregando plano alimentar")
                 
                 plano_alimentar = tables.app_tables.planoalimentar.get(Sequence=plano_seq)
                 refeicoes = tables.app_tables.refeicao.search(plano=plano_alimentar)
                 metas_plano = tables.app_tables.metadiaria.search(plano=plano_alimentar)
+                timer.check("plano_get+refeicoes+metas")
 
                 # self.log_progress(progress=15, message="Definindo variáveis")
                 ### BLOCO ESTÁTICO: Usado para definir estaticamente 2 vegetais
@@ -205,10 +213,13 @@ class DietaService(AbstractCrudServiceClass):
                     if AlimentoClassificacaoEnum.VEGETAL.key in alimento['grupos']:
                         chosen_vars[alimento['Sequence']] = LpVariable(f"Chosen_{alimento['Sequence']}", 0, 1, LpBinary)
                 ###
+                timer.check('chosen_vars')
+                
                 # self.log_progress(progress=30)
                 food_vars = LpVariable.dicts("Selecao", (
                     [refeicao['Sequence'] for refeicao in refeicoes], [alimento['Sequence'] for alimento in alimentos]
                 ), 0, cat="Integer")
+                timer.check("food_vars")
 
                 ### BLOCO ESTÁTICO: Usado para definir proporção de 70 / 30 entre carboidratos e energia (não sei o que significa)
                 prob += lpSum([
@@ -218,6 +229,7 @@ class DietaService(AbstractCrudServiceClass):
                     ) for refeicao in refeicoes for alimento in alimentos
                 ])
                 ###
+                timer.check("0.7/0.3")
 
                 for refeicao in refeicoes:
                     ref = refeicao['Sequence']
@@ -225,16 +237,18 @@ class DietaService(AbstractCrudServiceClass):
                     prob += lpSum([
                         food_vars[ref][alimento['Sequence']] for alimento in alimentos
                     ]) == total, f"Total_{refeicao['nome'].replace(' ', '_')}"
-
+                timer.check("totais refeicoes")
                 ### BLOCO ESTÁTICO: Usado para definir estaticamente 2 vegetais
                 prob += lpSum(chosen_vars[f] for f in chosen_vars) == 2, "Exactly_2_V_Foods"
                 ###
+                timer.check("Exactly_2_V_Foods")
 
                 ### BLOCO ESTÁTICO: Usado para definir algo para Almoço
                 for f in chosen_vars:
                     # TODO: Ainda não sei como definir isto
                     prob += food_vars[refeicoes[2]['Sequence']][f] <= chosen_vars[f], f"Choose_{f}_If_ChosenVar_Is_1"
                 ###
+                timer.check("Almoço")
 
                 # Pesos
                 # TODO: Ajuste de peso
@@ -250,6 +264,7 @@ class DietaService(AbstractCrudServiceClass):
                             alimento[composicao_enum.column_name] * food_vars[refeicao['Sequence']][alimento['Sequence']] 
                             for refeicao in refeicoes for alimento in alimentos
                         ) <= meta['maximo'], f"{composicao_enum.nome}Maximo"
+                timer.check("min/max")
 
                 ### BLOCO ESTÁTICO: Restrições adicionais
                 def in_classe_possivel(alimento_classes, classes_possiveis):
@@ -277,9 +292,11 @@ class DietaService(AbstractCrudServiceClass):
                                 food_vars[refeicao['Sequence']][alimento['Sequence']] 
                                 for alimento in alimentos if classificacao in alimento['grupos']
                             ]) == refeicao['quantidades'][classificacao], f"{refeicao['nome']}_{classificacao}_Exact"
+                timer.check("Grupos")
                 ###
 
                 prob.solve()
+                timer.check("Solve")
                 print(f"Status: {LpStatus[prob.status]}")
 
                 for refeicao in refeicoes:
@@ -298,11 +315,12 @@ class DietaService(AbstractCrudServiceClass):
                     )
                     print(f"{composicao.nome}: {value(final)}")
                 print(f"Função Objetivo: {value(prob.objective)}")
-                
-            start_process(plano_seq)
+                timer.check("finished process")
+            timer.check("After defining/before start process")
+            start_process(plano_seq, vigencia_dieta, renovacao_pesos)
         except Exception as e:
             self.log_error(e)
         else:
             pass
         finally:
-            pass
+            timer.end("Finished")

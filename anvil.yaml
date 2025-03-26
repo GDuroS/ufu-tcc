@@ -50,6 +50,22 @@ db_schema:
       type: number
     server: full
     title: Alimento
+  dieta:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: refeicao
+      target: refeicao
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      name: alimento
+      target: alimento
+      type: link_single
+    - admin_ui: {order: 2, width: 200}
+      name: quantidade
+      type: number
+    server: full
+    title: Dieta
   funcionalidadeversao:
     client: none
     columns:
@@ -137,6 +153,12 @@ db_schema:
     - admin_ui: {order: 4, width: 200}
       name: observacoes
       type: simpleObject
+    - admin_ui: {order: 5, width: 200}
+      name: validade_dieta
+      type: number
+    - admin_ui: {order: 6, width: 200}
+      name: renovar_pesos
+      type: number
     server: full
     title: PlanoAlimentar
   profissional:
