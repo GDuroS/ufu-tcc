@@ -132,6 +132,7 @@ class PlanoAlimentar(Entity):
     paciente = EntityDescriptor(Paciente)
     refeicoes = ManagedRelationship('Refeicao', 'plano')
     metas = ManagedRelationship('MetaDiaria', 'plano')
+    dietas = ManagedRelationship('Dieta', 'plano')
 
     def reset_changes(self):
         Entity.reset_changes(self)
@@ -216,4 +217,9 @@ class MetaDiaria(Entity):
         self._composicao_enum = None
         return self.__dict__
         
+class Dieta(Entity):
+    plano = EntityDescriptor(PlanoAlimentar)
     
+
+class DietaRefeicao(Entity):
+    pass

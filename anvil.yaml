@@ -54,6 +54,34 @@ db_schema:
     client: none
     columns:
     - admin_ui: {order: 0, width: 200}
+      name: plano
+      target: planoalimentar
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      name: inicio
+      type: date
+    - admin_ui: {order: 2, width: 200}
+      name: termino
+      type: date
+    - admin_ui: {order: 3, width: 200}
+      name: Sequence
+      type: number
+    - admin_ui: {order: 4, width: 200}
+      name: refeicoes
+      target: dietarefeicao
+      type: link_multiple
+    - admin_ui: {order: 5, width: 200}
+      name: summary
+      type: simpleObject
+    - admin_ui: {order: 6, width: 200}
+      name: f_objetivo
+      type: number
+    server: full
+    title: Dieta
+  dietarefeicao:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
       name: refeicao
       target: refeicao
       type: link_single
@@ -68,35 +96,7 @@ db_schema:
       name: Sequence
       type: number
     server: full
-    title: Dieta
-  dietacronograma:
-    client: none
-    columns:
-    - admin_ui: {order: 0, width: 200}
-      name: plano
-      target: planoalimentar
-      type: link_single
-    - admin_ui: {order: 1, width: 200}
-      name: inicio
-      type: date
-    - admin_ui: {order: 2, width: 200}
-      name: termino
-      type: date
-    - admin_ui: {order: 3, width: 200}
-      name: Sequence
-      type: number
-    - admin_ui: {order: 4, width: 200}
-      name: dietas
-      target: dieta
-      type: link_multiple
-    - admin_ui: {order: 5, width: 200}
-      name: summary
-      type: simpleObject
-    - admin_ui: {order: 6, width: 200}
-      name: f_objetivo
-      type: number
-    server: full
-    title: DietaCronograma
+    title: DietaRefeicao
   funcionalidadeversao:
     client: none
     columns:

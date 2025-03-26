@@ -174,19 +174,19 @@ class PacienteService(AbstractCrudServiceClass):
 paciente_service = PacienteService()
 
 
-class DietaCronogramaService(AbstractCrudServiceClass):
+class DietaService(AbstractCrudServiceClass):
     default_on_link_multiple_action = "CASCADE"
     
     def __init__(self):
-        super().__init__("DietaCronograma")
-dieta_cronograma_service = DietaCronogramaService()
+        super().__init__("Dieta")
+dieta_service = DietaService()
 
 from anvil_extras.logging import TimerLogger
-class DietaService(AbstractCrudServiceClass):
+class DietaRefeicaoService(AbstractCrudServiceClass):
     action_by_column_remap = {'alimento': "NO_ACTION"}
     
     def __init__(self):
-        super().__init__("Dieta")
+        super().__init__("DietaRefeicao")
     
     @anvil.server.background_task
     def gerar_dieta(self, plano_seq, vigencia_dieta, renovacao_pesos):
@@ -353,10 +353,10 @@ class DietaService(AbstractCrudServiceClass):
                     print(f"Função Objetivo: {value(prob.objective)}")
                     inicio = curr_date
                     curr_date = curr_date + timedelta(days=vigencia_dieta)
-                    dieta_cronograma_service.save({
+                    dieta_service.save({
                         'plano': plano_alimentar, 
                         'inicio': inicio.date(), 'termino': min(curr_date - timedelta(days=1), plano_alimentar['termino']).date(), 
-                        'dietas': dietas_cadastradas, 'summary': summary, 'f_objetivo': value(prob.objective)
+                        'refeicoes': dietas_cadastradas, 'summary': summary, 'f_objetivo': value(prob.objective)
                     })
                     
                     if curr_date < plano_alimentar['termino'] and curr_date < reset_pesos_when:
@@ -379,4 +379,4 @@ class DietaService(AbstractCrudServiceClass):
         finally:
             timer.end("Finished")
 
-dieta_service = DietaService()
+dieta_refeicao_service = DietaRefeicaoService()
