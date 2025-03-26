@@ -191,49 +191,40 @@ class DietaService(AbstractCrudServiceClass):
                 # self.log_progress(progress=1, message="Carregando base de Alimentos")
                 # TODO: substituir tables por self assim que possível
                 alimentos = tables.app_tables.alimento.search()
-                food_items = list([a['descricao'] for a in alimentos])
 
                 # self.log_progress(progress=10, message="Carregando plano alimentar")
-                energia = dict(zip(food_items, [a['energia'] for a in alimentos]))
-                proteina = dict(zip(food_items, [a['proteina'] for a in alimentos]))
-                carboidrato = dict(zip(food_items, [a['carboidrato'] for a in alimentos]))
-                fibra = dict(zip(food_items, [a['fibra'] for a in alimentos]))
-                calcio = dict(zip(food_items, [a['calcio'] for a in alimentos]))
-                magnesio = dict(zip(food_items, [a['magnesio'] for a in alimentos]))
-                fosforo = dict(zip(food_items, [a['fosforo'] for a in alimentos]))
-                ferro = dict(zip(food_items, [a['ferro'] for a in alimentos]))
-                sodio = dict(zip(food_items, [a['sodio'] for a in alimentos]))
-                zinco = dict(zip(food_items, [a['zinco'] for a in alimentos]))
-                lipideos = dict(zip(food_items, [a['lipidios'] for a in alimentos]))
-                classificacao_l = dict(zip(food_items, [a['grupos'] for a in alimentos]))
                 
                 plano_alimentar = tables.app_tables.planoalimentar.get(Sequence=plano_seq)
                 refeicoes = tables.app_tables.refeicao.search(plano=plano_alimentar)
                 metas_plano = tables.app_tables.metadiaria.search(plano=plano_alimentar)
 
-                contagem_classificacoes_necessarias = {
-                    ref['nome']:ref['quantidades'] for ref in refeicoes
-                }
-
-                nomes_refeicoes = [ref['nome'] for ref in refeicoes]
-
                 # self.log_progress(progress=15, message="Definindo variáveis")
                 ### BLOCO ESTÁTICO: Usado para definir estaticamente 2 vegetais
                 chosen_vars = {}
-                for f in food_items:
-                    if AlimentoClassificacaoEnum.VEGETAL.key in classificacao_l[f]:
-                        chosen_vars[f] = LpVariable(f"Chosen_{f}", 0, 1, LpBinary)
+                for alimento in alimentos:
+                    if AlimentoClassificacaoEnum.VEGETAL.key in alimento['grupos']:
+                        chosen_vars[alimento['Sequence']] = LpVariable(f"Chosen_{alimento['Sequence']}", 0, 1, LpBinary)
                 ###
                 # self.log_progress(progress=30)
-                food_vars = LpVariable.dicts("Selecao", (nomes_refeicoes, food_items), 0, cat="Integer")
+                food_vars = LpVariable.dicts("Selecao", (
+                    [refeicao['Sequence'] for refeicao in refeicoes], [alimento['Sequence'] for alimento in alimentos]
+                ), 0, cat="Integer")
 
                 ### BLOCO ESTÁTICO: Usado para definir proporção de 70 / 30 entre carboidratos e energia (não sei o que significa)
-                prob += lpSum([((0.7 * (carboidrato[i] * food_vars[ref][i])) + (0.3 * (energia[i] * food_vars[ref][i]))) for ref in nomes_refeicoes for i in food_items])
+                prob += lpSum([
+                    ( 
+                        (0.7 * (alimento['carboidrato'] * food_vars[refeicao['Sequence']][alimento['Sequence']])) + 
+                        (0.3 * (alimento['energia'] * food_vars[refeicao['Sequence']][alimento['Sequence']]) ) 
+                    ) for refeicao in refeicoes for alimento in alimentos
+                ])
                 ###
 
                 for refeicao in refeicoes:
+                    ref = refeicao['Sequence']
                     total = sum(refeicao['quantidades'].values())
-                    prob += lpSum([food_vars[refeicao['nome']][f] for f in food_items]) == total, f"Total_{refeicao['nome'].replace(' ', '_')}"
+                    prob += lpSum([
+                        food_vars[ref][alimento['Sequence']] for alimento in alimentos
+                    ]) == total, f"Total_{refeicao['nome'].replace(' ', '_')}"
 
                 ### BLOCO ESTÁTICO: Usado para definir estaticamente 2 vegetais
                 prob += lpSum(chosen_vars[f] for f in chosen_vars) == 2, "Exactly_2_V_Foods"
@@ -241,7 +232,8 @@ class DietaService(AbstractCrudServiceClass):
 
                 ### BLOCO ESTÁTICO: Usado para definir algo para Almoço
                 for f in chosen_vars:
-                    prob += food_vars[refeicoes[2]['nome']][f] <= chosen_vars[f], f"Choose_{f}_If_ChosenVar_Is_1"
+                    # TODO: Ainda não sei como definir isto
+                    prob += food_vars[refeicoes[2]['Sequence']][f] <= chosen_vars[f], f"Choose_{f}_If_ChosenVar_Is_1"
                 ###
 
                 # Pesos
@@ -249,9 +241,15 @@ class DietaService(AbstractCrudServiceClass):
                 for meta in metas_plano:
                     composicao_enum = AlimentoComposicaoEnum.by_key(meta['composicao'])
                     if meta['minimo']:
-                        prob += lpSum(a[composicao_enum.column_name] * food_vars[ref['nome']][a['descricao']] for ref in refeicoes for a in alimentos) >= meta['minimo'], f"{composicao_enum.nome}Minimo"
+                        prob += lpSum(
+                            alimento[composicao_enum.column_name] * food_vars[refeicao['Sequence']][alimento['Sequence']] 
+                            for refeicao in refeicoes for alimento in alimentos
+                        ) >= meta['minimo'], f"{composicao_enum.nome}Minimo"
                     if meta['maximo']:
-                        prob += lpSum(a[composicao_enum.column_name] * food_vars[ref['nome']][a['descricao']] for ref in refeicoes for a in alimentos) <= meta['maximo'], f"{composicao_enum.nome}Maximo"
+                        prob += lpSum(
+                            alimento[composicao_enum.column_name] * food_vars[refeicao['Sequence']][alimento['Sequence']] 
+                            for refeicao in refeicoes for alimento in alimentos
+                        ) <= meta['maximo'], f"{composicao_enum.nome}Maximo"
 
                 ### BLOCO ESTÁTICO: Restrições adicionais
                 def in_classe_possivel(alimento_classes, classes_possiveis):
@@ -259,39 +257,46 @@ class DietaService(AbstractCrudServiceClass):
                         if classe in classes_possiveis:
                             return True
                     return False
-                for refeicao in nomes_refeicoes:
-                    for classificacao in contagem_classificacoes_necessarias[refeicao]:
+                for refeicao in refeicoes:
+                    for classificacao in refeicao['quantidades']:
                         if '/' in classificacao:
+                            # TODO: Bloco inatingível com a implementação atual
                             classes_possiveis = classificacao.split("/")
                             if classificacao == "FRUTA/LEITE" or classificacao == "BEBIDA/SUCO":
-                                prob += lpSum(
-                                    [food_vars[refeicao][f] for f in food_items if in_classe_possivel(classificacao_l[f], classes_possiveis)]
-                                ) == contagem_classificacoes_necessarias[refeicao][classificacao], f"{refeicao}_{classificacao}_Exact"
+                                prob += lpSum([
+                                    food_vars[refeicao['Sequence']][alimento['Sequence']]
+                                    for alimento in alimentos if in_classe_possivel(alimento['grupos'], classes_possiveis)
+                                ]) == refeicao['quantidades'][classificacao], f"{refeicao['nome']}_{classificacao}_Exact"
                             else:
-                                prob += lpSum(
-                                    [food_vars[refeicao][f] for f in food_items if in_classe_possivel(classificacao_l[f], classes_possiveis)]
-                                ) <= contagem_classificacoes_necessarias[refeicao][classificacao], f"{refeicao}_{classificacao}_Max"
+                                prob += lpSum([
+                                    food_vars[refeicao['Sequence']][alimento['Sequence']]
+                                    for alimento in alimentos if in_classe_possivel(alimento['grupos'], classes_possiveis)
+                                ]) <= refeicao['quantidades'][classificacao], f"{refeicao['nome']}_{classificacao}_Max"
                         else:
-                            prob += lpSum(
-                                [food_vars[refeicao][f] for f in food_items if classificacao in classificacao_l[f]]
-                            ) == contagem_classificacoes_necessarias[refeicao][classificacao], f"{refeicao}_{classificacao}_Exact"
+                            prob += lpSum([
+                                food_vars[refeicao['Sequence']][alimento['Sequence']] 
+                                for alimento in alimentos if classificacao in alimento['grupos']
+                            ]) == refeicao['quantidades'][classificacao], f"{refeicao['nome']}_{classificacao}_Exact"
                 ###
 
                 prob.solve()
                 print(f"Status: {LpStatus[prob.status]}")
 
-                for refeicao in nomes_refeicoes:
+                for refeicao in refeicoes:
                     print("\n")
-                    print(f"Alimentos para {refeicao}")
-                    for f in food_items:
-                        var_value = food_vars[refeicao][f].varValue
+                    print(f"Alimentos para {refeicao['nome']}")
+                    for alimento in alimentos:
+                        var_value = food_vars[refeicao['Sequence']][alimento['Sequence']].varValue
                         if var_value > 0:
-                            print(f"{f} = {round(var_value, 2)}")
+                            print(f"{alimento['descricao']} = {round(var_value, 2)}")
 
                 print("\n")
-                # for composicao in AlimentoComposicaoEnum.list():
-                #     final = lpSum(alimento[composicao.column_name] * food_vars[ref['Sequence']][a['Sequence']].varValue for ref in refeicoes for a in alimentos)
-                #     print(f"{composicao.nome}: {value(final)}")
+                for composicao in AlimentoComposicaoEnum.list():
+                    final = lpSum(
+                        alimento[composicao.column_name] * food_vars[refeicao['Sequence']][alimento['Sequence']].varValue 
+                        for refeicao in refeicoes for alimento in alimentos
+                    )
+                    print(f"{composicao.nome}: {value(final)}")
                 print(f"Função Objetivo: {value(prob.objective)}")
                 
             start_process(plano_seq)
