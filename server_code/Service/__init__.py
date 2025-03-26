@@ -173,9 +173,18 @@ class PacienteService(AbstractCrudServiceClass):
 
 paciente_service = PacienteService()
 
-from anvil_extras.logging import TimerLogger
 
+class DietaCronogramaService(AbstractCrudServiceClass):
+    default_on_link_multiple_action = "CASCADE"
+    
+    def __init__(self):
+        super().__init__("DietaCronograma")
+dieta_cronograma_service = DietaCronogramaService()
+
+from anvil_extras.logging import TimerLogger
 class DietaService(AbstractCrudServiceClass):
+    action_by_column_remap = {'alimento': "NO_ACTION"}
+    
     def __init__(self):
         super().__init__("Dieta")
     
@@ -185,6 +194,7 @@ class DietaService(AbstractCrudServiceClass):
         timer.start("Starting")
         try:
             from pulp import LpProblem, LpMinimize, LpVariable, LpBinary, LpStatus, lpSum, value
+            from datetime import timedelta
             from ..Enums import AlimentoClassificacaoEnum, AlimentoComposicaoEnum
             # state = anvil.server.task_state
 
@@ -204,122 +214,169 @@ class DietaService(AbstractCrudServiceClass):
                 plano_alimentar.update(validade_dieta=vigencia_dieta, renovar_pesos=renovacao_pesos)
                 timer.check("plano_update")
 
-                prob = LpProblem("Problema de Dieta Simples", LpMinimize)
-                timer.check("prob init")
-
-                ### BLOCO ESTÁTICO: Usado para definir estaticamente 2 vegetais
-                chosen_vars = {}
-                for alimento in alimentos:
-                    if AlimentoClassificacaoEnum.VEGETAL.key in alimento['grupos']:
-                        chosen_vars[alimento['Sequence']] = LpVariable(f"Chosen_{alimento['Sequence']}", 0, 1, LpBinary)
-                ###
-                timer.check('chosen_vars')
-                
-                food_vars = LpVariable.dicts("Selecao", (
-                    [refeicao['Sequence'] for refeicao in refeicoes], [alimento['Sequence'] for alimento in alimentos]
-                ), 0, cat="Integer")
-                timer.check("food_vars")
-
-                ### BLOCO ESTÁTICO: Usado para definir proporção de 70 / 30 entre carboidratos e energia (não sei o que significa)
-                prob += lpSum([
-                    ( 
-                        (0.7 * (alimento['carboidrato'] * food_vars[refeicao['Sequence']][alimento['Sequence']])) + 
-                        (0.3 * (alimento['energia'] * food_vars[refeicao['Sequence']][alimento['Sequence']]) ) 
-                    ) for refeicao in refeicoes for alimento in alimentos
-                ])
-                ###
-                timer.check("0.7/0.3")
-
-                for refeicao in refeicoes:
-                    ref = refeicao['Sequence']
-                    total = sum(refeicao['quantidades'].values())
+                pesos = {}
+                curr_date = plano_alimentar['inicio']
+                reset_pesos_when = curr_date
+                while curr_date <= plano_alimentar['termino']:
+                    if renovacao_pesos and curr_date >= reset_pesos_when:
+                        if not pesos:
+                            # TODO: Aqui os pesos devem iniciar usando os dados do questionário do paciente
+                            pesos = dict([(alimento['Sequence'], 0) for alimento in alimentos])
+                            timer.check("Set pesos")
+                        else:
+                            pesos = {k:0 for k in pesos}
+                            timer.check("Reset pesos")
+                        while curr_date >= reset_pesos_when:
+                            reset_pesos_when += timedelta(days=renovacao_pesos)
+                    else:
+                        # Ajustar pesos
+                        timer.check("Adjust pesos")
+                    timer.check("creating next range")
+                    prob = LpProblem(f"Problema de Dieta Simples {'{:%d/%m}'.format(curr_date)}", LpMinimize)
+                    timer.check(f"prob init {'{:%d/%m}'.format(curr_date)}")
+    
+                    ### BLOCO ESTÁTICO: Usado para definir estaticamente 2 vegetais
+                    chosen_vars = {}
+                    for alimento in alimentos:
+                        if AlimentoClassificacaoEnum.VEGETAL.key in alimento['grupos']:
+                            chosen_vars[alimento['Sequence']] = LpVariable(f"Chosen_{alimento['Sequence']}", 0, 1, LpBinary)
+                    ###
+                    timer.check('chosen_vars')
+                    
+                    food_vars = LpVariable.dicts("Selecao", (
+                        [refeicao['Sequence'] for refeicao in refeicoes], [alimento['Sequence'] for alimento in alimentos]
+                    ), 0, cat="Integer")
+                    timer.check("food_vars")
+    
+                    ### BLOCO ESTÁTICO: Usado para definir proporção de 70 / 30 entre carboidratos e energia (não sei o que significa)
                     prob += lpSum([
-                        food_vars[ref][alimento['Sequence']] for alimento in alimentos
-                    ]) == total, f"Total_{refeicao['nome'].replace(' ', '_')}"
-                timer.check("totais refeicoes")
-                ### BLOCO ESTÁTICO: Usado para definir estaticamente 2 vegetais
-                prob += lpSum(chosen_vars[f] for f in chosen_vars) == 2, "Exactly_2_V_Foods"
-                ###
-                timer.check("Exactly_2_V_Foods")
-
-                ### BLOCO ESTÁTICO: Usado para definir algo para Almoço
-                for f in chosen_vars:
-                    # TODO: Ainda não sei como definir isto
-                    prob += food_vars[refeicoes[2]['Sequence']][f] <= chosen_vars[f], f"Choose_{f}_If_ChosenVar_Is_1"
-                ###
-                timer.check("Almoço")
-
-                # Pesos
-                # TODO: Ajuste de peso
-                for meta in metas_plano:
-                    composicao_enum = AlimentoComposicaoEnum.by_key(meta['composicao'])
-                    if meta['minimo']:
-                        prob += lpSum(
-                            alimento[composicao_enum.column_name] * food_vars[refeicao['Sequence']][alimento['Sequence']] 
-                            for refeicao in refeicoes for alimento in alimentos
-                        ) >= meta['minimo'], f"{composicao_enum.nome}Minimo"
-                    if meta['maximo']:
-                        prob += lpSum(
-                            alimento[composicao_enum.column_name] * food_vars[refeicao['Sequence']][alimento['Sequence']] 
-                            for refeicao in refeicoes for alimento in alimentos
-                        ) <= meta['maximo'], f"{composicao_enum.nome}Maximo"
-                timer.check("min/max")
-
-                ### BLOCO ESTÁTICO: Restrições adicionais
-                def in_classe_possivel(alimento_classes, classes_possiveis):
-                    for classe in alimento_classes:
-                        if classe in classes_possiveis:
-                            return True
-                    return False
-                for refeicao in refeicoes:
-                    for classificacao in refeicao['quantidades']:
-                        if '/' in classificacao:
-                            # TODO: Bloco inatingível com a implementação atual
-                            classes_possiveis = classificacao.split("/")
-                            if classificacao == "FRUTA/LEITE" or classificacao == "BEBIDA/SUCO":
-                                prob += lpSum([
-                                    food_vars[refeicao['Sequence']][alimento['Sequence']]
-                                    for alimento in alimentos if in_classe_possivel(alimento['grupos'], classes_possiveis)
-                                ]) == refeicao['quantidades'][classificacao], f"{refeicao['nome']}_{classificacao}_Exact"
+                        ( 
+                            (0.7 * (alimento['carboidrato'] * food_vars[refeicao['Sequence']][alimento['Sequence']])) + 
+                            (0.3 * (alimento['energia'] * food_vars[refeicao['Sequence']][alimento['Sequence']]) ) 
+                        ) for refeicao in refeicoes for alimento in alimentos
+                    ])
+                    ###
+                    timer.check("0.7/0.3")
+    
+                    for refeicao in refeicoes:
+                        ref = refeicao['Sequence']
+                        total = sum(refeicao['quantidades'].values())
+                        prob += lpSum([
+                            food_vars[ref][alimento['Sequence']] for alimento in alimentos
+                        ]) == total, f"Total_{refeicao['nome'].replace(' ', '_')}"
+                    timer.check("totais refeicoes")
+                    ### BLOCO ESTÁTICO: Usado para definir estaticamente 2 vegetais
+                    prob += lpSum(chosen_vars[f] for f in chosen_vars) == 2, "Exactly_2_V_Foods"
+                    ###
+                    timer.check("Exactly_2_V_Foods")
+    
+                    ### BLOCO ESTÁTICO: Usado para definir algo para Almoço
+                    for f in chosen_vars:
+                        # TODO: Ainda não sei como definir isto
+                        prob += food_vars[refeicoes[2]['Sequence']][f] <= chosen_vars[f], f"Choose_{f}_If_ChosenVar_Is_1"
+                    ###
+                    timer.check("Almoço")
+    
+                    # Pesos
+                    prob += lpSum([
+                        pesos[alimento['Sequence']] * food_vars[refeicao['Sequence']][alimento['Sequence']]
+                        for refeicao in refeicoes for alimento in alimentos
+                    ]) <= 5.0
+                    timer.check("peso")
+                    
+                    for meta in metas_plano:
+                        composicao_enum = AlimentoComposicaoEnum.by_key(meta['composicao'])
+                        if meta['minimo']:
+                            prob += lpSum(
+                                alimento[composicao_enum.column_name] * food_vars[refeicao['Sequence']][alimento['Sequence']] 
+                                for refeicao in refeicoes for alimento in alimentos
+                            ) >= meta['minimo'], f"{composicao_enum.nome}Minimo"
+                        if meta['maximo']:
+                            prob += lpSum(
+                                alimento[composicao_enum.column_name] * food_vars[refeicao['Sequence']][alimento['Sequence']] 
+                                for refeicao in refeicoes for alimento in alimentos
+                            ) <= meta['maximo'], f"{composicao_enum.nome}Maximo"
+                    timer.check("min/max")
+    
+                    ### BLOCO ESTÁTICO: Restrições adicionais
+                    def in_classe_possivel(alimento_classes, classes_possiveis):
+                        for classe in alimento_classes:
+                            if classe in classes_possiveis:
+                                return True
+                        return False
+                    for refeicao in refeicoes:
+                        for classificacao in refeicao['quantidades']:
+                            if '/' in classificacao:
+                                # TODO: Bloco inatingível com a implementação atual
+                                classes_possiveis = classificacao.split("/")
+                                if classificacao == "FRUTA/LEITE" or classificacao == "BEBIDA/SUCO":
+                                    prob += lpSum([
+                                        food_vars[refeicao['Sequence']][alimento['Sequence']]
+                                        for alimento in alimentos if in_classe_possivel(alimento['grupos'], classes_possiveis)
+                                    ]) == refeicao['quantidades'][classificacao], f"{refeicao['nome']}_{classificacao}_Exact"
+                                else:
+                                    prob += lpSum([
+                                        food_vars[refeicao['Sequence']][alimento['Sequence']]
+                                        for alimento in alimentos if in_classe_possivel(alimento['grupos'], classes_possiveis)
+                                    ]) <= refeicao['quantidades'][classificacao], f"{refeicao['nome']}_{classificacao}_Max"
                             else:
                                 prob += lpSum([
-                                    food_vars[refeicao['Sequence']][alimento['Sequence']]
-                                    for alimento in alimentos if in_classe_possivel(alimento['grupos'], classes_possiveis)
-                                ]) <= refeicao['quantidades'][classificacao], f"{refeicao['nome']}_{classificacao}_Max"
-                        else:
-                            prob += lpSum([
-                                food_vars[refeicao['Sequence']][alimento['Sequence']] 
-                                for alimento in alimentos if classificacao in alimento['grupos']
-                            ]) == refeicao['quantidades'][classificacao], f"{refeicao['nome']}_{classificacao}_Exact"
-                timer.check("Grupos")
-                ###
-
-                prob.solve()
-                timer.check("Solve")
-                print(f"Status: {LpStatus[prob.status]}")
-
-                for refeicao in refeicoes:
+                                    food_vars[refeicao['Sequence']][alimento['Sequence']] 
+                                    for alimento in alimentos if classificacao in alimento['grupos']
+                                ]) == refeicao['quantidades'][classificacao], f"{refeicao['nome']}_{classificacao}_Exact"
+                    timer.check("Grupos")
+                    ###
+    
+                    prob.solve()
+                    timer.check("Solve")
+                    print(f"Status: {LpStatus[prob.status]}")
+    
+                    dietas_cadastradas = []
+                    for refeicao in refeicoes:
+                        print("\n")
+                        print(f"Alimentos para {refeicao['nome']}")
+                        for alimento in alimentos:
+                            var_value = food_vars[refeicao['Sequence']][alimento['Sequence']].varValue
+                            if var_value > 0:
+                                print(f"{alimento['descricao']} = {round(var_value, 2)}")
+                                dietas_cadastradas.append(self.save({'refeicao': refeicao, 'alimento': alimento, 'quantidade': round(var_value, 2)}))
+    
                     print("\n")
-                    print(f"Alimentos para {refeicao['nome']}")
-                    for alimento in alimentos:
-                        var_value = food_vars[refeicao['Sequence']][alimento['Sequence']].varValue
-                        if var_value > 0:
-                            print(f"{alimento['descricao']} = {round(var_value, 2)}")
-
-                print("\n")
-                for composicao in AlimentoComposicaoEnum.list():
-                    final = lpSum(
-                        alimento[composicao.column_name] * food_vars[refeicao['Sequence']][alimento['Sequence']].varValue 
-                        for refeicao in refeicoes for alimento in alimentos
-                    )
-                    print(f"{composicao.nome}: {value(final)}")
-                print(f"Função Objetivo: {value(prob.objective)}")
+                    summary = {}
+                    for composicao in AlimentoComposicaoEnum.list():
+                        final = lpSum(
+                            alimento[composicao.column_name] * food_vars[refeicao['Sequence']][alimento['Sequence']].varValue 
+                            for refeicao in refeicoes for alimento in alimentos
+                        )
+                        summary[composicao.key] = value(final)
+                        print(f"{composicao.nome}: {value(final)}")
+                    print(f"Função Objetivo: {value(prob.objective)}")
+                    inicio = curr_date
+                    curr_date = curr_date + timedelta(days=vigencia_dieta)
+                    dieta_cronograma_service.save({
+                        'plano': plano_alimentar, 
+                        'inicio': inicio.date(), 'termino': min(curr_date - timedelta(days=1), plano_alimentar['termino']).date(), 
+                        'dietas': dietas_cadastradas, 'summary': summary, 'f_objetivo': value(prob.objective)
+                    })
+                    
+                    if curr_date < plano_alimentar['termino'] and curr_date < reset_pesos_when:
+                        timer.check("ajuste de pesos")
+                        for peso in pesos:
+                            count = sum(food_vars[refeicao['Sequence']][peso].varValue for refeicao in refeicoes)
+                            if count > 0:
+                                pesos[peso] += count
+                            elif pesos[peso] > 0:
+                                pesos[peso] -= 1
+                    
                 timer.check("finished process")
             timer.check("After defining/before start process")
             start_process(plano_seq, vigencia_dieta, renovacao_pesos)
         except Exception as e:
             self.log_error(e)
+            raise e
         else:
             pass
         finally:
             timer.end("Finished")
+
+dieta_service = DietaService()
