@@ -199,10 +199,10 @@ class DietaService(AbstractCrudServiceClass):
                 plano_alimentar = tables.app_tables.planoalimentar.get(Sequence=plano_seq)
                 refeicoes = tables.app_tables.refeicao.search(plano=plano_alimentar)
                 metas_plano = tables.app_tables.metadiaria.search(plano=plano_alimentar)
-                # TODO: Atualizar o plano
                 timer.check("plano_get+refeicoes+metas")
-
                 
+                plano_alimentar.update(validade_dieta=vigencia_dieta, renovar_pesos=renovacao_pesos)
+                timer.check("plano_update")
 
                 prob = LpProblem("Problema de Dieta Simples", LpMinimize)
                 timer.check("prob init")
