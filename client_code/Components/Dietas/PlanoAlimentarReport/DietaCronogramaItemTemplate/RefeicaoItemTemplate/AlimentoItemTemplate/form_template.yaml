@@ -1,0 +1,9 @@
+components:
+- layout_properties: {grid_position: 'CMXQJH,VENGIF'}
+  name: alimento_text
+  properties: {icon: 'mi:adjust', text: Café}
+  type: form:dep_lin1x4oec0ytd:_Components.Text
+container:
+  properties: {spacing_above: none, spacing_below: none}
+  type: ColumnPanel
+is_package: true

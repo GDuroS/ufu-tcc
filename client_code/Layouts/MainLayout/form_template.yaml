@@ -84,6 +84,10 @@ components_by_slot:
       name: nav_link_dietas
       properties: {icon: 'mi:menu_book', path: /dietas, text: Dietas}
       type: form:dep_1f2ta8jjofu6y2:router.NavLink
+    - layout_properties: {grid_position: 'VUGMPM,LSSOBW'}
+      name: nav_link_reports
+      properties: {icon: 'mi:print', path: /impressao, text: Relatórios}
+      type: form:dep_1f2ta8jjofu6y2:router.NavLink
     - layout_properties: {grid_position: 'QYCHDQ,YBLFYE'}
       name: outros_text
       properties: {bold: true, style: label, text: Outros}
