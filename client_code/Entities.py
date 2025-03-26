@@ -219,7 +219,3 @@ class MetaDiaria(Entity):
         
 class Dieta(Entity):
     plano = EntityDescriptor(PlanoAlimentar)
-    
-
-class DietaRefeicao(Entity):
-    pass
