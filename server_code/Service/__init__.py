@@ -198,7 +198,7 @@ class DietaService(AbstractCrudServiceClass):
             from ..Enums import AlimentoClassificacaoEnum, AlimentoComposicaoEnum
             # state = anvil.server.task_state
 
-            @tables.in_transaction
+            # @tables.in_transaction
             def start_process(plano_seq, vigencia_dieta, renovacao_pesos):
                 timer.check("start_process")
                 
