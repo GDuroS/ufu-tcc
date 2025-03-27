@@ -196,6 +196,11 @@ class DietaService(AbstractCrudServiceClass):
     
     def __init__(self):
         super().__init__("Dieta")
+
+    def registrar_tarefa(self, plano_seq, task):
+        from datetime import datetime
+        self.app_tables.dietatarefa.add_row(task_id=task.get_id(), start=datetime.now(), plano=plano_alimentar_service.get_by_sequence(plano_seq), status="STARTED")
+        
 dieta_service = DietaService()
 
 class DietaRefeicaoService(AbstractCrudServiceClass):
@@ -221,11 +226,11 @@ class DietaRefeicaoService(AbstractCrudServiceClass):
             alimentos = self.app_tables.alimento.search()
 
             self.log_progress(step=1, progress=5, message="Iniciando variáveis: Buscando dados do Plano do Paciente")
-            plano_alimentar = tables.app_tables.planoalimentar.get(Sequence=plano_seq)
+            plano_alimentar = self.app_tables.planoalimentar.get(Sequence=plano_seq)
             self.log_progress(step=1, progress=6)
-            refeicoes = tables.app_tables.refeicao.search(plano=plano_alimentar)
+            refeicoes = self.app_tables.refeicao.search(plano=plano_alimentar)
             self.log_progress(step=1, progress=8)
-            metas_plano = tables.app_tables.metadiaria.search(plano=plano_alimentar)
+            metas_plano = self.app_tables.metadiaria.search(plano=plano_alimentar)
             
             self.log_progress(step=1, progress=9, message="Iniciando variáveis: Atualizando dados do Plano do Paciente")
             plano_alimentar.update(validade_dieta=vigencia_dieta, renovar_pesos=renovacao_pesos)
@@ -242,24 +247,26 @@ class DietaRefeicaoService(AbstractCrudServiceClass):
                 periodos_completos = (curr_date - plano_alimentar['inicio']) // timedelta(days=vigencia_dieta)
                 percentual_periodo_completo = 85.0 / qtd_periodos
                 return (periodos_completos * percentual_periodo_completo) + (percentual_periodo_completo * percentual_local / 100.0) + 10.0
-                
+            def get_message_geral(message_local) -> str:
+                periodos_completos = (curr_date - plano_alimentar['inicio']) // timedelta(days=vigencia_dieta)
+                return f"Cálculo de Dietas: [{periodos_completos}/{qtd_periodos}] {message_local}"
+
+            self.log_progress(step=3)
             while curr_date <= plano_alimentar['termino']:
+                self.log_progress(progress=calcular_percentual_geral(0), message=get_message_geral("Definindo Pesos"))
                 if renovacao_pesos and curr_date >= reset_pesos_when:
                     if not pesos:
                         # TODO: Aqui os pesos devem iniciar usando os dados do questionário do paciente
                         pesos = dict([(alimento['Sequence'], 0) for alimento in alimentos])
-                        timer.check("Set pesos")
                     else:
                         pesos = {k:0 for k in pesos}
-                        timer.check("Reset pesos")
                     while curr_date >= reset_pesos_when:
                         reset_pesos_when += timedelta(days=renovacao_pesos)
                 elif not pesos:
                     pesos = dict([(alimento['Sequence'], 0) for alimento in alimentos])
-                    timer.check("Adjust pesos")
-                timer.check("creating next range")
-                prob = LpProblem(f"Problema de Dieta Simples {'{:%d/%m}'.format(curr_date)}", LpMinimize)
-                timer.check(f"prob init {'{:%d/%m}'.format(curr_date)}")
+                
+                self.log_progress(progress=calcular_percentual_geral(1), message=get_message_geral("Criando Problema"))
+                prob = LpProblem(f"Problema Dieta {'{:%d/%m}'.format(curr_date)}", LpMinimize)
 
                 ### BLOCO ESTÁTICO: Usado para definir estaticamente 2 vegetais
                 chosen_vars = {}
@@ -267,13 +274,13 @@ class DietaRefeicaoService(AbstractCrudServiceClass):
                     if AlimentoClassificacaoEnum.VEGETAL.key in alimento['grupos']:
                         chosen_vars[alimento['Sequence']] = LpVariable(f"Chosen_{alimento['Sequence']}", 0, 1, LpBinary)
                 ###
-                timer.check('chosen_vars')
                 
+                self.log_progress(progress=calcular_percentual_geral(2), message=get_message_geral("Definindo Seleções"))
                 food_vars = LpVariable.dicts("Selecao", (
                     [refeicao['Sequence'] for refeicao in refeicoes], [alimento['Sequence'] for alimento in alimentos]
                 ), 0, cat="Integer")
-                timer.check("food_vars")
 
+                self.log_progress(progress=calcular_percentual_geral(3), message=get_message_geral("Definindo Objetivo"))
                 ### BLOCO ESTÁTICO: Usado para definir proporção de 70 / 30 entre carboidratos e energia (não sei o que significa)
                 prob += lpSum([
                     ( 
@@ -282,34 +289,33 @@ class DietaRefeicaoService(AbstractCrudServiceClass):
                     ) for refeicao in refeicoes for alimento in alimentos
                 ])
                 ###
-                timer.check("0.7/0.3")
 
+                self.log_progress(progress=calcular_percentual_geral(8.5), message=get_message_geral("Calculando Totais de Refeições"))
                 for refeicao in refeicoes:
                     ref = refeicao['Sequence']
                     total = sum(refeicao['quantidades'].values())
                     prob += lpSum([
                         food_vars[ref][alimento['Sequence']] for alimento in alimentos
                     ]) == total, f"Total_{refeicao['nome'].replace(' ', '_')}"
-                timer.check("totais refeicoes")
+                
                 ### BLOCO ESTÁTICO: Usado para definir estaticamente 2 vegetais
                 prob += lpSum(chosen_vars[f] for f in chosen_vars) == 2, "Exactly_2_V_Foods"
                 ###
-                timer.check("Exactly_2_V_Foods")
 
                 ### BLOCO ESTÁTICO: Usado para definir algo para Almoço
                 for f in chosen_vars:
                     # TODO: Ainda não sei como definir isto
                     prob += food_vars[refeicoes[2]['Sequence']][f] <= chosen_vars[f], f"Choose_{f}_If_ChosenVar_Is_1"
                 ###
-                timer.check("Almoço")
 
+                self.log_progress(progress=calcular_percentual_geral(13), message=get_message_geral("Aplicando Preferências Alimentares"))
                 # Pesos
                 prob += lpSum([
                     pesos[alimento['Sequence']] * food_vars[refeicao['Sequence']][alimento['Sequence']]
                     for refeicao in refeicoes for alimento in alimentos
                 ]) <= 5.0
-                timer.check("peso")
                 
+                self.log_progress(progress=calcular_percentual_geral(19), message=get_message_geral("Aplicando Metas Definidas"))
                 for meta in metas_plano:
                     composicao_enum = AlimentoComposicaoEnum.by_key(meta['composicao'])
                     if meta['minimo']:
@@ -322,8 +328,8 @@ class DietaRefeicaoService(AbstractCrudServiceClass):
                             alimento[composicao_enum.column_name] * food_vars[refeicao['Sequence']][alimento['Sequence']] 
                             for refeicao in refeicoes for alimento in alimentos
                         ) <= meta['maximo'], f"{composicao_enum.nome}Maximo"
-                timer.check("min/max")
 
+                self.log_progress(progress=calcular_percentual_geral(72), message=get_message_geral("Aplicando Restrições de Grupos"))
                 ### BLOCO ESTÁTICO: Restrições adicionais
                 def in_classe_possivel(alimento_classes, classes_possiveis):
                     for classe in alimento_classes:
@@ -350,25 +356,19 @@ class DietaRefeicaoService(AbstractCrudServiceClass):
                                 food_vars[refeicao['Sequence']][alimento['Sequence']] 
                                 for alimento in alimentos if classificacao in alimento['grupos']
                             ]) == refeicao['quantidades'][classificacao], f"{refeicao['nome']}_{classificacao}_Exact"
-                timer.check("Grupos")
-                ###
-
+                
+                self.log_progress(progress=calcular_percentual_geral(84), message=get_message_geral("Solucionando problema (esta etapa pode demorar e aparentar ter parado)"))
                 prob.solve()
-                timer.check("Solve")
-                print(f"Status: {LpStatus[prob.status]}")
 
+                self.log_progress(progress=calcular_percentual_geral(98.0), message=get_message_geral("Bufferizando refeições"))
                 dietas_cadastradas = []
                 for refeicao in refeicoes:
-                    # print("\n")
-                    # print(f"Alimentos para {refeicao['nome']}")
                     for alimento in alimentos:
                         var_value = food_vars[refeicao['Sequence']][alimento['Sequence']].varValue
                         if var_value > 0:
-                            # print(f"{alimento['descricao']} = {round(var_value, 2)}")
-                            # dietas_cadastradas.append(self.save({'refeicao': refeicao, 'alimento': alimento, 'quantidade': round(var_value, 2)}))
                             dietas_cadastradas.append({'refeicao': refeicao, 'alimento': alimento, 'quantidade': round(var_value, 2)})
 
-                # print("\n")
+                self.log_progress(progress=calcular_percentual_geral(98.5), message=get_message_geral("Bufferizando sumário"))
                 summary = {}
                 for composicao in AlimentoComposicaoEnum.list():
                     final = lpSum(
@@ -376,23 +376,18 @@ class DietaRefeicaoService(AbstractCrudServiceClass):
                         for refeicao in refeicoes for alimento in alimentos
                     )
                     summary[composicao.key] = value(final)
-                    # print(f"{composicao.nome}: {value(final)}")
-                # print(f"Função Objetivo: {value(prob.objective)}")
+                
+                self.log_progress(progress=calcular_percentual_geral(98.7), message=get_message_geral("Bufferizando dieta"))
                 inicio = curr_date
                 curr_date = curr_date + timedelta(days=vigencia_dieta)
-                # dieta_service.save({
-                #     'plano': plano_alimentar, 
-                #     'inicio': inicio.date(), 'termino': min(curr_date - timedelta(days=1), plano_alimentar['termino']).date(), 
-                #     'refeicoes': dietas_cadastradas, 'summary': summary, 'f_objetivo': value(prob.objective)
-                # })
                 persist_buffer.append({
                     'plano': plano_alimentar, 
                     'inicio': inicio.date(), 'termino': min(curr_date - timedelta(days=1), plano_alimentar['termino']).date(), 
-                    'refeicoes': dietas_cadastradas, 'summary': summary, 'f_objetivo': value(prob.objective)
+                    'refeicoes': dietas_cadastradas, 'summary': summary, 'f_objetivo': value(prob.objective), 'prob_status': LpStatus[prob.status]
                 })
                 
+                self.log_progress(progress=calcular_percentual_geral(99), message=get_message_geral("Calculando pesos utilizados"))
                 if curr_date < plano_alimentar['termino'] and curr_date < reset_pesos_when:
-                    timer.check("ajuste de pesos")
                     for peso in pesos:
                         count = sum(food_vars[refeicao['Sequence']][peso].varValue for refeicao in refeicoes)
                         if count > 0:
@@ -418,7 +413,7 @@ class DietaRefeicaoService(AbstractCrudServiceClass):
             state['status'] = 'COMPLETED'
             self.log_progress(step=5, progress=100, message="Processo concluído sem erros")
         finally:
-            task = tables.app_tables.dietatarefa.get(task_id=anvil.server.context.background_task_id)
+            task = self.app_tables.dietatarefa.get(task_id=anvil.server.context.background_task_id)
             task.update(status=state['status'], log=state['log'], finish=datetime.now())
 
 dieta_refeicao_service = DietaRefeicaoService()

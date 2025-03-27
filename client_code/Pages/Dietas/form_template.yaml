@@ -18,11 +18,11 @@ components_by_slot:
       type: form:dep_lin1x4oec0ytd:_Components.DropdownMenu
     - layout_properties: {full_width_row: true, grid_position: 'IWBWXX,FDZWGT'}
       name: vigencia_text_box
-      properties: {appearance: outlined, label: Gerar nova dieta a cada, placeholder: '', supporting_text: Quantidade de dias que cada dieta deve ser reutilizada., text: '7', trailing_icon: '', type: number, visible: true}
+      properties: {appearance: outlined, enabled: true, label: Gerar nova dieta a cada, placeholder: '', supporting_text: Quantidade de dias que cada dieta deve ser reutilizada., text: '7', trailing_icon: '', type: number, visible: true}
       type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
     - layout_properties: {grid_position: 'IWBWXX,GAFZCJ'}
       name: renovacao_text_box
-      properties: {appearance: outlined, label: Renovar pesos a cada, placeholder: Nunca, supporting_text: Quantidade de dias para renovar os pesos., text: '', type: number, visible: true}
+      properties: {appearance: outlined, enabled: true, label: Renovar pesos a cada, placeholder: Nunca, supporting_text: Quantidade de dias para renovar os pesos., text: '', type: number, visible: true}
       type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
     - event_bindings: {click: gerar_button_click}
       layout_properties: {grid_position: 'LSAXFU,PLWLRU'}
