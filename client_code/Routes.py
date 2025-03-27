@@ -71,6 +71,15 @@ class DietasRoute(SecureRoute, Route):
     path = "/dietas"
     form = "Pages.Dietas"
 
+# Reports
+class ReportsRoute(SecureRoute, Route):
+    path = "/relatorios"
+    form = "Pages.Reports"
+
+class PlanoAlimentarReportRoute(SecureRoute, Route):
+    path = "/relatorios/plano/:id"
+    form = "Pages.Reports.PlanoAlimentarReport"
+
 # Outros
 class AboutRoute(Route):
     path = '/about'

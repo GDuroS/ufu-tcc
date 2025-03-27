@@ -129,6 +129,20 @@ class PlanoAlimentarService(AbstractCrudServiceClass):
         except Exception as e:
             self.log_error(e)
             raise e
+
+    def get_report_object(self, plano_seq, load_refeicoes, load_metas, for_download=False):
+        from ..Entities import PlanoAlimentar
+        vo = PlanoAlimentar(self.get_by_sequence(plano_seq))
+        if load_refeicoes:
+            vo.refeicoes
+        if load_metas:
+            vo.metas
+        vo.dietas
+        vo.lock_changes = True
+        if for_download:
+            pass # TODO: return the form loaded
+        return vo
+        
 plano_alimentar_service = PlanoAlimentarService()
 
 class PacienteService(AbstractCrudServiceClass):

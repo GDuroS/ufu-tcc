@@ -35,8 +35,8 @@ components:
     properties: {text: Cronograma de Dietas}
     type: form:dep_lin1x4oec0ytd:_Components.Heading
   - layout_properties: {grid_position: 'EYNQVF,JINSGI'}
-    name: dieta_cronograma_repeating_panel
-    properties: {item_template: Components.Dietas.PlanoAlimentarReport.DietaCronogramaItemTemplate}
+    name: dietas_repeating_panel
+    properties: {item_template: Components.Dietas.PlanoAlimentarReport.DietaItemTemplate}
     type: RepeatingPanel
   layout_properties: {slot: default}
   name: dietas_panel

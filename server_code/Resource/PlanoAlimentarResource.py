@@ -25,3 +25,7 @@ def deletePlanoAlimentar(plano):
 @anvil.server.callable
 def getPlanoAlimentarVigentePorPaciente(paciente):
     return plano_alimentar_service.get_vigente_por_paciente(paciente)
+
+@anvil.server.callable
+def getPlanoAlimentarReport(plano_seq, load_refeicoes, load_metas, for_download=False):
+    return plano_alimentar_service.get_report_object(plano_seq, load_refeicoes, load_metas, for_download)

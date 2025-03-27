@@ -1,0 +1,8 @@
+components_by_slot:
+  content:
+  - layout_properties: {}
+    name: plano_alimentar_report
+    properties: {}
+    type: form:Components.Dietas.PlanoAlimentarReport
+is_package: true
+layout: {type: 'form:Layouts.MainLayout'}

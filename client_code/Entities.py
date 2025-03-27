@@ -216,6 +216,7 @@ class MetaDiaria(Entity):
     def __serialize__(self, global_data):
         self._composicao_enum = None
         return self.__dict__
-        
+
+@anvil.server.portable_class
 class Dieta(Entity):
     plano = EntityDescriptor(PlanoAlimentar)

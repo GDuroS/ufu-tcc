@@ -22,7 +22,7 @@ components:
   type: FlowPanel
 - layout_properties: {grid_position: 'YFJSYN,LWYZNT'}
   name: refeicao_repeating_panel
-  properties: {item_template: Components.Dietas.PlanoAlimentarReport.DietaCronogramaItemTemplate.RefeicaoItemTemplate}
+  properties: {item_template: Components.Dietas.PlanoAlimentarReport.DietaItemTemplate.RefeicaoItemTemplate}
   type: RepeatingPanel
 - layout_properties: {grid_position: 'NHDWDW,XPIHCD'}
   name: summary_heading
@@ -30,7 +30,7 @@ components:
   type: form:dep_lin1x4oec0ytd:_Components.Heading
 - components:
   - name: summary_data_panel
-    properties: {item_template: Components.Dietas.PlanoAlimentarReport.DietaCronogramaItemTemplate.SummaryRowTemplate}
+    properties: {item_template: Components.Dietas.PlanoAlimentarReport.DietaItemTemplate.SummaryRowTemplate}
     type: RepeatingPanel
   layout_properties: {grid_position: 'ZZGOKW,SHHOSC'}
   name: summary_data_grid
@@ -53,3 +53,4 @@ container:
   properties: {spacing_above: none, spacing_below: none}
   type: ColumnPanel
 is_package: true
+item_type: {table_id: 933910}

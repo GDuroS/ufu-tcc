@@ -4,10 +4,10 @@ unique_ids:
     theme.css: 6G44GIEQQRJLILWU6GQSQO5BTDFT5ZI3
   forms:
     Components.Dietas.PlanoAlimentarReport: '1743021339214305323092402.3811'
-    Components.Dietas.PlanoAlimentarReport.DietaCronogramaItemTemplate: '1743022360373224668794622.35358'
-    Components.Dietas.PlanoAlimentarReport.DietaCronogramaItemTemplate.RefeicaoItemTemplate: '1743022690094173451166722.0302'
-    Components.Dietas.PlanoAlimentarReport.DietaCronogramaItemTemplate.RefeicaoItemTemplate.AlimentoItemTemplate: '1743022938450655998771472.5812'
-    Components.Dietas.PlanoAlimentarReport.DietaCronogramaItemTemplate.SummaryRowTemplate: '1743023368408797497502154.575'
+    Components.Dietas.PlanoAlimentarReport.DietaItemTemplate: '1743022360373224668794622.35358'
+    Components.Dietas.PlanoAlimentarReport.DietaItemTemplate.RefeicaoItemTemplate: '1743022690094173451166722.0302'
+    Components.Dietas.PlanoAlimentarReport.DietaItemTemplate.RefeicaoItemTemplate.AlimentoItemTemplate: '1743022938450655998771472.5812'
+    Components.Dietas.PlanoAlimentarReport.DietaItemTemplate.SummaryRowTemplate: '1743023368408797497502154.575'
     Components.Refeicoes.AlimentoClassificacoesLegenda: '1741607372669758647828619.7391'
     Components.Refeicoes.RefeicaoAlimentoClassificacoesBar: '1741578022046538403456332.33167'
     Components.Users.IdentidadesForm: '1741223492393423412961305.5164'
@@ -26,6 +26,7 @@ unique_ids:
     Pages.Pacientes.PacienteEdit.RefeicaoEditRowTemplate.ClassificacaoRowTemplate: '1741723956560955260993874.6553'
     Pages.Pacientes.PacienteRowTemplate: '1741380547749273032919218.29053'
     Pages.Reports: '1743021851990206393791433.02982'
+    Pages.Reports.PlanoAlimentarReport: '1743041687330271121449793.309'
     Pages.Users.Identidades: '1741215763045886578854752.211'
     Pages.Utils.ErrorForm: '174120922593380738955856.1351'
     Pages.Utils.ErrorFormUnlogged: '1741368403664409024648057.83966'

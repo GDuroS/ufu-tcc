@@ -10,7 +10,8 @@ components_by_slot:
     name: clear_icon_button
     properties: {appearance: outlined, icon: 'mi:undo', tooltip: Limpar campos}
     type: form:dep_lin1x4oec0ytd:_Components.IconButton
-  - layout_properties: {}
+  - event_bindings: {click: emitir_button_click}
+    layout_properties: {}
     name: emitir_button
     properties: {appearance: filled, icon: 'mi:quick_reference_all', tooltip: Emitir relatório}
     type: form:dep_lin1x4oec0ytd:_Components.IconButton
