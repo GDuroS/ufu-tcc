@@ -259,10 +259,10 @@ db_schema:
       name: Alimento
       type: number
     - admin_ui: {order: 10, width: 200}
-      name: Dieta
+      name: DietaRefeicao
       type: number
     - admin_ui: {order: 11, width: 200}
-      name: DietaCronograma
+      name: Dieta
       type: number
     server: full
     title: Sequencer
