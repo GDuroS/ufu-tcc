@@ -1,12 +1,28 @@
 components_by_slot:
-  content: []
+  content:
+  - event_bindings: {change: paciente_autocomplete_change, resync_click: paciente_autocomplete_resync_click}
+    layout_properties: {}
+    name: paciente_autocomplete
+    properties: {label: Paciente, show_clear_button: true, show_refresh_button: true}
+    type: form:dep_obp4eaigzghyeh:FormInput.Autocomplete
+  - layout_properties: {}
+    name: planos_dropdown_menu
+    properties: {label: Plano Alimentar do Paciente}
+    type: form:dep_lin1x4oec0ytd:_Components.DropdownMenu
+  - layout_properties: {}
+    name: options_select_box_panel
+    properties:
+      items: []
+      show_controls: false
+    type: form:dep_obp4eaigzghyeh:FormInput.SelectBoxPanelComponent
   content_heading_left:
   - layout_properties: {}
     name: heading
     properties: {text: Relatórios}
     type: form:dep_lin1x4oec0ytd:_Components.Heading
   content_heading_right:
-  - layout_properties: {}
+  - event_bindings: {click: clear_icon_button_click}
+    layout_properties: {}
     name: clear_icon_button
     properties: {appearance: outlined, icon: 'mi:undo', tooltip: Limpar campos}
     type: form:dep_lin1x4oec0ytd:_Components.IconButton

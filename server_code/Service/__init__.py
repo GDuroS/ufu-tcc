@@ -140,7 +140,10 @@ class PlanoAlimentarService(AbstractCrudServiceClass):
         vo.dietas
         vo.lock_changes = True
         if for_download:
-            pass # TODO: return the form loaded
+            from anvil.pdf import PDFRenderer
+            return PDFRenderer(
+                filename=f"PlanoAlimentar_{vo['paciente']['nome'].split()[0]}_{'{:%d-%m}'.format(vo['inicio'])}_{'{:%d-%m-%y}'.format(vo['termino'])}.pdf",
+            ).render_form('Components.Dietas.PlanoAlimentarReport', background='white', foreground='black', plano_alimentar=vo)
         return vo
         
 plano_alimentar_service = PlanoAlimentarService()
