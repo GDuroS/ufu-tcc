@@ -198,7 +198,6 @@ class DietaService(AbstractCrudServiceClass):
         super().__init__("Dieta")
 dieta_service = DietaService()
 
-from anvil_extras.logging import TimerLogger
 class DietaRefeicaoService(AbstractCrudServiceClass):
     action_by_column_remap = {'alimento': "NO_ACTION"}
     
@@ -207,34 +206,43 @@ class DietaRefeicaoService(AbstractCrudServiceClass):
     
     @anvil.server.background_task
     def gerar_dieta(self, plano_seq, vigencia_dieta, renovacao_pesos):
-        timer = TimerLogger("Task timer")
-        timer.start("Starting")
         try:
             from pulp import LpProblem, LpMinimize, LpVariable, LpBinary, LpStatus, lpSum, value
-            from datetime import timedelta
+            from datetime import timedelta, datetime
             from ..Enums import AlimentoClassificacaoEnum, AlimentoComposicaoEnum
-            # state = anvil.server.task_state
+            
+            state = anvil.server.task_state
 
-            # @tables.in_transaction
-            # def start_process(plano_seq, vigencia_dieta, renovacao_pesos):
+            self.log_progress(step=1, progress=0, message="Iniciando variáveis")
             persist_buffer = []
-            timer.check("start_process")
             
             # TODO: substituir tables por self assim que possível
-            alimentos = tables.app_tables.alimento.search()
-            timer.check("alimentos_search")
+            self.log_progress(step=1, progress=1, message="Iniciando variáveis: Buscando Alimentos")
+            alimentos = self.app_tables.alimento.search()
 
+            self.log_progress(step=1, progress=5, message="Iniciando variáveis: Buscando dados do Plano do Paciente")
             plano_alimentar = tables.app_tables.planoalimentar.get(Sequence=plano_seq)
+            self.log_progress(step=1, progress=6)
             refeicoes = tables.app_tables.refeicao.search(plano=plano_alimentar)
+            self.log_progress(step=1, progress=8)
             metas_plano = tables.app_tables.metadiaria.search(plano=plano_alimentar)
-            timer.check("plano_get+refeicoes+metas")
             
+            self.log_progress(step=1, progress=9, message="Iniciando variáveis: Atualizando dados do Plano do Paciente")
             plano_alimentar.update(validade_dieta=vigencia_dieta, renovar_pesos=renovacao_pesos)
-            timer.check("plano_update")
+            self.log_progress(step=1, progress=10)
 
+            self.log_progress(step=2, progress=10, message="Contando períodos a ajustar.")
+            qtd_periodos = (plano_alimentar['termino'] - plano_alimentar['inicio']) // timedelta(days=vigencia_dieta)
             pesos = {}
             curr_date = plano_alimentar['inicio']
             reset_pesos_when = curr_date
+            
+            def calcular_percentual_geral(percentual_local) -> int:
+                """Calcula o percentual da tarefa de forma geral com base no percentual do progresso de cada loop"""
+                periodos_completos = (curr_date - plano_alimentar['inicio']) // timedelta(days=vigencia_dieta)
+                percentual_periodo_completo = 85.0 / qtd_periodos
+                return (periodos_completos * percentual_periodo_completo) + (percentual_periodo_completo * percentual_local / 100.0) + 10.0
+                
             while curr_date <= plano_alimentar['termino']:
                 if renovacao_pesos and curr_date >= reset_pesos_when:
                     if not pesos:
@@ -246,8 +254,8 @@ class DietaRefeicaoService(AbstractCrudServiceClass):
                         timer.check("Reset pesos")
                     while curr_date >= reset_pesos_when:
                         reset_pesos_when += timedelta(days=renovacao_pesos)
-                else:
-                    # Ajustar pesos
+                elif not pesos:
+                    pesos = dict([(alimento['Sequence'], 0) for alimento in alimentos])
                     timer.check("Adjust pesos")
                 timer.check("creating next range")
                 prob = LpProblem(f"Problema de Dieta Simples {'{:%d/%m}'.format(curr_date)}", LpMinimize)
@@ -392,7 +400,7 @@ class DietaRefeicaoService(AbstractCrudServiceClass):
                         elif pesos[peso] > 0:
                             pesos[peso] -= 1
             
-            timer.check('finished loop')
+            self.log_progress(step=3, progress=96, message="Cálculo de Dietas: Concluído")
             @tables.in_transaction
             def persist_objects(buffer):
                 for dieta in buffer:
@@ -402,18 +410,15 @@ class DietaRefeicaoService(AbstractCrudServiceClass):
                     dieta['refeicoes'] = refeicoes_cadastradas
                     dieta_service.save(dieta)
 
-            timer.check('defined persist method')
+            self.log_progress(step=4, progress=96, message="Salvando Dietas calculadas")
             persist_objects(persist_buffer)
-                
-            timer.check("persisted")
-            # timer.check("After defining/before start process")
-            # start_process(plano_seq, vigencia_dieta, renovacao_pesos)
         except Exception as e:
-            self.log_error(e)
-            raise e
+            self.log_progress(message=e)
         else:
-            pass
+            state['status'] = 'COMPLETED'
+            self.log_progress(step=5, progress=100, message="Processo concluído sem erros")
         finally:
-            timer.end("Finished")
+            task = tables.app_tables.dietatarefa.get(task_id=anvil.server.context.background_task_id)
+            task.update(status=state['status'], log=state['log'], finish=datetime.now())
 
 dieta_refeicao_service = DietaRefeicaoService()

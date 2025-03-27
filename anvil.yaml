@@ -97,6 +97,30 @@ db_schema:
       type: number
     server: full
     title: DietaRefeicao
+  dietatarefa:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: plano
+      target: planoalimentar
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      name: task_id
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      name: status
+      type: string
+    - admin_ui: {order: 3, width: 200}
+      name: log
+      type: string
+    - admin_ui: {order: 4, width: 200}
+      name: start
+      type: datetime
+    - admin_ui: {order: 5, width: 200}
+      name: finish
+      type: datetime
+    server: full
+    title: DietaTarefa
   funcionalidadeversao:
     client: none
     columns:
