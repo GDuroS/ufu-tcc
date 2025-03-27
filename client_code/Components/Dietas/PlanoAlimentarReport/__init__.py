@@ -10,4 +10,5 @@ class PlanoAlimentarReport(PlanoAlimentarReportTemplate):
         # Any code you write here will run before the form opens.
 
     @property
-    def plano_alimentar()
+    def plano_alimentar(self):
+        return self.item
