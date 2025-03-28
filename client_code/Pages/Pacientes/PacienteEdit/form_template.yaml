@@ -63,6 +63,7 @@ components_by_slot:
             type: form:dep_obp4eaigzghyeh:FormInput.DatePickerAlt
           - data_bindings:
             - {code: 'self.item.plano_vigente[''termino'']', property: date, writeback: true}
+            - {code: self.plano_inicio_date_picker.date, property: min_date, writeback: false}
             layout_properties: {expand: true}
             name: plano_termino_date_picker
             properties:

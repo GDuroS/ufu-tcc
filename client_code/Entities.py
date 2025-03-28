@@ -33,6 +33,14 @@ class Paciente(Entity):
     profissional = EntityDescriptor(Profissional)
 
     @property
+    def planos_alimentares(self):
+        try:
+            return getattr(self, '_planos_alimentares')
+        except AttributeError:
+            self._planos_alimentares = PlanoAlimentar.from_search(anvil.server.call('getPlanoAlimentarFind', paciente=self.original_row))
+            return self._planos_alimentares
+
+    @property
     def plano_vigente(self):
         try:
             return getattr(self, '_plano_vigente')
@@ -72,6 +80,7 @@ class Paciente(Entity):
         changes = {k:plano_vigente.original_row[k] for k in plano_vigente._original_key_list}
         novo_plano = PlanoAlimentar(changes)
         novo_plano['inicio'] = self['termino'] + timedelta(days=1) if self['termino'] else datetime.now().date()
+        novo_plano['termino'] = novo_plano['inicio'] + self['termino'] - self['inicio'] if self['termino'] else None
         
         refeicoes = []
         for refeicao in plano_vigente.refeicoes:
@@ -123,6 +132,15 @@ class PlanoAlimentar(Entity):
     paciente = EntityDescriptor(Paciente)
     refeicoes = ManagedRelationship('Refeicao', 'plano')
     metas = ManagedRelationship('MetaDiaria', 'plano')
+    dietas = ManagedRelationship('Dieta', 'plano')
+
+    @property
+    def tarefa(self):
+        try:
+            return getattr(self, '_tarefa')
+        except AttributeError:
+            self._tarefa = anvil.server.call('getPlanoAlimentarTarefa', plano=self.original_row)
+            return self._tarefa
 
     def reset_changes(self):
         Entity.reset_changes(self)
@@ -130,6 +148,9 @@ class PlanoAlimentar(Entity):
             self.refeicoes.reset_changes()
         if getattr(self, '_managed_metas', None):
             self.metas.reset_changes()
+
+    def __str__(self):
+        return f"Plano de {'{:%d/%m/%Y}'.format(self['inicio'])} à {'{:%d/%m/%Y}'.format(self['termino'])}"
 
     @property
     def was_changed(self):
@@ -203,5 +224,7 @@ class MetaDiaria(Entity):
     def __serialize__(self, global_data):
         self._composicao_enum = None
         return self.__dict__
-        
-    
+
+@anvil.server.portable_class
+class Dieta(Entity):
+    plano = EntityDescriptor(PlanoAlimentar)

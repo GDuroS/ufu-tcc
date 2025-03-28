@@ -20,6 +20,7 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
                 self.metas_card.visible = True
                 self.no_plano_text.visible = False
                 if self.item.plano_vigente['observacoes']:
+                    self.plano_observacoes_quill.placeholder = ""
                     self.plano_observacoes_quill.set_html(self.item.plano_vigente['observacoes'])
                 else:
                     self.plano_observacoes_quill.visible = False
@@ -42,7 +43,8 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         ])
 
         self.set_required_components([
-            (self.plano_inicio_date_picker, 'Vigência do Plano Alimentar'),
+            (self.plano_inicio_date_picker, 'Início do Plano Alimentar'),
+            (self.plano_termino_date_picker, 'Término do Plano Alimentar'),
         ], 'planoVigenteValidationGroup')
 
         def has_refeicoes():

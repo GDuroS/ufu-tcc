@@ -3,7 +3,7 @@ db_schema:
   alimento:
     client: none
     columns:
-    - admin_ui: {order: 0, width: 200}
+    - admin_ui: {order: 0, width: 395}
       name: descricao
       type: string
     - admin_ui: {order: 2, width: 200}
@@ -45,8 +45,85 @@ db_schema:
     - admin_ui: {order: 1, width: 200}
       name: grupos
       type: simpleObject
+    - admin_ui: {order: 0.5, width: 200}
+      name: Sequence
+      type: number
     server: full
     title: Alimento
+  dieta:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: plano
+      target: planoalimentar
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      name: inicio
+      type: date
+    - admin_ui: {order: 2, width: 200}
+      name: termino
+      type: date
+    - admin_ui: {order: 3, width: 200}
+      name: Sequence
+      type: number
+    - admin_ui: {order: 4, width: 200}
+      name: refeicoes
+      target: dietarefeicao
+      type: link_multiple
+    - admin_ui: {order: 5, width: 200}
+      name: summary
+      type: simpleObject
+    - admin_ui: {order: 6, width: 200}
+      name: f_objetivo
+      type: number
+    - admin_ui: {order: 7, width: 200}
+      name: prob_status
+      type: string
+    server: full
+    title: Dieta
+  dietarefeicao:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: refeicao
+      target: refeicao
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      name: alimento
+      target: alimento
+      type: link_single
+    - admin_ui: {order: 2, width: 200}
+      name: quantidade
+      type: number
+    - admin_ui: {order: 1.5, width: 200}
+      name: Sequence
+      type: number
+    server: full
+    title: DietaRefeicao
+  dietatarefa:
+    client: none
+    columns:
+    - admin_ui: {order: 0, width: 200}
+      name: plano
+      target: planoalimentar
+      type: link_single
+    - admin_ui: {order: 1, width: 200}
+      name: task_id
+      type: string
+    - admin_ui: {order: 2, width: 200}
+      name: status
+      type: string
+    - admin_ui: {order: 3, width: 200}
+      name: log
+      type: string
+    - admin_ui: {order: 4, width: 200}
+      name: start
+      type: datetime
+    - admin_ui: {order: 5, width: 200}
+      name: finish
+      type: datetime
+    server: full
+    title: DietaTarefa
   funcionalidadeversao:
     client: none
     columns:
@@ -134,6 +211,12 @@ db_schema:
     - admin_ui: {order: 4, width: 200}
       name: observacoes
       type: simpleObject
+    - admin_ui: {order: 5, width: 200}
+      name: validade_dieta
+      type: number
+    - admin_ui: {order: 6, width: 200}
+      name: renovar_pesos
+      type: number
     server: full
     title: PlanoAlimentar
   profissional:
@@ -198,6 +281,15 @@ db_schema:
       type: number
     - admin_ui: {order: 8, width: 200}
       name: MetaDiaria
+      type: number
+    - admin_ui: {order: 9, width: 200}
+      name: Alimento
+      type: number
+    - admin_ui: {order: 10, width: 200}
+      name: DietaRefeicao
+      type: number
+    - admin_ui: {order: 11, width: 200}
+      name: Dieta
       type: number
     server: full
     title: Sequencer

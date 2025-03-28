@@ -1,0 +1,69 @@
+components_by_slot:
+  content:
+  - event_bindings: {tick: task_check_timer_tick}
+    layout_properties: {}
+    name: task_check_timer
+    properties: {interval: 0}
+    type: Timer
+  - event_bindings: {change: paciente_autocomplete_change, clear_click: paciente_autocomplete_change, resync_click: paciente_autocomplete_resync_click}
+    layout_properties: {}
+    name: paciente_autocomplete
+    properties: {label: Paciente, show_clear_button: true, show_refresh_button: true}
+    type: form:dep_obp4eaigzghyeh:FormInput.Autocomplete
+  - components:
+    - event_bindings: {change: plano_dropdown_menu_change}
+      layout_properties: {full_width_row: true, grid_position: 'MPAOIZ,IPEWEB'}
+      name: plano_dropdown_menu
+      properties: {appearance: outlined, enabled: true, label: Plano Alimentar}
+      type: form:dep_lin1x4oec0ytd:_Components.DropdownMenu
+    - layout_properties: {full_width_row: true, grid_position: 'IWBWXX,FDZWGT'}
+      name: vigencia_text_box
+      properties: {appearance: outlined, enabled: true, label: Gerar nova dieta a cada, placeholder: '', supporting_text: Quantidade de dias que cada dieta deve ser reutilizada., text: '7', trailing_icon: '', type: number, visible: true}
+      type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
+    - layout_properties: {grid_position: 'IWBWXX,GAFZCJ'}
+      name: renovacao_text_box
+      properties: {appearance: outlined, enabled: true, label: Renovar pesos a cada, placeholder: Nunca, supporting_text: Quantidade de dias para renovar os pesos., text: '', type: number, visible: true}
+      type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
+    - event_bindings: {click: gerar_button_click}
+      layout_properties: {grid_position: 'LSAXFU,PLWLRU'}
+      name: gerar_button
+      properties: {align: center, icon: 'mi:schedule_send', text: Gerar dieta para o Plano definido, visible: true}
+      type: form:dep_lin1x4oec0ytd:_Components.Button
+    layout_properties: {}
+    name: create_panel
+    properties: {}
+    type: ColumnPanel
+  - layout_properties: {}
+    name: percentage_text
+    properties: {align: center, bold: true, visible: false}
+    type: form:dep_lin1x4oec0ytd:_Components.Text
+  - layout_properties: {}
+    name: geracao_progress_indicator
+    properties: {progress: 75, progress_color: '', track_color: '', type: indeterminate, visible: false}
+    type: form:dep_lin1x4oec0ytd:_Components.LinearProgressIndicator
+  - layout_properties: {}
+    name: tarefa_status_text
+    properties:
+      content: ''
+      spacing:
+        margin: ['0', null, null, null]
+        padding: ['0', null, null, null]
+      visible: false
+    type: RichText
+  - event_bindings: {click: show_log_button_click}
+    layout_properties: {}
+    name: show_log_button
+    properties: {align: center, appearance: outlined, icon: 'mi:receipt_long', text: Ver Log}
+    type: form:dep_lin1x4oec0ytd:_Components.Button
+  - event_bindings: {click: ver_receita_button_click}
+    layout_properties: {}
+    name: ver_receita_button
+    properties: {align: center, icon: 'mi:find_in_page', text: Ver Receita Gerada}
+    type: form:dep_lin1x4oec0ytd:_Components.Button
+  content_heading_left:
+  - layout_properties: {}
+    name: heading
+    properties: {text: Geração de Dietas}
+    type: form:dep_lin1x4oec0ytd:_Components.Heading
+is_package: true
+layout: {type: 'form:Layouts.MainLayout'}

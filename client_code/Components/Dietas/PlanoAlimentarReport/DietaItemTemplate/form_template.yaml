@@ -1,0 +1,56 @@
+components:
+- components:
+  - layout_properties: {}
+    name: periodo_title_text
+    properties: {bold: true, text: 'Período:'}
+    type: form:dep_lin1x4oec0ytd:_Components.Text
+  - layout_properties: {}
+    name: periodo_inicio_text
+    properties: {text: 01/01/2025}
+    type: form:dep_lin1x4oec0ytd:_Components.Text
+  - layout_properties: {}
+    name: periodo_a_text
+    properties: {text: à}
+    type: form:dep_lin1x4oec0ytd:_Components.Text
+  - layout_properties: {}
+    name: periodo_termino_text
+    properties: {text: 31/01/2025}
+    type: form:dep_lin1x4oec0ytd:_Components.Text
+  layout_properties: {grid_position: 'QPKSSO,CXWPKB'}
+  name: dieta_cronograma_periodo_panel
+  properties: {gap: tiny, spacing_above: none, spacing_below: none}
+  type: FlowPanel
+- layout_properties: {grid_position: 'YFJSYN,LWYZNT'}
+  name: refeicao_repeating_panel
+  properties: {item_template: Components.Dietas.PlanoAlimentarReport.DietaItemTemplate.RefeicaoItemTemplate}
+  type: RepeatingPanel
+- layout_properties: {grid_position: 'NHDWDW,XPIHCD'}
+  name: summary_heading
+  properties: {align: center, bold: true, style: title, text: RESUMO DA DIETA DIÁRIA, underline: true}
+  type: form:dep_lin1x4oec0ytd:_Components.Heading
+- components:
+  - name: summary_data_panel
+    properties: {item_template: Components.Dietas.PlanoAlimentarReport.DietaItemTemplate.SummaryRowTemplate}
+    type: RepeatingPanel
+  layout_properties: {grid_position: 'ZZGOKW,SHHOSC'}
+  name: summary_data_grid
+  properties:
+    columns:
+    - {data_key: composicao, id: NSHFIR, title: Composição}
+    - {data_key: value, id: KPNWKR, title: Atingido}
+    rows_per_page: null
+    show_page_controls: false
+  type: DataGrid
+- layout_properties: {grid_position: 'FFPPGI,YJFANF'}
+  name: divider
+  properties: {}
+  type: form:dep_lin1x4oec0ytd:_Components.Divider
+- layout_properties: {grid_position: 'NKBEEZ,OJOYDW'}
+  name: page_break
+  properties: {border: ''}
+  type: form:dep_45ni8uk6frrkc:PageBreak
+container:
+  properties: {spacing_above: none, spacing_below: none}
+  type: ColumnPanel
+is_package: true
+item_type: {table_id: 933910}
