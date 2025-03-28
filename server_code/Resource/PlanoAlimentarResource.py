@@ -29,3 +29,7 @@ def getPlanoAlimentarVigentePorPaciente(paciente):
 @anvil.server.callable
 def getPlanoAlimentarReport(plano_seq, load_refeicoes, load_metas, for_download=False):
     return plano_alimentar_service.get_report_object(plano_seq, load_refeicoes, load_metas, for_download)
+
+@anvil.server.callable
+def getPlanoAlimentarTarefa(plano):
+    return plano_alimentar_service.get_tarefa(plano)

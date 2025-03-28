@@ -6,6 +6,7 @@ refeicao_service = AbstractCrudServiceClass("Refeicao")
 meta_diaria_service = AbstractCrudServiceClass("MetaDiaria")
 user_service = AbstractCrudServiceClass('Users')
 profissional_service = AbstractCrudServiceClass('Profissional')
+dieta_tarefa_service = AbstractCrudServiceClass("DietaTarefa")
 
 class PlanoAlimentarService(AbstractCrudServiceClass):
     def __init__(self):
@@ -129,6 +130,18 @@ class PlanoAlimentarService(AbstractCrudServiceClass):
         except Exception as e:
             self.log_error(e)
             raise e
+
+    def get_tarefa(self, plano):
+        tarefas = tables.app_tables.dietatarefa.search(
+            tables.order_by('status', ascending=False), tables.order_by('finish', ascending=False), tables.order_by('start', ascending=False),
+            plano=plano
+        )
+        tarefa = None
+        for tarefa in tarefas:
+            if tarefa['status'] == 'ABORTED':
+                continue
+            return tarefa
+        return tarefa
 
     def get_report_object(self, plano_seq, load_refeicoes, load_metas, for_download=False):
         from ..Entities import PlanoAlimentar

@@ -134,6 +134,14 @@ class PlanoAlimentar(Entity):
     metas = ManagedRelationship('MetaDiaria', 'plano')
     dietas = ManagedRelationship('Dieta', 'plano')
 
+    @property
+    def tarefa(self):
+        try:
+            return getattr(self, '_tarefa')
+        except AttributeError:
+            self._tarefa = anvil.server.call('getPlanoAlimentarTarefa', plano=self.original_row)
+            return self._tarefa
+
     def reset_changes(self):
         Entity.reset_changes(self)
         if getattr(self, '_managed_refeicoes', None):

@@ -38,13 +38,25 @@ class Reports(Validatable, ReportsTemplate):
     def emitir_button_click(self, **event_args):
         if not self.is_valid('planoReportValidationGroup'):
             return
-        vo = server.call('getPlanoAlimentarReport', 1, 'load_refeicoes' in self.options_select_box_panel.selected_values, 'load_metas' in self.options_select_box_panel.selected_values, 'for_download' in self.options_select_box_panel.selected_values)
+        vo = server.call(
+            'getPlanoAlimentarReport', self.planos_dropdown_menu.selected_value['sequence'], 
+            'load_refeicoes' in self.options_select_box_panel.selected_values, 
+            'load_metas' in self.options_select_box_panel.selected_values, 
+            'for_download' in self.options_select_box_panel.selected_values
+        )
+        if not vo:
+            Notification("Nenhum resultado foi encontrado para os parâmetros informados.").show()
+            return
         if 'for_download' in self.options_select_box_panel.selected_values:
             media.download(vo)
         else:
             navigate(
-                path="/relatorios/plano/:id", params={"id": 1}, 
-                query={"r": False, "m": False, "mode": "view"},
+                path="/relatorios/plano/:id", params={"id": vo['Sequence']}, 
+                query={
+                    "r": 'load_refeicoes' in self.options_select_box_panel.selected_values, 
+                    "m": 'load_metas' in self.options_select_box_panel.selected_values, 
+                    "mode": "view"
+                },
                 nav_context={'vo': vo}
             )
 
@@ -53,10 +65,18 @@ class Reports(Validatable, ReportsTemplate):
         if paciente:
             self.planos_dropdown_menu.items = [
                 (str(plano), plano) for plano in paciente.planos_alimentares
-                if True # TODO: Adicionar condição de plano gerado
+                if plano.tarefa and plano.tarefa['status'] == 'COMPLETED'
             ]
+            if not self.planos_dropdown_menu.items:
+                self.planos_dropdown_menu.placeholder = 'Nenhum plano alimentar encerrado para emissão'
+                self.planos_dropdown_menu.read_only = True
+            else:
+                self.planos_dropdown_menu.placeholder = ''
+                self.planos_dropdown_menu.read_only = False
         else:
             self.planos_dropdown_menu.items = []
+            self.planos_dropdown_menu.placeholder = ''
+            self.planos_dropdown_menu.read_only = True
         self.planos_dropdown_menu.selected_value = None
 
     def paciente_autocomplete_change(self, **event_args):
