@@ -132,8 +132,8 @@ class PlanoAlimentarService(AbstractCrudServiceClass):
             raise e
 
     def get_tarefa(self, plano):
-        tarefas = tables.app_tables.dietatarefa.search(
-            tables.order_by('status', ascending=False), tables.order_by('finish', ascending=False), tables.order_by('start', ascending=False),
+        tarefas = self.app_tables.dietatarefa.search(
+            self.order_by('status', ascending=False), self.order_by('finish', ascending=False), self.order_by('start', ascending=False),
             plano=plano
         )
         tarefa = None
