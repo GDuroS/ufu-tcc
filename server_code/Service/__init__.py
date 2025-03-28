@@ -224,6 +224,8 @@ class DietaRefeicaoService(AbstractCrudServiceClass):
     
     @anvil.server.background_task
     def gerar_dieta(self, plano_seq, vigencia_dieta, renovacao_pesos):
+        if self is None:
+            self = DietaRefeicaoService()
         try:
             from pulp import LpProblem, LpMinimize, LpVariable, LpBinary, LpStatus, lpSum, value
             from datetime import timedelta, datetime
@@ -246,11 +248,11 @@ class DietaRefeicaoService(AbstractCrudServiceClass):
             metas_plano = self.app_tables.metadiaria.search(plano=plano_alimentar)
             
             self.log_progress(step=1, progress=9, message="Iniciando variáveis: Atualizando dados do Plano do Paciente")
-            plano_alimentar.update(validade_dieta=vigencia_dieta, renovar_pesos=renovacao_pesos)
+            plano_alimentar.update(validade_dieta=vigencia_dieta, renovar_pesos=renovacao_pesos or None)
             self.log_progress(step=1, progress=10)
 
             self.log_progress(step=2, progress=10, message="Contando períodos a ajustar.")
-            qtd_periodos = (plano_alimentar['termino'] - plano_alimentar['inicio']) // timedelta(days=vigencia_dieta)
+            qtd_periodos = round((plano_alimentar['termino'] - plano_alimentar['inicio']) / timedelta(days=vigencia_dieta))
             pesos = {}
             curr_date = plano_alimentar['inicio']
             reset_pesos_when = curr_date
@@ -262,7 +264,7 @@ class DietaRefeicaoService(AbstractCrudServiceClass):
                 return (periodos_completos * percentual_periodo_completo) + (percentual_periodo_completo * percentual_local / 100.0) + 10.0
             def get_message_geral(message_local) -> str:
                 periodos_completos = (curr_date - plano_alimentar['inicio']) // timedelta(days=vigencia_dieta)
-                return f"Cálculo de Dietas: [{periodos_completos}/{qtd_periodos}] {message_local}"
+                return f"Cálculo de Dietas: [{periodos_completos+1}/{qtd_periodos}] {message_local}"
 
             self.log_progress(step=3)
             while curr_date <= plano_alimentar['termino']:
@@ -423,8 +425,8 @@ class DietaRefeicaoService(AbstractCrudServiceClass):
         except Exception as e:
             self.log_progress(message=e)
         else:
-            state['status'] = 'COMPLETED'
             self.log_progress(step=5, progress=100, message="Processo concluído sem erros")
+            state['status'] = 'COMPLETED'
         finally:
             task = self.app_tables.dietatarefa.get(task_id=anvil.server.context.background_task_id)
             task.update(status=state['status'], log=state['log'], finish=datetime.now())

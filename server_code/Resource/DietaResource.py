@@ -23,7 +23,7 @@ def deleteDieta(plano):
 
 @anvil.server.callable(require_user=True)
 def postDietaGerar(plano_seq, vigencia_dieta, renovacao_pesos):
-    task = anvil.server.launch_background_task('gerar_dieta', dieta_refeicao_service, plano_seq, vigencia_dieta, renovacao_pesos)
+    task = anvil.server.launch_background_task('gerar_dieta', None, plano_seq, vigencia_dieta, renovacao_pesos)
     dieta_service.registrar_tarefa(plano_seq, task)
     return task
     
