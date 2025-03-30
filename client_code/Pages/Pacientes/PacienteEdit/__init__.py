@@ -8,6 +8,7 @@ from ....Entities import Paciente, Refeicao
 
 class PacienteEdit(CrudInterface, PacienteEditTemplate):
     def __init__(self, routing_context, **properties):
+        from datetime import date
         CrudInterface.__init__(self, Paciente, routing_context, mode_switch_component=self.mode_switch, **properties)
         # self.refeicoes_card.visible = False
         # self.metas_card.visible = False
