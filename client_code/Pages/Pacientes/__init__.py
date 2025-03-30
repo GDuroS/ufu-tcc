@@ -33,3 +33,7 @@ class Pacientes(PacientesTemplate):
         pacientes = LocalCommons().get_pacientes()
         query = self.date_pattern.sub('', self.paciente_nascimento_filter_text_box.text) if self.paciente_nascimento_filter_text_box.text else None
         self.pacientes_data_panel.items = [p for p in pacientes if not query or query in p['nascimento'].strftime('%d%m%Y')]
+
+    def refresh_pacientes_button_click(self, **event_args):
+        LocalCommons()._refresh_pacientes()
+        self.refresh_pacientes()
