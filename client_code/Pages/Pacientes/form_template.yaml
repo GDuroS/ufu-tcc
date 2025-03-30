@@ -10,7 +10,7 @@ components_by_slot:
       - event_bindings: {change: paciente_nascimento_filter_text_box_change}
         layout_properties: {column: GONQZH}
         name: paciente_nascimento_filter_text_box
-        properties: {appearance: outlined, label: '', leading_icon: 'mi:filter_alt', placeholder: 01/01/1900}
+        properties: {appearance: outlined, label: '', leading_icon: 'mi:filter_alt', placeholder: ''}
         type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
       name: filter_data_row_panel
       properties: {}
@@ -42,6 +42,10 @@ components_by_slot:
     properties: {style: headline, text: Pacientes}
     type: form:dep_lin1x4oec0ytd:_Components.Heading
   content_heading_right:
+  - layout_properties: {}
+    name: refresh_pacientes_button
+    properties: {tooltip: Recarregar os pacientes}
+    type: form:dep_lin1x4oec0ytd:_Components.IconButton
   - components:
     - event_bindings: {}
       layout_properties: {slot: anvil-m3-link-slot}
