@@ -116,7 +116,6 @@ class PlanoAlimentarService(AbstractCrudServiceClass):
 
     def get_vigente_por_paciente(self, paciente):
         from datetime import datetime
-        momento_atual = datetime.now()
         # Lógica abaixo foi substituída por buscar o plano mais recente
         # planos_vigentes = self.app_tables.planoalimentar.search(
         #     self.order_by('inicio', ascending=False), self.order_by('Sequence', ascending=False),
