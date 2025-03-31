@@ -4,9 +4,9 @@ import anvil.server
 
 refeicao_service = AbstractCrudServiceClass("Refeicao")
 meta_diaria_service = AbstractCrudServiceClass("MetaDiaria")
-user_service = AbstractCrudServiceClass('Users')
+user_service = AbstractCrudServiceClass('Users', has_sequence=False)
 profissional_service = AbstractCrudServiceClass('Profissional')
-dieta_tarefa_service = AbstractCrudServiceClass("DietaTarefa")
+dieta_tarefa_service = AbstractCrudServiceClass("DietaTarefa", has_sequence=False)
 
 class PlanoAlimentarService(AbstractCrudServiceClass):
     def __init__(self):
@@ -117,11 +117,16 @@ class PlanoAlimentarService(AbstractCrudServiceClass):
     def get_vigente_por_paciente(self, paciente):
         from datetime import datetime
         momento_atual = datetime.now()
+        # Lógica abaixo foi substituída por buscar o plano mais recente
+        # planos_vigentes = self.app_tables.planoalimentar.search(
+        #     self.order_by('inicio', ascending=False), self.order_by('Sequence', ascending=False),
+        #     paciente=paciente,
+        #     inicio=self.q.less_than_or_equal_to(momento_atual),
+        #     termino=self.q.any_of(None, self.q.greater_than_or_equal_to(momento_atual))
+        # )
         planos_vigentes = self.app_tables.planoalimentar.search(
-            self.order_by('inicio', ascending=False), self.order_by('Sequence', ascending=False),
-            paciente=paciente,
-            inicio=self.q.less_than_or_equal_to(momento_atual),
-            termino=self.q.any_of(None, self.q.greater_than_or_equal_to(momento_atual))
+            self.order_by('termino', ascending=False), self.order_by('inicio', ascending=False), self.order_by('Sequence', ascending=False),
+            paciente=paciente
         )
         try:
             return planos_vigentes[0]
