@@ -16,11 +16,13 @@ components_by_slot:
       name: plano_dropdown_menu
       properties: {appearance: outlined, enabled: true, label: Plano Alimentar}
       type: form:dep_lin1x4oec0ytd:_Components.DropdownMenu
-    - layout_properties: {full_width_row: true, grid_position: 'IWBWXX,FDZWGT'}
+    - event_bindings: {change: number_box_change}
+      layout_properties: {full_width_row: true, grid_position: 'IWBWXX,FDZWGT'}
       name: vigencia_text_box
       properties: {appearance: outlined, enabled: true, label: Gerar nova dieta a cada, placeholder: '', supporting_text: Quantidade de dias que cada dieta deve ser reutilizada., text: '7', trailing_icon: '', type: number, visible: true}
       type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox
-    - layout_properties: {grid_position: 'IWBWXX,GAFZCJ'}
+    - event_bindings: {change: number_box_change}
+      layout_properties: {grid_position: 'IWBWXX,GAFZCJ'}
       name: renovacao_text_box
       properties: {appearance: outlined, enabled: true, label: Renovar pesos a cada, placeholder: Nunca, supporting_text: Quantidade de dias para renovar os pesos., text: '', type: number, visible: true}
       type: form:dep_lin1x4oec0ytd:_Components.TextInput.TextBox

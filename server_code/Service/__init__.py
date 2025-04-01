@@ -255,7 +255,7 @@ class DietaRefeicaoService(AbstractCrudServiceClass):
             self.log_progress(step=1, progress=10)
 
             self.log_progress(step=2, progress=10, message="Contando períodos a ajustar.")
-            qtd_periodos = round((plano_alimentar['termino'] - plano_alimentar['inicio']) / timedelta(days=vigencia_dieta))
+            qtd_periodos = round((plano_alimentar['termino'] - plano_alimentar['inicio'] + timedelta(days=1)) / timedelta(days=vigencia_dieta))
             pesos = {}
             curr_date = plano_alimentar['inicio']
             reset_pesos_when = curr_date

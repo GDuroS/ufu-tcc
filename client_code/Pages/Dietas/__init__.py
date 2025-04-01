@@ -19,8 +19,7 @@ class Dietas(Validatable, DietasTemplate):
         self.set_required_components([
             self.paciente_autocomplete,
             self.plano_dropdown_menu,
-            self.vigencia_text_box,
-            self.renovacao_text_box
+            self.vigencia_text_box
         ])
         self.paciente_autocomplete_resync_click()
 
@@ -176,6 +175,13 @@ class Dietas(Validatable, DietasTemplate):
                 self.ver_receita_button.visible = True
             if status == 'ABORTED':
                 self.geracao_progress_indicator.progress_color = 'var(--anvil-m3-error)'
-            self.task_check_timer.interval = 3
+                self.show_log_button.visible = True
+            self.task_check_timer.interval = 1
+
+    def number_box_change(self, **event_args):
+        """This method is called when the text in this component is edited."""
+        number_box = event_args['sender']
+        if isinstance(number_box.text, float):
+            number_box.text = max(number_box.text, 1)
 
     
