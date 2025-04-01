@@ -138,5 +138,7 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         self.plano_vigente_panel.visible = True
         self.no_plano_text.visible = False
         if self.item.criar_novo_plano():
+            self.refeicoes_edit_data_panel.items = self.item.plano_vigente.refeicoes
             self.metas_edit_data_panel.items = self.item.plano_vigente.metas
             self.on_query_changed()
+        self.plano_inicio_date_picker.scroll_into_view()
