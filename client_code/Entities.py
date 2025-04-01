@@ -79,24 +79,21 @@ class Paciente(Entity):
         
         changes = {k:plano_vigente.original_row[k] for k in plano_vigente._original_key_list}
         novo_plano = PlanoAlimentar(changes)
-        novo_plano['inicio'] = self['termino'] + timedelta(days=1) if self['termino'] else datetime.now().date()
+        novo_plano['inicio'] = self['termino'] + timedelta(days=1) if self['termino'] else datetime.now()
         novo_plano['termino'] = novo_plano['inicio'] + self['termino'] - self['inicio'] if self['termino'] else None
         
         refeicoes = []
         for refeicao in plano_vigente.refeicoes:
             if refeicao.is_new:
-                refeicao['plano'] = novo_plano
                 refeicoes.append(refeicao)
                 continue
             ref_changes = {k:refeicao.original_row[k] for k in refeicao._original_key_list}
-            ref_changes['plano'] = novo_plano
             refeicoes.append(Refeicao(ref_changes))
         novo_plano.refeicoes = refeicoes
 
         metas = []
         for meta in plano_vigente.metas:
             meta_changes = {k:meta.original_row[k] for k in meta._original_key_list}
-            meta_changes['plano'] = novo_plano
             metas.append(MetaDiaria(meta_changes))
         novo_plano.metas = metas
         

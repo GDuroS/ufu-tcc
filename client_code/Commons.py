@@ -52,9 +52,9 @@ class LocalCommons(CommonData):
 
     # VERIFY METHOS
     def _wait_for_pacientes(self):
+        if self.get_logged_user() is None:
+            return
         if self._pacientes_async_call is None:
-            if self.get_logged_user() is None:
-                return
             self._refresh_pacientes()
         if self._pacientes_async_call.status == "PENDING":
             from anvil import server
@@ -62,9 +62,9 @@ class LocalCommons(CommonData):
                 self._set_pacientes(self._pacientes_async_call.await_result())
 
     def _wait_for_profissional(self):
+        if self.get_logged_user() is None:
+            return
         if self._profissional_async_call is None:
-            if self.get_logged_user() is None:
-                return
             self._refresh_profissional()
         if self._profissional_async_call.status == "PENDING":
             self._set_profissional(self._profissional_async_call.await_result())

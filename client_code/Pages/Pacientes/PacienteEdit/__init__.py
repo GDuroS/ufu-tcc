@@ -8,6 +8,7 @@ from ....Entities import Paciente, Refeicao
 
 class PacienteEdit(CrudInterface, PacienteEditTemplate):
     def __init__(self, routing_context, **properties):
+        from datetime import date
         CrudInterface.__init__(self, Paciente, routing_context, mode_switch_component=self.mode_switch, **properties)
         # self.refeicoes_card.visible = False
         # self.metas_card.visible = False
@@ -137,5 +138,7 @@ class PacienteEdit(CrudInterface, PacienteEditTemplate):
         self.plano_vigente_panel.visible = True
         self.no_plano_text.visible = False
         if self.item.criar_novo_plano():
+            self.refeicoes_edit_data_panel.items = self.item.plano_vigente.refeicoes
             self.metas_edit_data_panel.items = self.item.plano_vigente.metas
             self.on_query_changed()
+        self.plano_inicio_date_picker.scroll_into_view()
