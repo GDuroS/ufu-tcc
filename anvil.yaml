@@ -377,7 +377,7 @@ dependencies:
   version: {version_tag: v1.2.2}
 - dep_id: dep_0opyfyew6egz9
   resolution_hints: {app_id: OANIXGELFYRDP4VV, name: OruDataCore, package_name: OruData}
-  version: {branch: master}
+  version: {version_tag: v2.4}
 - dep_id: dep_obp4eaigzghyeh
   resolution_hints: {app_id: HYVETZT644ZWTERL, name: M3 Components, package_name: core_m3}
   version: {branch: master}
